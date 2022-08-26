@@ -938,7 +938,7 @@
 		font-weight: 400;
 		height: 2.85em;
 		line-height: 2.95em;
-		padding: 0 1.5em;
+		padding: 0 2.5em;
 		text-align: center;
 		text-decoration: none;
 		white-space: nowrap;
@@ -1023,7 +1023,7 @@
 		input[type="button"].style2,
 		button.style2,
 		.button.style2 {
-			background-color: #df0e07;
+			background-color: #676767;
 		}
 
 			input[type="submit"].style2:hover,
@@ -1031,7 +1031,7 @@
 			input[type="button"].style2:hover,
 			button.style2:hover,
 			.button.style2:hover {
-				background-color: #e44040;
+				background-color: #808080;
 			}
 
 			input[type="submit"].style2:active,
