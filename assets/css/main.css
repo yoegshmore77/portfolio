@@ -1242,7 +1242,25 @@
 			}
 
 		#banner .more {
-			/*background-image: url("images/arrow.svg");
+			
+
+			background-position: center 1.35em;
+			background-repeat: no-repeat;
+			background-size: auto;
+			
+			color: rgba(255, 255, 255, 0.75);
+			
+			height: 4em;
+			text-indent: 4em;
+			overflow: hidden;
+			white-space: nowrap;
+			width: 4em;
+			z-index: 2;
+			margin: 0 auto 2em auto;
+		}
+
+		#banner .more_circle_button {
+			background-image: url("images/arrow.svg");
 			background-position: center 1.35em;
 			background-repeat: no-repeat;
 			background-size: auto;
@@ -1256,7 +1274,7 @@
 			white-space: nowrap;
 			width: 4em;
 			z-index: 2;
-			margin: 0 auto 2em auto;*/
+			margin: 0 auto 2em auto;
 
 			background-position: center 1.35em;
 			background-repeat: no-repeat;
@@ -1277,6 +1295,12 @@
 				/*background-color: rgba(255, 255, 255, 0.05);
 				border: 1px solid #fff;*/
 				color: #FFF;
+			}
+			
+			#banner .more_circle_button:hover {
+				background-color: rgba(255, 255, 255, 0.05);
+				border: 2px solid #DEDEDE;
+				color: #ACACAC;
 			}
 
 		#banner video {
