@@ -78,8 +78,12 @@
 
 						});
 
-				// More button.
+				// More text button.
 					$banner.find('.more')
+						.addClass('scrolly');
+
+				// More circular button.
+					$banner.find('.more_circle_button')
 						.addClass('scrolly');
 
 			}
