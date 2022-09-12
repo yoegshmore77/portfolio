@@ -33,6 +33,7 @@
 
 		// Banner.
 			var $banner = $('#banner');
+			var $gallery = $('#gallery');
 
 			if ($banner.length > 0) {
 
@@ -62,7 +63,7 @@
 					}
 
 				// Video check.
-					var video = $banner.data('video');
+					var video = $banner.data('img');
 
 					if (video)
 						$window.on('load.banner', function() {
@@ -74,7 +75,7 @@
 								if (!skel.vars.mobile
 								&&	!skel.breakpoint('large').active
 								&&	skel.vars.IEVersion > 9)
-									$banner.append('<video autoplay loop><source src="' + video + '.mp4" type="video/mp4" /><source src="' + video + '.webm" type="video/webm" /></video>');
+									$banner.append('<img src="' + video + '.jpg" style="vertical-align:middle;margin:0px 50px">');
 
 						});
 
@@ -84,6 +85,9 @@
 
 				// More circular button.
 					$banner.find('.more_circle_button')
+						.addClass('scrolly');
+				// Home text button.
+					$gallery.find('.home_button')
 						.addClass('scrolly');
 
 			}
@@ -116,6 +120,8 @@
 			$window.on('load', function() {
 				$window.trigger('scroll');
 			});
+
+
 
 	});
 
