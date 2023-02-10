@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.7.1/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.2/dist/mobilenet.js"></script>
+  </head>
+  <body>
+    <img id="input-image" src="https://c0.wallpaperflare.com/preview/20/678/504/young-boy-portrait-outdoor.jpg" width="224" height="224">
+    <script>
+      async function run() {
+        // Load the MobileNet model
+        const model = await mobilenet.load();
+  
+        // Get a reference to the input image
+        const image = document.getElementById('input-image');
+  
+        // Get the predictions from the model
+        const predictions = await model.classify(image);
+  
+        // Display the top prediction
+        console.log(predictions[0]);
+      }
+  
+      run();
+    </script>
+  </body>
+</html>
