@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+    <script>
+      async function run() {
+        const result = await tf.add(1, 2).print();
+        console.log(result.dataSync());
+      }
+      run();
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
