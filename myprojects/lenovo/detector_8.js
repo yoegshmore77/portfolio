@@ -258,7 +258,7 @@ document.body.style.fontFamily = 'sans-serif';
         // If AI found something overlapping CV, use its label
         if (pick && aiPreds.length) {
             for (const p of aiPreds) {
-                if (p.score < 0.1) continue;
+                if (p.score < 0.08) continue;
                 //if (p.score < 0.02) continue;
                 //if (p.score < 0.4) continue;//original
                 const [px, py, pw, ph] = p.bbox;
