@@ -13,6 +13,8 @@
 
     import * as THREE from 'https://esm.sh/three@0.161.0';
     import { GLTFLoader } from 'https://esm.sh/three@0.161.0/examples/jsm/loaders/GLTFLoader';
+    //import { DRACOLoader } from 'https://esm.sh/three@0.161.0/examples/jsm/loaders/GLTFLoader';
+    
 
 (function () {
     'use strict';
@@ -3831,21 +3833,38 @@ function registerShot(isGoal) {
 }
 
 const scorePanel = document.querySelector(".scorePanel");
+const ratingPanel = document.querySelector(".ratingPanel");
 
 function showScorePanel() {
   //scorePanel.classList.add("visible");
   scorePanel.style.display = "block";
+  ratingPanel.style.display = "block";
 
 }
 
 function hideScorePanel() {
   //scorePanel.classList.remove("visible");
   scorePanel.style.display = "none";
+  ratingPanel.style.display = "none";
 }
 hideScorePanel();
 
+//clears the goal scores
+function reset_Score_Panel() {
+  document.querySelectorAll(".attempt").forEach(a => a.innerHTML = "");
+  currentAttempt = 0;
+}
+
+
 //registerShot(true);  // goal
 //registerShot(false); // miss
+
+const rankEl = document.querySelector(".rankValue");
+
+function updateRank(newRank) {
+  rankEl.textContent = newRank;
+}
+updateRank(1325);
 
 
     
