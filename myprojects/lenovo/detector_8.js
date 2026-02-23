@@ -256,7 +256,8 @@ document.body.style.fontFamily = 'sans-serif';
         // If AI found something overlapping CV, use its label
         if (pick && aiPreds.length) {
             for (const p of aiPreds) {
-                if (p.score < 0.02) continue;
+                if (p.score < 0.15) continue;
+                //if (p.score < 0.02) continue;
                 //if (p.score < 0.4) continue;//original
                 const [px, py, pw, ph] = p.bbox;
                 const acx = px + pw / 2, acy = py + ph / 2;
@@ -529,6 +530,7 @@ document.body.style.fontFamily = 'sans-serif';
             //ground.visible = true;
             //ball.visible = true;
             updateTimer();
+            showScorePanel();
             interval = setInterval(updateTimer, 1000);
             ready_to_shoot = true;
             grabber_hand_anim(ball.position,ball.rotation.y);
@@ -1579,7 +1581,7 @@ function init_1(){
 
 let totalSeconds = 60;
   const timerEl = document.getElementById("timer");
-  //timerEl.style.display = 'none';
+  timerEl.style.display = 'none';
 
   function updateTimer() {
     //let minutes = Math.floor(totalSeconds / 60);
@@ -2423,6 +2425,7 @@ function handlePostCollision(post) {
     //ball.visible = false;
     goal_is_done = true;
     score+=10;
+    registerShot(true);
     scoreDisplay.textContent = score;
     flashScore();
     //console.log("-------------Goal By Pole--------------💈 💈 💈 💈 💈 💈 💈 💈 💈 💈");
@@ -2887,6 +2890,11 @@ function showGoalFlash() {
 
      if (list_id == 3){
        fadeBall();
+     }
+
+     if(list_id == 0 || list_id == 2 || list_id == 3){
+
+        registerShot(false);
      }
 
 
@@ -3805,6 +3813,39 @@ function onWindowResize() {
   renderer.domElement.addEventListener('touchend', onTouchEnd);
 
 init_1();
+
+let currentAttempt = 0;
+
+function registerShot(isGoal) {
+  if (currentAttempt >= 5) return;
+
+  const attempt = document.querySelectorAll(".attempt")[currentAttempt];
+
+  const img = document.createElement("img");
+  img.src = isGoal ? "./football.png" : "./football-cross.png";
+  img.className = "resultIcon";
+
+  attempt.appendChild(img);
+
+  currentAttempt++;
+}
+
+const scorePanel = document.querySelector(".scorePanel");
+
+function showScorePanel() {
+  //scorePanel.classList.add("visible");
+  scorePanel.style.display = "block";
+
+}
+
+function hideScorePanel() {
+  //scorePanel.classList.remove("visible");
+  scorePanel.style.display = "none";
+}
+hideScorePanel();
+
+//registerShot(true);  // goal
+//registerShot(false); // miss
 
 
     

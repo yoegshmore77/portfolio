@@ -161,3 +161,56 @@ body {
     .gameBtn:active {
     transform: scale(0.9);
     }
+
+/*----------------        score panel       --------------*/
+
+    /* Panel container */
+    .scorePanel {
+      position: fixed;
+      left: 4vw;
+      bottom: 4vh;
+      width: 50vw;          /* responsive width */
+      max-width: 450px;
+      z-index: 2007;
+    }
+
+    /* Background image */
+    .panelBg {
+      width: 110%;
+      height: auto;
+      display: block;
+    }
+
+    /* Attempts row */
+    .attempts {
+      position: absolute;
+      bottom: 32%;           /* adjust based on your PNG layout */
+      left: 8%;
+      width: 94%;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* Individual circle slot */
+    .attempt {
+      width: 20%;
+      aspect-ratio: 1/1;
+      background: url("./circle.png") no-repeat center;
+      background-size: contain;
+      position: relative;
+    }
+
+    .resultIcon {
+      position: absolute;
+      inset: 0;
+      width: 90%;
+      height: 90%;
+      margin: auto;
+      object-fit: contain;
+      animation: popIn 0.3s ease;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0); }
+      to { transform: scale(1); }
+    }
