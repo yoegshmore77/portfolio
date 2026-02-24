@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Lenovo</title>
+
+
+    <!-- TensorFlow.js & COCO-SSD -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+
+    <!-- OpenCV.js — shim must exist before async load completes -->
+    <script>
+        window.cvReady = false;
+        function onOpenCvReady() {
+            console.log('[Boot] OpenCV loaded');
+            window.cvReady = true;
+            document.dispatchEvent(new Event('cvReady'));
+        }
+    </script>
+    <script async src="https://docs.opencv.org/4.8.0/opencv.js" onload="onOpenCvReady();"
+        type="text/javascript"></script>
+
+    <link rel="stylesheet" href="./style_8.css">
+
+
+</head>
+
+<body>
+
+        <!-- PHASE 1: SCANNER VIDEO FEED (Raw HTML Video) -->
+    <!-- We use this video element for detection -->
+    <video id="webcam" autoplay playsinline muted width="640" height="480"
+        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;"></video>
+
+    <!-- Debug Canvas -->
+    <canvas id="debug-canvas" width="640" height="480"
+        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 2; pointer-events: none; opacity: 1.0;"></canvas>
+
+    <!-- UI LAYER -->
+    <div id="ui-layer">
+        <!-- Scanner UI -->
+        <div id="scanner-overlay">
+            <div class="scanner-box">
+                <div class="scanner-line"></div>
+            </div>
+            <div id="status-msg">POINT AT A RECTANGULAR OBJECT</div>
+        </div>
+
+    </div>
+
+    <div class="timer-container" id="timer">00:60</div>
+    
+  <div class="branding-panel">
+    <img src="./branding.png" alt="Brand Logo">
+  </div>
+
+  <img src="./Button_Help.png" class="gameBtn btn1" />
+  <img src="./Button_Restart.png" class="gameBtn btn2" />
+  <img src="./Button_Close.png" class="gameBtn btn3" />
+
+
+  <div class="scorePanel">
+
+  <img src="panel-bg.png" class="panelBg" />
+
+  <div class="attempts">
+    <div class="attempt" data-index="0"></div>
+    <div class="attempt" data-index="1"></div>
+    <div class="attempt" data-index="2"></div>
+    <div class="attempt" data-index="3"></div>
+    <div class="attempt" data-index="4"></div>
+  </div>
+
+</div>
+
+<div class="ratingPanel">
+  <img src="./rating-bg.png" class="ratingBg" />
+
+  <div class="ratingContent">
+    <img src="./rating_star.png" class="starIcon" />
+    <span class="rankValue">1250</span>
+  </div>
+</div>
+
+
+<!--
+<script type="module">
+  import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js';
+  import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/loaders/GLTFLoader.js?module';
+</script>
+-->
+
+     <script type="module" src="./detector_9.js"></script>
+     
+
+   
+   
+
+
+
+</body>
+
+</html>
