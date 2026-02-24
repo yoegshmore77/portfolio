@@ -1027,7 +1027,7 @@ let gameWorld;
           scene.add(gameWorld);
           //scannerOvl.style.display = 'none';//
         //gw show gameworld
-          //gameWorld.visible = false;
+          gameWorld.visible = false;
           //gameWorld.scale.set(0.02,0.02,0.02);
           //gameWorld.position.set(0,2.5,8);
 
@@ -1575,7 +1575,7 @@ function init_1(){
 
   //main_anim_Id = requestAnimationFrame(animate);
   // to run the game from the sesting
-  animate();
+  //animate();
 
 
 
