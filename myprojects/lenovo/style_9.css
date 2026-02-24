@@ -1,0 +1,260 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    font-family: 'sans-serif', monospace;
+
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* UI Layer sits on top of everything */
+#ui-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    /* Let touches pass through to 3D scene */
+    z-index: 10;
+}
+
+/* Scanner Overlay (Phase 1) */
+#scanner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.3);
+    color: #0f0;
+}
+
+.scanner-box {
+    width: 89%;
+    aspect-ratio: 10 / 6;
+
+    /* Full-width landscape guide — matches CV ROI */
+    border: 4px solid white;
+    position: relative;
+    box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.5);
+    /* Dim background outside */
+    border-radius: 10px;
+}
+
+
+
+.scanner-line {
+    display: none;
+    /* Remove scanning animation */
+}
+
+#status-msg {
+    margin-top: 20px;
+    font-size: 2.5em;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* Game UI (Phase 2) */
+#game-ui {
+    display: none;
+    /* Hidden until game starts */
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: white;
+    font-size: 24px;
+    font-family: sans-serif;
+    text-shadow: 2px 2px 0 #000;
+}
+
+/* Capsule Container ------------------------------------------------- */
+
+  .timer-container {
+    position: absolute;
+    /*top: 40px;*/
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    
+    padding: 25px 35px;
+    border-radius: 20px; /* capsule shape */
+    
+    background: rgba(0, 0, 0, 0.6);
+    border: 2px solid white;
+    
+    font-family: Arial, sans-serif;
+    font-size: 50px;
+    font-weight: bold;
+    color: white;
+    
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
+     z-index: 2001;
+  }
+
+  /* Red warning state */
+  .danger {
+    color: #ff2b2b;
+    border-color: #ff2b2b;
+  }
+
+  /* Blinking effect */
+  .blink {
+    animation: blinkAnim 1s infinite;
+  }
+
+  @keyframes blinkAnim {
+    0%   { opacity: 1; }
+    50%  { opacity: 0.3; }
+    100% { opacity: 1; }
+  }
+
+  /*---- Branding container */
+
+
+  .branding-panel {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 15vh;              /* 20% of screen height */
+      background: #111;          /* fallback background */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .branding-panel img {
+      max-height: 90%;
+      max-width: 90%;
+      object-fit: contain;
+    }
+
+    /* Common button style */
+    .gameBtn {
+      position: fixed;          /* stays on screen */
+      left: 4vw;                /* small responsive left margin */
+      width: 25vw;              /* responsive size */
+      max-width: 120px;          /* prevents too large on tablets */
+      height: auto;
+      z-index: 2005;
+      pointer-events: auto;
+      user-select: none;
+      -webkit-user-drag: none;
+     
+    }
+
+    /* Positioning */
+    .btn1 { bottom: 15%; }
+    .btn2 { bottom: 22%; }  /* 30 + 20 */
+    .btn3 { bottom: 29%; }  /* 50 + 20 */
+
+    .gameBtn:active {
+    transform: scale(0.9);
+    }
+
+/*----------------        score panel       --------------*/
+
+    /* Panel container */
+    .scorePanel {
+      position: fixed;
+      left: 4vw;
+      bottom: 4vh;
+      width: 50vw;          /* responsive width */
+      max-width: 450px;
+      z-index: 2007;
+    }
+
+    /* Background image */
+    .panelBg {
+      width: 110%;
+      height: auto;
+      display: block;
+    }
+
+    /* Attempts row */
+    .attempts {
+      position: absolute;
+      bottom: 32%;           /* adjust based on your PNG layout */
+      left: 8%;
+      width: 94%;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* Individual circle slot */
+    .attempt {
+      width: 20%;
+      aspect-ratio: 1/1;
+      background: url("./circle.png") no-repeat center;
+      background-size: contain;
+      position: relative;
+    }
+
+    .resultIcon {
+      position: absolute;
+      inset: 0;
+      width: 90%;
+      height: 90%;
+      margin: auto;
+      object-fit: contain;
+      animation: popIn 0.3s ease;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0); }
+      to { transform: scale(1); }
+    }
+
+    /* ---------------   Rating Panel -----------*/
+
+.ratingPanel {
+  position: fixed;
+  right: 8vw;
+  bottom: 4vh;
+  width: 35vw;
+  max-width: 280px;
+  z-index: 2008;
+}
+
+/* Background image */
+.ratingBg {
+  width: 110%;
+  height: auto;
+  display: block;
+}
+
+/* Overlay content */
+.ratingContent {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6%;
+  bottom: 15%;  
+}
+
+/* Star icon */
+.starIcon {
+  width: 20%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Rank number */
+.rankValue {
+  color: white;
+  font-weight: bold;
+  font-size: clamp(28px, 4vw, 42px);
+  font-family: Arial, sans-serif;
+}
