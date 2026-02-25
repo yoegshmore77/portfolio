@@ -1020,6 +1020,11 @@ function updateBoneSpheres(boneSpheres, armatureRoot) {
 let gameWorld;
 
 
+
+scene = new THREE.Scene();
+          //scene.background = new THREE.Color(0x87ceeb);
+
+
           scene = new THREE.Scene();
           //scene.background = new THREE.Color(0x87ceeb);
 
@@ -1032,13 +1037,13 @@ let gameWorld;
           //gameWorld.position.set(0,2.5,8);
 
           //gameWorld.position.set(0,2.0,-1.5); //gw postion to get it in the scanner box outline
-          gameWorld.position.set(0 ,0.8, 2.0);//gameWorld.position.set(0 ,1, =2.0)
+          gameWorld.position.set(0 ,0.5, 2.3);//gameWorld.position.set(0 ,1, =2.0)
           gameWorld.scale.set(2.8,2.8,2.8);
 
           console.log(window.innerWidth / window.innerHeight);
           const screen_ratio = window.innerWidth / window.innerHeight;
-          camera = new THREE.PerspectiveCamera(65+screen_ratio*2, window.innerWidth / window.innerHeight, 0.1, 1000);
-          camera.position.set(0, 4.0, -8+screen_ratio);
+          camera = new THREE.PerspectiveCamera(64+screen_ratio*2, window.innerWidth / window.innerHeight, 0.1, 1000);
+          camera.position.set(0, 3.7, -8+screen_ratio);
           //camera.position.set(0, 0, 0);
           //camera.lookAt(0, 3, 5);
 
@@ -1057,6 +1062,7 @@ let gameWorld;
            renderer.domElement.style.setProperty('left', '0', 'important');
 
           renderer.domElement.style.setProperty('z-index', '2000', 'important');
+
           renderer.shadowMap.enabled = true;
           renderer.shadowMap.type = THREE.PCFSoftShadowMap;
           document.body.appendChild(renderer.domElement);
@@ -1147,9 +1153,11 @@ function init_1(){
 
             //loader_img.visible = false;
 
-
+            //yg
             const loader = new GLTFLoader();
-            loader.load('./goli_output_512.glb', gltf => {
+
+            //loader.load('./new_export/player.glb', gltf => {
+                loader.load('./goli_output_512.glb', gltf => {
                 /*const { mesh, animations } = gltf.scene;
 
                     // Don't mutate mesh directly
@@ -1162,7 +1170,7 @@ function init_1(){
                 //scene.add(goalkeeper);
                 gameWorld.add(goalkeeper);
 
-                goalkeeper.position.set(0, 0, 9.129);
+                 goalkeeper.position.set(0, 0, 9.129);
                 // maybe scale if needed
                 goalkeeper.scale.set(0.7, 0.7, 0.7);
                 goalkeeper.rotation.set(0, 91, 0);
@@ -1183,16 +1191,19 @@ function init_1(){
 
 
             const animations = gltf.animations;
+            console.log("animations[0] = " + animations[0]);
+            //keeperMixer.clipAction(animations[0]).play();
+
                     //mixer = new THREE.AnimationMixer( model );
 
-                    console.log("animations.length ="+ animations.length);
+                    //console.log("animations.length ="+ animations.length);
 
 
             //console.log("goalkeeper.mesh ====== ===== ====="+ goalkeeper);
 
-        //Object.entries(gltf.animations[0]).forEach(([key, value]) => {
-            //console.log(`Key: ${key}, Value:`, value);
-        //});
+        /*Object.entries(gltf.animations[0]).forEach(([key, value]) => {
+            console.log(`Key: ${key}, Value:`, value);
+        });*/
 
         keeperMixer.addEventListener("finished", function () {
 
@@ -1221,6 +1232,33 @@ function init_1(){
 
     //playSegment("save_upper_left");
     //playSegment("save_upper_left");
+
+        gltf.animations.forEach(clip => {
+      console.log("animation name = "+ clip.name);
+      /*if (clip.name.toLowerCase().includes('mixamo.com')) {
+        keeperActions.idle = keeperMixer.clipAction(clip);
+      } else if (clip.name.toLowerCase().includes('mixamo.com')) {
+        keeperActions.diveLeft = keeperMixer.clipAction(clip);
+      } else if (clip.name.toLowerCase().includes('right')) {
+        keeperActions.diveRight = keeperMixer.clipAction(clip);
+      }*/
+      if (clip.name.toLowerCase().includes('mixamo.com')) {
+        keeperActions.idle = keeperMixer.clipAction(clip);
+        keeperActions.idle.setLoop(THREE.LoopOnce, 0);
+        keeperActions.idle.clampWhenFinished = true;
+      } 
+       if (clip.name.toLowerCase().includes('mixamo.com')) {
+        keeperActions.diveLeft = keeperMixer.clipAction(clip);
+        keeperActions.diveLeft.setLoop(THREE.LoopOnce, 0);
+        keeperActions.diveLeft.clampWhenFinished = true;
+      } 
+       if (clip.name.toLowerCase().includes('mixamo.com')) {
+        let diveRight = createMirroredAnimation(clip);
+        keeperActions.diveRight = keeperMixer.clipAction(diveRight);
+        keeperActions.diveRight.setLoop(THREE.LoopOnce, 0);
+        keeperActions.diveRight.clampWhenFinished = true;
+      }
+    });
 
     const sp_size_1 = 2;
     const sp_size_2 = 3;
@@ -1401,7 +1439,7 @@ function init_1(){
 
 
   const loader_ball = new GLTFLoader();
-  loader_ball.load('./polyfield_strikers-_football.glb', gltf => {
+  loader_ball.load('./black_football.glb', gltf => {
     ball = gltf.scene;
     //scene.add(ball);
     gameWorld.add(ball);
@@ -2325,7 +2363,7 @@ function handlePostCollision(post) {
       isGoal = isBallOnGoalSideOfPost(post);
 
       if(isGoal){
-        
+        score_multiplyer = 1.5;
         //deflectionStrength = -(2 + Math.random()*2);//deflects the ball inside the goalpost towards right side
         //velocity.y += deflectionStrength + 2; //deflect the ball slightly down towards the ground
 
@@ -2348,7 +2386,7 @@ function handlePostCollision(post) {
       isGoal = isBallOnGoalSideOfPost(post);
 
       if(isGoal){
-        
+        score_multiplyer = 1.5;
         deflectionStrength = (2 + Math.random()*3);//deflects the ball  inside the goalpost towards left side
         //velocity.y += deflectionStrength - 6; //deflect the ball slightly down towards the ground
         //velocity.y += - deflectionStrength*0.2; 
@@ -2368,6 +2406,7 @@ function handlePostCollision(post) {
       
       isGoal = isBallBelowCrossbar(post);
       if(isGoal){
+        score_multiplyer = 2;
         //Ball hit the cross bar on bottom side and defects down side inside the goal
         //deflectionStrength = - 2;// deflects the ball towards down side
         deflectionStrength = - (1 + Math.random()*1);
@@ -2415,6 +2454,7 @@ function handlePostCollision(post) {
      velocity.x = 0;
      velocity.z *= 0.00002;
      isGoal = true;
+     score_multiplyer = 1;
 
      //console.log( "✅ ❌✅ ❌✅ ❌✅ ❌✅ ❌✅ ❌✅ ❌");
 
@@ -2430,9 +2470,11 @@ function handlePostCollision(post) {
     //ball.visible = false;
     goal_is_done = true;
     score+=10;
+    console.log("currentForce = "+ currentForce + " currentSwing = "+ currentSwing);
     registerShot(true);
     scoreDisplay.textContent = score;
     flashScore();
+    createScorePopup();
     //console.log("-------------Goal By Pole--------------💈 💈 💈 💈 💈 💈 💈 💈 💈 💈");
     //copy_color = "#ffcc00";
     //goalFlash.innerText = "GOAL!";
@@ -3598,11 +3640,11 @@ function animate() {
   const delta = clock.getDelta();
 
   // Animate goalkeeper if loaded
-  /*if (keeperMixer) {
-    action.timeScale = animation_speed;
+  if (keeperMixer) {
+    //action.timeScale = animation_speed;
     keeperMixer.update(delta);
-    goalkeeper.position.x += (keeperTargetX - goalkeeper.position.x) * goli_mov_speed;
-  }*/
+    //goalkeeper.position.x += (keeperTargetX - goalkeeper.position.x) * goli_mov_speed;
+  }
 
 
 
@@ -3867,7 +3909,165 @@ const rankEl = document.querySelector(".rankValue");
 function updateRank(newRank) {
   rankEl.textContent = newRank;
 }
-updateRank(1325);
+//updateRank(1325);
+
+//---
+//const rankEl = document.querySelector(".rankValue");
+
+let currentRating = 0;   // starting rating
+let animationFrame = null;
+
+function animateRating(targetRating, duration = 1800) {
+
+  targetRating = currentRating + targetRating;
+
+  cancelAnimationFrame(animationFrame);
+
+  const startRating = currentRating;
+  const difference = targetRating - startRating;
+  const startTime = performance.now();
+
+  function update(now) {
+    //console.log("update running");
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+
+    // Ease-out effect (smooth slowdown near end)
+    const easeOut = 1 - Math.pow(1 - progress, 3);
+
+    currentRating = Math.round(startRating + difference * easeOut);
+    rankEl.textContent = currentRating;
+
+    if (progress < 1) {
+         console.log("animateRating running");
+      animationFrame = requestAnimationFrame(update);
+    } else {
+        console.log("animateRating done");
+      currentRating = targetRating;
+      rankEl.textContent = targetRating;
+    }
+  }
+
+  animationFrame = requestAnimationFrame(update);
+}
+animateRating(0);  // smoothly increase to 1350
+
+
+
+//let animationFrame = null;
+
+/*function animateRating(startValue, endValue, duration = 800) {
+
+  cancelAnimationFrame(animationFrame);
+
+  const startTime = performance.now();
+  const difference = endValue - startValue;
+
+  function update(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+
+    // Linear (completely smooth, no slow-down)
+    const value = startValue + difference * progress;
+
+    rankEl.textContent = Math.floor(value);
+
+    if (progress < 1) {
+      animationFrame = requestAnimationFrame(update);
+    } else {
+      rankEl.textContent = endValue;
+    }
+  }
+
+  animationFrame = requestAnimationFrame(update);
+}
+animateRating(120, 1350, 1000);*/
+//------
+let score_multiplyer = 1;
+function calculate_points(){
+
+}
+// Points animation
+function createScorePopup() {//scopop
+  
+  const text =  (1000*score_multiplyer)+Math.round(currentForce*1000)+Math.round(Math.abs(currentAngle*1000));
+
+
+  animateRating(text);
+  //console.log("-----pop up is called");
+
+  // Create a canvas to draw text
+  const point_canvas = document.createElement('canvas');
+  const ctx = point_canvas.getContext('2d');
+  const size = 256;
+  
+  point_canvas.width = point_canvas.height = size;
+
+  ctx.font = '48px Arial';
+  ctx.fillStyle = 'yellow';
+  ctx.strokeStyle = 'black';
+  ctx.lineWidth = 2;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.strokeText(text, size / 2, size / 2);
+  ctx.fillText(text, size / 2, size / 2);
+  point_canvas.style.zIndex = "99999";  // higher = appears on top
+
+  //ctx.fontSize = 'clamp(5rem, 7vw, 6rem)';
+  //ctx.fontSize = '48px';
+  //ctx.font = "200px Cherry Bomb One, system-ui";
+
+  ctx.fontWeight = '400';//ff
+  //ctx.fontFamily ='Cherry Bomb One', 'system-ui';//'sans-serif';
+
+  // Create texture from canvas
+  const texture = new THREE.CanvasTexture(point_canvas);
+  texture.needsUpdate = true;
+
+  // Create sprite material
+  const material = new THREE.SpriteMaterial({map:texture , transparent:true, depthTest:false, depthWrite:false});
+  const sprite = new THREE.Sprite(material);
+  
+  // Set initial position
+  //sprite.position.copy(basket.position);
+  sprite.position.set(0,3,11);
+  //console.log("basket.position = "+ basket.position.x , basket.position.y, basket.position.z);
+  //sprite.scale.set(15, 15, 15);
+  //sprite.position.set(0,3,2);
+  sprite.scale.set(10, 10, 10);
+  sprite.renderOrder = 99998;
+
+  scene.add(sprite);
+
+  // Animation data
+  const startTime = performance.now();
+  const duration = 2000; // 1 second
+  let frameId = null;
+
+  function animatePopup() {
+    const elapsed = performance.now() - startTime;
+    const t = elapsed / duration;
+
+    if (t >= 1) {
+      // Cleanup
+
+      cancelAnimationFrame(frameId);
+      scene.remove(sprite);
+      material.map.dispose();
+      material.dispose();
+      return;
+    }
+
+    // Update position and fade
+    sprite.position.y += 0.02;
+    //material.opacity = 1 - t;
+
+    frameId = requestAnimationFrame(animatePopup);
+  }
+
+  frameId = requestAnimationFrame(animatePopup);
+  
+}
 
 
     
