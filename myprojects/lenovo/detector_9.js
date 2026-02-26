@@ -535,7 +535,7 @@ document.body.style.fontFamily = 'sans-serif';
             showScorePanel();
             interval = setInterval(updateTimer, 1000);
             ready_to_shoot = true;
-            grabber_hand_anim(ball.position,ball.rotation.y);
+            //grabber_hand_anim(ball.position,ball.rotation.y);
             cancelAnimationFrame(animate_game_container_id);
           }
 
