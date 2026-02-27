@@ -1242,6 +1242,8 @@ function init_1(){
             playNextIdle();
             
             return;
+          }else{
+            fade_goli_out();
           }
           
             //goli_mov_speed = 0.01;
@@ -3092,7 +3094,7 @@ function showGoalFlash() {
       goalFlash.style.opacity = '0';
       goalFlash.innerText = "";
       goalFlash.style.display = 'none';
-      fade_goli_out();
+      //fade_goli_out();
       
       //ready_to_shoot = true;
       resetBall();
