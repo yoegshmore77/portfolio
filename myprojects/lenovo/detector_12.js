@@ -4323,7 +4323,7 @@ countdown_trumpetGain.connect(masterGain);
 
 //crowd
 
-fetch("./sounds/crowd_lalala_stereo.mp3")
+fetch("./crowd_lalala_stereo.mp3")
   .then(res => res.arrayBuffer())
   .then(data => audioContext.decodeAudioData(data))
   .then(buffer => {
@@ -4339,7 +4339,7 @@ function play_crowd_Sound() {
 }
 
 //kich
-fetch("./sounds/BD.mp3")
+fetch("./BD.mp3")
   .then(res => res.arrayBuffer())
   .then(data => audioContext.decodeAudioData(data))
   .then(buffer => {
@@ -4361,7 +4361,7 @@ function playKick_Sound() {
 }
 
 //goal
-  fetch("./sounds/victory_stereo.mp3")
+  fetch("./victory_stereo.mp3")
   .then(res => res.arrayBuffer())
   .then(data => audioContext.decodeAudioData(data))
   .then(buffer => {
@@ -4376,7 +4376,7 @@ function playKick_Sound() {
 }
 
 //whistle
-  fetch("./sounds/whistle_stereo.mp3")
+  fetch("./whistle_stereo.mp3")
   .then(res => res.arrayBuffer())
   .then(data => audioContext.decodeAudioData(data))
   .then(buffer => {
@@ -4393,7 +4393,7 @@ function playKick_Sound() {
 
 
 //boo
-  fetch("./sounds/boo_crowd_stereo.mp3")
+  fetch("./boo_crowd_stereo.mp3")
   .then(res => res.arrayBuffer())
   .then(data => audioContext.decodeAudioData(data))
   .then(buffer => {
@@ -4408,7 +4408,7 @@ function playKick_Sound() {
 }
 
 //countdown_trumpet
-  fetch("./sounds/Trumpet_stereo.mp3")
+  fetch("./Trumpet_stereo.mp3")
   .then(res => res.arrayBuffer())
   .then(data => audioContext.decodeAudioData(data))
   .then(buffer => {
