@@ -4046,7 +4046,7 @@ function onTouchMove(event) {
     if(currentForce>1.015){
       //currentForce = 1.015;
     }
-    createTrajectoryLine();
+    //createTrajectoryLine();
     //console.log("currentForce = "+ currentForce + " currentSwing = "+ currentSwing);
   }
        
