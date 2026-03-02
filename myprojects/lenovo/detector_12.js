@@ -28,8 +28,8 @@ document.body.style.fontFamily = 'sans-serif';
     const video = document.getElementById('webcam');
     const statusMsg = document.getElementById('status-msg');
     const scannerOvl = document.getElementById('scanner-overlay');
-    const arScene = document.getElementById('ar-scene');
-    const gameUI = document.getElementById('game-ui');
+    //const arScene = document.getElementById('ar-scene');
+    //const gameUI = document.getElementById('game-ui');
     const dbgCanvas = document.getElementById('debug-canvas');
     const dbgCtx = dbgCanvas.getContext('2d');
 
@@ -348,9 +348,12 @@ document.body.style.fontFamily = 'sans-serif';
 
             cancelAnimationFrame(processVideo_id);
             blink_viewfinder();
+            //play_target_found_Sound();
 
             isDetecting = false;
             //scannerOvl.style.display = 'none';
+
+            dbgCanvas.style.opacity = 1;
 
             dbgCtx.clearRect(0, 0, dbgCanvas.width, dbgCanvas.height);
             dbgCtx.drawImage(video, 0, 0, dbgCanvas.width, dbgCanvas.height);
@@ -421,15 +424,26 @@ document.body.style.fontFamily = 'sans-serif';
     let target_centerX = 0;
     let target_centerY = 0;
 
+    let pulse_snd_flag = true;
+
+
     function blink_viewfinder(){
 
           if (!running) return;
 
           //console.log("blink_viewfinder");
 
+        if(pulse_snd_flag){
+            play_target_found_Sound();
+            pulse_snd_flag = false;
+          }
+
         if (viewfinder_flash_count > 15) {
 
+
+         
           if(flashVisible){
+             pulse_snd_flag = true;
 
 
             dbgCanvas.style.display = "block";
@@ -442,9 +456,11 @@ document.body.style.fontFamily = 'sans-serif';
           flashVisible = !flashVisible;
           viewfinder_flash_count = 0;
 
+
+
           //console.log("viewfinder_flash_count = "+ viewfinder_flash_count + " ---- total_viewfinder_flash_count = " + total_viewfinder_flash_count);
           total_viewfinder_flash_count ++;
-          if(total_viewfinder_flash_count > 10){
+          if(total_viewfinder_flash_count > 10){//10
             total_viewfinder_flash_count = 0;
             
             console.log("blink_viewfinder finish");
@@ -464,10 +480,11 @@ document.body.style.fontFamily = 'sans-serif';
             animate();
 
             
-            timerEl.style.display = 'block';
+            //timerEl.style.display = 'block';
             
             animate_game_container();
             gameWorld.visible = true;
+            play_ground_anim_Sound();
             
           }
                 
@@ -510,8 +527,8 @@ document.body.style.fontFamily = 'sans-serif';
 
 
             //vec.unproject(camera);
-            gameWorld.position.lerp(vec, 0.15); // micro smoothing
-            gameWorld.scale.lerp(sc, 0.09); // micro smoothing
+            gameWorld.position.lerp(vec, 0.11); //15// micro smoothing
+            gameWorld.scale.lerp(sc, 0.05);//0.09 // micro smoothing
 
             const scl = gameWorld.scale.x;
             //animate_game_container_id = requestAnimationFrame(animate_game_container);
@@ -534,11 +551,13 @@ document.body.style.fontFamily = 'sans-serif';
             //ball.visible = true;
             //updateTimer();
             showScorePanel();
+            //timerEl.style.display = "block";
+            timer_wrapper.style.display = 'block';
             //interval = setInterval(updateTimer, 1000);
-            ready_to_shoot = true;
+            //ready_to_shoot = true;
             //grabber_hand_anim(ball.position,ball.rotation.y);
             show_Countdown();
-            play_ountdown_trumpet_Sound();
+            play_countdown_trumpet_Sound();
             cancelAnimationFrame(animate_game_container_id);
           }
 
@@ -1576,8 +1595,8 @@ function init_1(){
 
 
     const loader_ground = new GLTFLoader();
-    //loader_ground.load("./grass_2.glb", gltf => {
-    loader_ground.load("./grass_dummy.glb", gltf => {
+    loader_ground.load("./grass_lenevo_1.glb", gltf => {
+    //loader_ground.load("./grass_dummy.glb", gltf => {
         model_loaded_count++;
       ground = gltf.scene;
       //ground.scale.set(0.6, 0.6, 0.6);
@@ -2836,6 +2855,8 @@ function show_Countdown() {
         //countDown_finished = true;
         ready_to_shoot = true;
         //updateTimer();
+        //timerEl.style.display = "block";
+
         startTimer();
         grabber_hand_anim(ball.position,ball.rotation.y);
         countDown_Text.style.display = 'none'
@@ -2862,8 +2883,8 @@ const hand_tilesHoriz = 5; // number of tiles horizontally
 const hand_tilesVert = 1;  // number of tiles vertically
 const hand_numberOfTiles = hand_tilesHoriz * hand_tilesVert;
 
-//const hand_grabber_Texture = new THREE.TextureLoader().load('https://user.cdn.mywebar.com/521765/792411/Hand_spriteheet_5.png');
-const hand_grabber_Texture = new THREE.TextureLoader().load('./Hand_spriteheet_8_rotated.png');
+const hand_grabber_Texture = new THREE.TextureLoader().load('./Hand_spriteheet_lenovo_rotated.png');
+//const hand_grabber_Texture = new THREE.TextureLoader().load('./Hand_spriteheet_8_rotated.png');
 
 hand_grabber_Texture.wrapS = hand_grabber_Texture.wrapT = THREE.RepeatWrapping;
 hand_grabber_Texture.repeat.set(1 / hand_tilesHoriz, 1 / hand_tilesVert); // example 4x4
@@ -2922,7 +2943,7 @@ function grabber_hand_anim(position, rotationY) {
   cancelAnimationFrame(hand_grabber_anim_Id);
   //splashMesh.position.copy(position);
   //hand_grabber_Mesh.position.copy(position).add(new THREE.Vector3(-0.4, 1, -0.4));
-  hand_grabber_Mesh.position.copy(position).add(new THREE.Vector3(-0.4, 1.5, -0.4));
+  hand_grabber_Mesh.position.copy(position).add(new THREE.Vector3(-0.4, 1.9, -0.4));
   hand_grabber_Mesh.scale.set(0.9, 0.9, 1);
 
   const degToRad = (deg) => deg * (Math.PI / 180);
@@ -2937,7 +2958,7 @@ function grabber_hand_anim(position, rotationY) {
   const hand_frameDuration = hand_totalDuration / hand_numberOfTiles;
   let hand_lastTime = performance.now();
 
-  const totalLoops = 20;//150;              // play animation 150 times
+  const totalLoops = 120;//150;              // play animation 150 times
   let loopCount = 0;
 
 
@@ -4273,7 +4294,7 @@ function createScorePopup() {//scopop
 
 //----- Sound
 
-let crowdBuffer, kickBuffer, goalBuffer, whistle_Buffer, boo_Buffer, countdown_trumpet_Buffer;
+let crowdBuffer, kickBuffer, goalBuffer, whistle_Buffer, boo_Buffer, countdown_trumpet_Buffer, target_found_Buffer, graound_transition_Buffer;
 
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -4295,7 +4316,7 @@ const crowdGain = audioContext.createGain();
 crowdGain.gain.value = 0.2;  // softer background
 
 const goalGain = audioContext.createGain();
-goalGain.gain.value = 0.4;   // louder celebration
+goalGain.gain.value = 0.6;   // louder celebration
 
 const kickGain = audioContext.createGain();
 kickGain.gain.value = 1.0;   // medium kick sound
@@ -4307,7 +4328,13 @@ const booGain = audioContext.createGain();
 booGain.gain.value = 0.5;   // medium kick sound
 
 const countdown_trumpetGain = audioContext.createGain();
-countdown_trumpetGain.gain.value = 0.5;   // medium kick sound
+countdown_trumpetGain.gain.value = 0.5;   
+
+const target_found_BufferGain = audioContext.createGain();
+target_found_BufferGain.gain.value = 1.0;   
+
+const graound_transitionGain = audioContext.createGain();
+graound_transitionGain.gain.value = 0.8;   
 
 
 
@@ -4319,7 +4346,42 @@ kickGain.connect(masterGain);
 whistleGain.connect(masterGain);
 booGain.connect(masterGain);
 countdown_trumpetGain.connect(masterGain);
+target_found_BufferGain.connect(masterGain);
+graound_transitionGain.connect(masterGain);
 
+
+//target_found
+
+fetch("./pulse_stereo.mp3")
+  .then(res => res.arrayBuffer())
+  .then(data => audioContext.decodeAudioData(data))
+  .then(buffer => {
+    target_found_Buffer = buffer;
+  });
+
+function play_target_found_Sound() {
+  const source = audioContext.createBufferSource();
+  source.buffer = target_found_Buffer;
+
+  source.connect(target_found_BufferGain);
+  source.start(0);
+}
+
+//graound_transition
+
+fetch("./ground_Light_wave_stereo.mp3")
+  .then(res => res.arrayBuffer())
+  .then(data => audioContext.decodeAudioData(data))
+  .then(buffer => {
+    graound_transition_Buffer = buffer;
+  });
+
+function play_ground_anim_Sound() {
+  const source = audioContext.createBufferSource();
+  source.buffer = graound_transition_Buffer;
+  source.connect(graound_transitionGain);
+  source.start(0);
+}
 
 //crowd
 
@@ -4339,7 +4401,7 @@ function play_crowd_Sound() {
 }
 
 //kich
-fetch("./BD.mp3")
+fetch("./kick_stereo.mp3")
   .then(res => res.arrayBuffer())
   .then(data => audioContext.decodeAudioData(data))
   .then(buffer => {
@@ -4354,7 +4416,7 @@ function playKick_Sound() {
   if(list_id <3){
     kickGain.gain.value = 1.0; 
     }else{
-        kickGain.gain.value = 0.8; 
+        kickGain.gain.value = 0.5; 
     }
   source.connect(kickGain);
   source.start(0);
@@ -4407,6 +4469,7 @@ function playKick_Sound() {
   source.start(0);
 }
 
+
 //countdown_trumpet
   fetch("./Trumpet_stereo.mp3")
   .then(res => res.arrayBuffer())
@@ -4415,7 +4478,7 @@ function playKick_Sound() {
     countdown_trumpet_Buffer = buffer;
   });
 
-  function play_ountdown_trumpet_Sound() {
+  function play_countdown_trumpet_Sound() {
   const source = audioContext.createBufferSource();
   source.buffer = countdown_trumpet_Buffer;
 
@@ -4424,19 +4487,20 @@ function playKick_Sound() {
 }
 
 //show_Countdown();
-//play_ountdown_trumpet_Sound();
+//play_countdown_trumpet_Sound();
 
 const st_btn = document.getElementById("startBtn");
 st_btn.addEventListener("click", () => {
     boot();
     scannerOvl.style.opacity = 1;
+    dbgCanvas.style.opacity = 1;
     video.style.display = 'block';
     btn1.style.display = 'block';
     btn2.style.display = 'block';
     btn3.style.display = 'block';
     //scannerOvl.style.display = 'block';
   //show_Countdown();
-  //play_ountdown_trumpet_Sound();
+  //play_countdown_trumpet_Sound();
   document.getElementById("startBtn").remove();
   
 
