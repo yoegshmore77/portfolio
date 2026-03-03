@@ -131,8 +131,10 @@
 let gameId = null;
 let baseScore = 0;
 let cornerMultiplier = 0;
-let gameDurationTimmer =0;
-
+let gameDurationTimmer = 180;
+let shotId = 0
+let isGoal = false;
+let position = "net";
     // === DOM CREATION ===
 document.body.style.margin = '0';
 document.body.style.overflow = 'hidden';
@@ -529,8 +531,8 @@ document.body.style.fontFamily = 'sans-serif';
 
             statusMsg.textContent = 'LOCKED!';
             statusMsg.style.color = '#00FF00';
-            //video.pause();
-            video.stop();
+            video.pause();
+            //video.stop();
             log(`LOCKED: ${rect.label} center=(${rect.cx},${rect.cy}) size=${rect.w}x${rect.h}`);
         }
     }
@@ -2574,6 +2576,7 @@ function updateBallPosition(delta) {
             //hit_Flag = true;
             if(list_id != 0){
               list_id = 3;
+              position = "missed";
               
               play_boo_Sound();
               
@@ -2685,6 +2688,7 @@ function check_Goli_Collision(ballMesh, hitSpheres) {
         //goalFlash.innerText = "SAVED!";
         //list_id = 3;
         list_id = 4;
+        position = "saved";
         playKick_Sound();
         play_boo_Sound();
         showGoalFlash();
@@ -2743,6 +2747,7 @@ function handlePostCollision(post) {
         list_id = 2;
         playKick_Sound();
         score_multiplyer = 1.5;
+        position = "left pole";
         //deflectionStrength = -(2 + Math.random()*2);//deflects the ball inside the goalpost towards right side
         //velocity.y += deflectionStrength + 2; //deflect the ball slightly down towards the ground
 
@@ -2770,6 +2775,7 @@ function handlePostCollision(post) {
         list_id = 2;
         playKick_Sound();
         score_multiplyer = 1.5;
+        position = "right pole";
         deflectionStrength = (2 + Math.random()*3);//deflects the ball  inside the goalpost towards left side
         //velocity.y += deflectionStrength - 6; //deflect the ball slightly down towards the ground
         //velocity.y += - deflectionStrength*0.2; 
@@ -2792,6 +2798,7 @@ function handlePostCollision(post) {
       isGoal_done = isBallBelowCrossbar(post);
       if(isGoal_done){
         score_multiplyer = 1.5;
+        position = "crossbar";
         list_id = 0;
         playKick_Sound();
         //Ball hit the cross bar on bottom side and defects down side inside the goal
@@ -2844,6 +2851,7 @@ function handlePostCollision(post) {
      velocity.z *= 0.00002;
      isGoal_done = true;
      score_multiplyer = 1;
+     position = "net";
      list_id = 1;
      
 
@@ -2861,6 +2869,8 @@ function handlePostCollision(post) {
     //ball.visible = false;
     goal_is_done = true;
     score+=10;
+
+    isGoal = true;
 
     //console.log("currentForce = "+ currentForce + " currentSwing = "+ currentSwing);
     playGoal_Sound();
@@ -4264,6 +4274,8 @@ function registerShot(isGoal_done) {
   img.className = "resultIcon";
 
   attempt.appendChild(img);
+
+  shotId = currentAttempt;
 
   currentAttempt++;
 }
