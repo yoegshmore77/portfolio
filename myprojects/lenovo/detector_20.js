@@ -23,7 +23,7 @@
     'use strict';
 
     function Create_Game(base64Image){
-        console.log("base64Image -" + base64Image);
+        //console.log("base64Image -" + base64Image);
         axios.post('https://fifa1.hashconnect.in/api/user/game', {
             //firstName: 'Fred',
             //lastName: 'Flintstone'
@@ -529,7 +529,8 @@ document.body.style.fontFamily = 'sans-serif';
 
             statusMsg.textContent = 'LOCKED!';
             statusMsg.style.color = '#00FF00';
-            video.pause();
+            //video.pause();
+            video.stop();
             log(`LOCKED: ${rect.label} center=(${rect.cx},${rect.cy}) size=${rect.w}x${rect.h}`);
         }
     }
