@@ -23,7 +23,10 @@
     'use strict';
 
     function Create_Game(base64Image){
-        //console.log("base64Image -" + base64Image);
+
+        console.log(" Create_Game is called =================================");
+
+        //console.log("base64Image ---" + base64Image);
         axios.post('https://fifa1.hashconnect.in/api/user/game', {
             //firstName: 'Fred',
             //lastName: 'Flintstone'
@@ -37,54 +40,103 @@
           })
           .then(function (response) {
 
-            /*Object.entries(response.data).forEach(([key, value]) => {
+            Object.entries(response.data).forEach(([key, value]) => {
                 console.log(`Key: ${key}, Value:`, value);
-            });*/
-            console.log("response -----" + response.data);
+            });
+            console.log("response -----" + response);
             console.log("refid =============>>>>> "+ response.data.data.refId);
-            console.log("config =============>>>>> "+ response.data.data.config.baseScore);
-            console.log("config =============>>>>> "+ response.data.data.config.cornerMultiplier);
-            console.log("config =============>>>>> "+ response.data.data.config.gameDurationTimmer);
+            console.log("baseScore =============>>>>> "+ response.data.data.config.baseScore);
+            console.log("cornerMultiplier =============>>>>> "+ response.data.data.config.cornerMultiplier);
+            console.log("gameDurationTimer =============>>>>> "+ response.data.data.config.gameDurationTimer);
 
             gameId = response.data.data.refId;
             baseScore = response.data.data.config.baseScore
             cornerMultiplier = response.data.data.config.cornerMultiplier;
             gameDurationTimmer = response.data.data.config.gameDurationTimmer;
 
-                setTimeout(() => {
+                        show_Countdown();
+            play_countdown_trumpet_Sound();
+
+                //setTimeout(() => {
                        //Record_Shot();
-                }, 400);
+                //}, 400);
           })
           .catch(function (error) {
             console.log(error);
           });
         }
 
+    function Create_New_Game(){
+        countDown_count = 0;
+        console.log("Create_New_Game is called =================================");
+
+        //console.log("base64Image -" + base64Image);
+        axios.post('https://fifa1.hashconnect.in/api/user/game', {
+            //firstName: 'Fred',
+            //lastName: 'Flintstone'
+
+             headers:{
+                      'Authorization' : 'Bearer XZXTuRcQYS1qgORCjgNUGs4n'
+                  },
+                  data: {
+                    //"goalPostImage": base64Image
+                    } 
+          })
+          .then(function (response) {
+
+            Restart_The_Game();
+
+            /*Object.entries(response.data).forEach(([key, value]) => {
+                console.log(`Key: ${key}, Value:`, value);
+            });*/
+            //console.log("response -----" + response);
+            console.log("New refid =============>>>>> "+ response.data.data.refId);
+            console.log("New baseScore =============>>>>> "+ response.data.data.config.baseScore);
+            console.log("New cornerMultiplier =============>>>>> "+ response.data.data.config.cornerMultiplier);
+            console.log("New gameDurationTimer =============>>>>> "+ response.data.data.config.gameDurationTimer);
+
+            gameId = response.data.data.refId;
+            baseScore = response.data.data.config.baseScore
+            cornerMultiplier = response.data.data.config.cornerMultiplier;
+            gameDurationTimmer = response.data.data.config.gameDurationTimmer;
+
+               //setTimeout(() => {
+                       //Record_Shot();
+                //}, 400);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    }
+
 
         //------ Record a Shot -----------------------------
         function Record_Shot(){
+
+        console.log(" Record a Shot is called ============================================");
+
          axios.post('https://fifa1.hashconnect.in/api/user/game/'+gameId+'/shot/'+-1, {
 
             headers:{
                       Authorization : 'Bearer XZXTuRcQYS1qgORCjgNUGs4n', 'Content-Type': 'application/json'
                   },
                   data: {
-                    "shotId": "1",
-                    "isGoal": true,
-                    "position": "saved"
+                    "shotId": shotId,
+                    "isGoal": isGoal,
+                    "position": position
                     }
                     //left pole right pole 
 
           })
           .then(function (response) {
 
-            console.log(" Record a Shot response =================================");
+            console.log(" Record a Shot response =========");
             console.log(response);
             //console.log("refid =============>>>>> "+ response.data.data.refId);
             //gameId = response.data.data.refId;
-            setTimeout(() => {
+            /*setTimeout(() => {
                        Submit_Game();
-                }, 400);
+                }, 400);*/
           })
           .catch(function (error) {
             console.log(error);
@@ -94,6 +146,8 @@
       //---------------------------------------------------------
 
        function Submit_Game(){
+
+            console.log(" Submit_Game is called *************************************************");
 
             axios.post('https://fifa1.hashconnect.in/api/user/game/'+gameId+'/submit', {
                 /*"shotId": "1",
@@ -108,16 +162,25 @@
                       },
                       data: {
                         "action": "submit",
-                        "timetake": 12000
+                        "timetake": timer_mili
                         }
     
               })
               .then(function (response) {
 
-                console.log(" Submit_Game response **************************");
+                console.log(" Submit_Game response ****************");
 
 
                 console.log(response);
+
+
+                setTimeout(() => {
+                       //Restart_The_Game();
+                       Create_New_Game();
+                       console.log( " Game is restared -----------------------");
+                }, 11000);
+
+                
   
               })
               .catch(function (error) {
@@ -135,6 +198,7 @@ let gameDurationTimmer = 180;
 let shotId = 0
 let isGoal = false;
 let position = "net";
+let timer_mili = 0;
     // === DOM CREATION ===
 document.body.style.margin = '0';
 document.body.style.overflow = 'hidden';
@@ -681,8 +745,10 @@ document.body.style.fontFamily = 'sans-serif';
             //interval = setInterval(updateTimer, 1000);
             //ready_to_shoot = true;
             //grabber_hand_anim(ball.position,ball.rotation.y);
-            show_Countdown();
-            play_countdown_trumpet_Sound();
+            
+            //show_Countdown();
+            //play_countdown_trumpet_Sound();
+
             cancelAnimationFrame(animate_game_container_id);
           }
 
@@ -730,7 +796,7 @@ document.body.style.fontFamily = 'sans-serif';
 
 
 
-const break_count = 10000;
+const break_count = 10000005;
 
 let scene, camera, renderer;
 
@@ -1834,9 +1900,9 @@ function init_1(){
     totalSeconds--;
 }*/
 
-// forward timer
+// forward timer --------------------------------------- 00 00 00
 
-let totalSeconds = 0;
+/*let totalSeconds = 0;
   let interval = null;
   const timer_wrapper = document.querySelector(".timer-wrapper");
   const timerEl = document.getElementById("timer");
@@ -1873,6 +1939,73 @@ let totalSeconds = 0;
     totalSeconds = 0;
     timerEl.textContent = "00:00";
   }
+*/
+//
+let startTime = 0;
+let elapsedBeforePause = 0;
+let timer_running = false;
+let timer_animationFrameId = null;
+
+  const timer_wrapper = document.querySelector(".timer-wrapper");
+  const timerEl = document.getElementById("timer");
+  timerEl.style.fontFamily ='Orbitron', 'system-ui';
+
+
+function formatTime(ms) {
+  const mins = Math.floor(ms / 60000);
+  const secs = Math.floor((ms % 60000) / 1000);
+  //const millis = Math.floor(ms % 1000);
+
+  //console.log("ms = "+ ms + " millis = " + millis);
+  timer_mili = ms;
+
+  return (
+    mins.toString().padStart(2, "0") + ":" +
+    secs.toString().padStart(2, "0") //+ ":" +
+    //millis.toString().padStart(3, "0")
+  );
+}
+
+function updateTimer() {
+  if (!timer_running) return;
+
+  const now = performance.now();
+  const totalElapsed = elapsedBeforePause + (now - startTime);
+
+  timerEl.textContent = formatTime(totalElapsed);
+
+  timer_animationFrameId = requestAnimationFrame(updateTimer);
+}
+
+function startTimer() {
+  if (timer_running) return;
+
+  startTime = performance.now();
+  timer_running = true;
+  updateTimer();
+}
+
+function pauseTimer() {
+  if (!timer_running) return;
+
+  const now = performance.now();
+  elapsedBeforePause += (now - startTime);
+
+  timer_running = false;
+  cancelAnimationFrame(timer_animationFrameId);
+}
+
+function resetTimer() {
+  timer_running = false;
+  cancelAnimationFrame(timer_animationFrameId);
+
+  startTime = 0;
+  elapsedBeforePause = 0;
+
+  timerEl.textContent = "00:00";
+}
+
+  //
 
   // Auto start
   //startTimer();
@@ -1915,7 +2048,7 @@ var animRanges = {//new
   //throw_ball: [998, 1174]
 };
 
-var diveDistance = {
+/*var diveDistance = {
 
   crouch_left: 0,
   crouch_right: 0, //(use negative value to move the model right)
@@ -1924,6 +2057,22 @@ var diveDistance = {
   save_lower_right: 2.0,
   save_upper_left: -2.3,
   save_upper_right: 2.3,
+  save_lower_center: 0,
+  save_upper_center: 0,
+  punt: 0,
+  roll: 0,
+  throw_ball: 0
+};*/
+
+var diveDistance = {
+
+  crouch_left: 0,
+  crouch_right: 0, //(use negative value to move the model right)
+
+  save_lower_left: -1.5,
+  save_lower_right: 1.5,
+  save_upper_left: -1.3,
+  save_upper_right: 1.3,
   save_lower_center: 0,
   save_upper_center: 0,
   punt: 0,
@@ -1945,7 +2094,26 @@ const goli_anim = [
 //let an =0;
   let random_anim_value = 0;
   let lottery = 0;
-let lottery_bank = [0,1,2,0,2];
+let lottery_bank = [0,0,0,1,1];
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    // Pick a random index from 0 to i
+    const j = Math.floor(Math.random() * (i + 1));
+
+    // Swap elements at i and j
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  console.log("lottery_bank ="+lottery_bank);
+  return array;
+}
+
+// Usage example:
+//const myArray = [1, 2, 3, 4, 5];
+shuffleArray(lottery_bank);
+//console.log("lottery_bank ="+lottery_bank); // The original array is now shuffled
+
+
 function decideKeeperDive(angleRad) {
       clearTimeout(decide_wait_time);
 
@@ -2014,7 +2182,7 @@ function decideKeeperDive(angleRad) {
 
    
     //console.log("range = " + (currentForce*currentAngle), " current angle = " +currentAngle, " currentForce = "+ currentForce);
-    lottery = 0;//getRandomInt(0,2);
+    lottery = lottery_bank[currentAttempt];//0;//getRandomInt(0,2);
     if(lottery === 0){ // play accurate animation 
         console.log("range "+ range);
          if(currentForce < 0.8 && currentAngle < 0 && currentAngle > -0.13){
@@ -2025,17 +2193,14 @@ function decideKeeperDive(angleRad) {
 
             if(currentAngle <0){
 
-                //keeperTargetX = diveDistance[name] || 0;
+               //keeperTargetX = diveDistance[name] || 0;
                 diveDistance["save_upper_center"] = 1;
-
                 console.log("diveDistance ="+ diveDistance["save_upper_center"] );
-
             }
             speedNormal = 1.1;
              playSegment("save_upper_center");
              console.log("************" + "save_upper_center" + " range = "+ range);
-          }//else if(range >= 0.1 && range < 0.13){//0.19
-            else if(currentForce < 0.8 && currentAngle > 0){
+          }else if(currentForce < 0.8 && currentAngle > 0){
             speedNormal = sp_factor;
              playSegment("save_lower_left");
              console.log("************" + "save_lower_left" + " range = "+ range);
@@ -2056,35 +2221,42 @@ function decideKeeperDive(angleRad) {
              playSegment("save_upper_right");
              console.log("************" + "save_upper_right" + " range = "+ range);
           }
-      }else if(lottery === 1){ // play accurate animation 
-         if(range  <= -0.001 && range > -0.1){
+      }else if(lottery === 1){ // play random animation 
+         if(currentForce < 0.8 && currentAngle < 0 && currentAngle > -0.13){
             speedNormal = 0.5;
-              playSegment("save_lower_center");  
-              console.log("************" + "save_lower_center" + " range = "+ range);  
-          }else if(range >= -0.1 && range < 0.1){
+              playSegment("save_upper_left");  
+              console.log("Random ************" + "save_lower_center" + " range = "+ range);  
+          }else if(currentForce >= 0.8 && currentAngle > -0.1 && currentAngle < 0.1){
+
+            /*if(currentAngle <0){
+
+               //keeperTargetX = diveDistance[name] || 0;
+                diveDistance["save_upper_center"] = 1;
+                console.log("diveDistance ="+ diveDistance["save_upper_center"] );
+            }*/
             speedNormal = 1.1;
-             playSegment("save_upper_center");
-             console.log("************" + "save_upper_center" + " range = "+ range);
-          }else if(range >= 0.1 && range < 0.13){//0.19
+             playSegment("save_lower_right");
+             console.log("Random ************" + "save_upper_center" + " range = "+ range);
+          }else if(currentForce < 0.8 && currentAngle > 0){
             speedNormal = sp_factor;
-             playSegment("save_lower_left");
-             console.log("************" + "save_lower_left" + " range = "+ range);
-          }else if(range >= 0.13 && range < 0.9){
+             playSegment("save_upper_right");
+             console.log("Random ************" + "save_lower_left" + " range = "+ range);
+          }else if(currentForce >= 0.8 && currentAngle > 0){
             speedNormal = 1.4;//sp_factor;
             /*setTimeout(() => {
                 goalkeeper.position.y+=0.6;
             }, 400); */
             
-             playSegment("save_upper_left");
-             console.log("************" + "save_upper_left" + " range = "+ range);
-          }else if(range <= -0.1 && range > -0.16){//-0.19
-            speedNormal = sp_factor;
-             playSegment("save_lower_right");
-             console.log("************" + "save_lower_right" + " range = "+ range);
-          }else if(range <= -0.16 && range > -0.9){
-            speedNormal = 1.5;//sp_factor;
              playSegment("save_upper_right");
-             console.log("************" + "save_upper_right" + " range = "+ range);
+             console.log("Random ************" + "save_upper_left" + " range = "+ range);
+          }else if(currentForce < 0.8 && currentAngle < 0){//-0.19
+            speedNormal = sp_factor;
+             playSegment("save_lower_left");
+             console.log("Random ************" + "save_lower_right" + " range = "+ range);
+          }else if(currentForce >= 0.8 && currentAngle < 0){
+            speedNormal = 1.5;//sp_factor;
+             playSegment("save_upper_left");
+             console.log("Random ************" + "save_upper_right" + " range = "+ range);
           }
       }else{
         //random_anim_value = getRandomInt(0,goli_anim.length-1);
@@ -2269,7 +2441,7 @@ function shootBall() {
     //currentForce = 0.2;
   //}
 
-  if (ballInFlight) return;
+  if (ballInFlight && currentAttempt < 5) return;
 
   playKick_Sound();
   
@@ -2969,7 +3141,7 @@ countDown_Text.style.pointerEvents = 'none';
 countDown_Text.style.zIndex = '9996';
 //countDown_Text.style.fontSize = 'clamp(4rem, 5vw, 3rem)';
 countDown_Text.style.fontSize = 'clamp(5rem, 7vw, 6rem)';
-countDown_Text.style.fontWeight = '400';//ff
+countDown_Text.style.fontWeight = '900';//ff
 countDown_Text.style.fontFamily = "Noto Sans", 'system-ui';//'sans-serif';
 countDown_Text.style.opacity = '0';
 countDown_Text.style.display = 'none'
@@ -2991,10 +3163,12 @@ let countDown_finished = false;
 
 function show_Countdown() {
  
-
+countDown_Text.style.display = 'block'
  //console.log("countDown_finished ="+ countDown_finished);
   //if(countDown_finished)return;
   countDown_Text.innerText = countDown_copy_list[countDown_count];
+  console.log("countDown_Text.innerText = "+ countDown_Text.innerText);
+  console.log("countDown_copy_list[countDown_count] = "+ countDown_copy_list[countDown_count]);
   //countDown_Text.style.color = '#ffcc00';
   //countDown_Text.style.textShadow = '0 0 20px #ffcc00, 0 0 40px #ff6600';
 
@@ -3038,7 +3212,7 @@ function show_Countdown() {
 
         startTimer();
         grabber_hand_anim(ball.position,ball.rotation.y);
-        countDown_Text.style.display = 'none'
+        countDown_Text.style.display = 'none';
         disposeCountdown();
         clearTimeout(countdown_setTimeout);
         play_crowd_Sound();
@@ -3050,9 +3224,9 @@ function show_Countdown() {
 
 }
 function disposeCountdown() {
-  if (countDown_Text && countDown_Text.parentNode) {
+  /*if (countDown_Text && countDown_Text.parentNode) {
     countDown_Text.parentNode.removeChild(countDown_Text);
-  }
+  }*/
 }
 
 //---------------------------- Grabber hand anim
@@ -3390,7 +3564,7 @@ function showGoalFlash() {
       
       //ready_to_shoot = true;
       resetBall();
-        show_overlay_count ++;
+        /*show_overlay_count ++;
         if(show_overlay_count >= break_count){
           show_overlay_count = 0;
           ready_to_shoot = false;
@@ -3399,7 +3573,15 @@ function showGoalFlash() {
         }else{
           ready_to_shoot = true;
           grabber_hand_anim(ball.position,ball.rotation.y);
+        }*/
+        if(currentAttempt >= 5){
+            ready_to_shoot = false;
+            show_result_Text();
+        }else{
+          ready_to_shoot = true;
+          grabber_hand_anim(ball.position,ball.rotation.y);
         }
+
       
       goalFlash.innerHTML = "";
       clearTimeout(msg_setTimeout);
@@ -3438,9 +3620,9 @@ result_Text.style.zIndex = '9996';
 
 //result_Text.style.fontSize = 'clamp(2.8rem, 7vw, 3rem)';
 //result_Text.style.fontSize = "clamp(2rem, 6vw, 3.2rem)";
-result_Text.style.fontSize = "clamp(2.3rem, 6.3vw, 3.5rem)";
-result_Text.style.fontFamily = 'Cherry Bomb One, system-ui';
-result_Text.style.fontWeight = '400';
+result_Text.style.fontSize = '150px';//"clamp(2.3rem, 6.3vw, 3.5rem)";
+result_Text.style.fontFamily = "Noto Sans", 'system-ui';
+result_Text.style.fontWeight = '900';
 result_Text.style.lineHeight = '1.2';
 
 result_Text.style.whiteSpace = 'normal';
@@ -3467,40 +3649,9 @@ let result_Text_finished = false;
 
 function show_result_Text() {
 
-  
-  if(score/10 == break_count){//win copy
+    result_Text_copy_list[0] = "Game Over!";
+    // "Final Score\n'"+ score + "'";
 
-    result_Text_copy_list[0] = "Total striker energy!";
-
-    //result_Text_copy_list[1] = "Your Score Is\n'"+ score + "'\nOut Of 10 Attempts";
-    result_Text_copy_list[1] = "Final Score\n'"+ score + "'";
-
-    result_Text_copy_list[2] = "Goals "+"'"+ score/10 +"/"+ break_count + "'";
-    
-    result_Text_copy_list[3] = "You ruled the field!";
-
-  }else if (score == 0){//lose copy
-
-    result_Text_copy_list[0] = "Missed the goal.";
-
-    //result_Text_copy_list[1] = "Your Score Is\n'"+ score + "'\nOut Of 10 Attempts";
-    result_Text_copy_list[1] = "Final Score\n'"+ score + "'";
-
-    result_Text_copy_list[2] = "Goals "+"'"+score/10+"/"+ break_count + "'";
-    
-    result_Text_copy_list[3] = "Good try! Take another shot.";
-
-  }else{
-
-    result_Text_copy_list[0] = "Good try!";
-
-    result_Text_copy_list[1] = "Final Score\n'"+ score + "'";
-
-    result_Text_copy_list[2] = "Goals "+"'"+score/10+"/"+ break_count + "'";
-    
-    result_Text_copy_list[3] = "Almost famous. Almost.";
-
-  }
   
   function splitInto3Lines(text) {
     const words = text.trim().split(/\s+/);
@@ -3584,10 +3735,10 @@ function show_result_Text() {
           result_Text_count = 0;
           score = 0;
           scoreDisplay.textContent = score;
-          ready_to_shoot = true;
+          
           result_Text_finished = true;
-          ready_to_shoot = true;
-          grabber_hand_anim(ball.position,ball.rotation.y);
+          //ready_to_shoot = true;
+          //grabber_hand_anim(ball.position,ball.rotation.y);
           
           
           result_Text.style.display = 'none'
@@ -4088,7 +4239,7 @@ function getIntersects(x, y) {
 
 function pointerdown( event ) {
 
-    if(!countDown_finished) return
+    //if(!countDown_finished) return
 
      if(ready_to_shoot){
      const hits = getIntersects(event.clientX, event.clientY);
@@ -4265,19 +4416,38 @@ init_1();
 let currentAttempt = 0;
 
 function registerShot(isGoal_done) {
-  if (currentAttempt >= 5) return;
+    currentAttempt++;
+    shotId = currentAttempt;
+  if (currentAttempt <= 5) {//return;
 
-  const attempt = document.querySelectorAll(".attempt")[currentAttempt];
+      const attempt = document.querySelectorAll(".attempt")[currentAttempt-1];
 
-  const img = document.createElement("img");
-  img.src = isGoal_done ? "./success-slot-icon-v2.png" : "./fail-slot-icon-v2.png";
-  img.className = "resultIcon";
+      const img = document.createElement("img");
+      img.src = isGoal_done ? "./success-slot-icon-v2.png" : "./fail-slot-icon-v2.png";
+      img.className = "resultIcon";
 
-  attempt.appendChild(img);
+      attempt.appendChild(img);
 
-  shotId = currentAttempt;
 
-  currentAttempt++;
+
+      //currentAttempt++;
+      //shotId = currentAttempt;
+      Record_Shot();
+      if(currentAttempt == 5){
+          pauseTimer();
+          Submit_Game();
+          ready_to_shoot = false;
+
+      }
+  }else{
+      //currentAttempt++;
+      //shotId = currentAttempt;
+      /*pauseTimer();
+      Record_Shot();
+      Submit_Game();
+      ready_to_shoot = false;*/
+  }
+
 }
 
 const scorePanel = document.querySelector(".scorePanel");
@@ -4573,13 +4743,19 @@ fetch("./crowd_lalala_stereo.mp3")
     crowdBuffer = buffer;
   });
 
-function play_crowd_Sound() {
+let isCrowdPlaying = false;
+function play_crowd_Sound() { 
+ 
+ if(isCrowdPlaying) return
+  
+  isCrowdPlaying = true;
   const source = audioContext.createBufferSource();
   source.buffer = crowdBuffer;
   source.loop = true;
   source.connect(crowdGain);
   source.start(0);
 }
+
 
 //kich
 fetch("./kick_stereo.mp3")
@@ -4718,6 +4894,21 @@ scannerOvl.style.opacity = 0;
 video.style.display = 'none';
 const loading_txt = document.getElementById("loading-text");
 //boot();
+
+
+function Restart_The_Game(){
+
+    shuffleArray(lottery_bank);
+    show_Countdown();
+    play_countdown_trumpet_Sound();
+
+    reset_Score_Panel();
+    currentRating =0;
+    currentAttempt = 0;
+    countDown_count = 0;
+    resetTimer();
+
+}
 
 
 //--------------------- xx ----- xx ----- xx ------------------------------------
