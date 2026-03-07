@@ -2954,7 +2954,9 @@ function handlePostCollision(post) {
         velocity.y +=  deflectionStrength*0.00001; 
       }
       else{
+
         list_id = 3;
+        target_found_Vibration();
         playKick_Sound();
         play_boo_Sound();
         deflectionStrength = (3 + Math.random()*3);
@@ -2981,6 +2983,7 @@ function handlePostCollision(post) {
       }
       else{
         list_id = 3;
+        target_found_Vibration();
         playKick_Sound();
         play_boo_Sound();
         deflectionStrength = -(3 + Math.random()*3);
@@ -3018,6 +3021,7 @@ function handlePostCollision(post) {
       }
       else{
         list_id = 3;
+        target_found_Vibration();
         playKick_Sound();
         play_boo_Sound();
         // Ball hit the cross bar on top side and defects on the upside
@@ -3068,6 +3072,7 @@ function handlePostCollision(post) {
     isGoal_done =false;
     //ball.visible = false;
     goal_is_done = true;
+    goal_done_Vibration();
     score+=10;
 
     isGoal = true;
@@ -5048,9 +5053,15 @@ function Restart_The_Game(){
 }
 function target_found_Vibration() {
   if ("vibrate" in navigator) {
-    navigator.vibrate(100);
+    navigator.vibrate(500);
   }
 }
+function goal_done_Vibration() {
+  if ("vibrate" in navigator) {
+    navigator.vibrate(500);
+  }
+}
+
 
 //--------------------- xx ----- xx ----- xx ------------------------------------
 })();
