@@ -5053,7 +5053,7 @@ function Restart_The_Game(){
 }
 function target_found_Vibration() {
   if ("vibrate" in navigator) {
-    navigator.vibrate(500);
+    navigator.vibrate(1500);
   }
 }
 function goal_done_Vibration() {
