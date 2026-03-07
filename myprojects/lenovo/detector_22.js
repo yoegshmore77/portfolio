@@ -750,7 +750,7 @@ let dummy_video_grab = null;
           if(flashVisible){
              pulse_snd_flag = true;
 
-            target_found_Vibration();
+            //target_found_Vibration();
             dbgCanvas.style.display = "block";
             
 
