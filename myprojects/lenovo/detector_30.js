@@ -442,6 +442,8 @@ document.body.style.fontFamily = 'sans-serif';
     }
 
 let br = null;
+let x = null;
+let y = null;
     // ══════════════════════════════════════════════════════════════
     // CV DETECTION — SIMPLE GEOMETRY
     // ══════════════════════════════════════════════════════════════
@@ -511,8 +513,7 @@ if (approx.rows !== 4) {
 }
 
 let pts = [];
-let x = null;
-let y = null;
+
 for (let i = 0; i < 4; i++) {
     pts.push({
          x: approx.intPtr(i,0)[0],
