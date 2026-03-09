@@ -579,7 +579,8 @@ document.body.style.fontFamily = 'sans-serif';
             const _roiY = Math.floor((vh - _roiH) / 2);
 
             for (const p of aiPreds) {
-                if (p.score < 0.6) continue;  // Need 60%+ confidence for AI-only
+                //if (p.score < 0.6) continue;  // Need 60%+ confidence for AI-only
+                if (p.score < 0.2) continue;  // Need 60%+ confidence for AI-only
                 const [px, py, pw, ph] = p.bbox;
                 const acx = px + pw / 2, acy = py + ph / 2;
 
