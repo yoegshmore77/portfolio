@@ -498,7 +498,7 @@ document.body.style.fontFamily = 'sans-serif';
                 const v = approx.rows;
                 approx.delete();
 
-                const aspect = br.width / br.height;
+                const aspect = br.width / br.height/2;
 
                 // TIGHTER CHECK:
                 //   4-8 vertices, fill > 0.3, solidity > 0.85, landscape aspect 1.2-4.0
