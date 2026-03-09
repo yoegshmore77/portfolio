@@ -485,6 +485,8 @@ document.body.style.fontFamily = 'sans-serif';
                 const brArea = br.width * br.height;
                 if (brArea <= 0) continue;
 
+
+
                 const fill = area / brArea;  // How rectangular (1.0 = perfect)
 
                 // Convexity check: reject merged multi-object blobs
@@ -496,7 +498,8 @@ document.body.style.fontFamily = 'sans-serif';
 
                 const peri = cv.arcLength(cnt, true);
                 const approx = new cv.Mat();
-                cv.approxPolyDP(cnt, approx, 0.04 * peri, true);
+                //cv.approxPolyDP(cnt, approx, 0.04 * peri, true);
+                cv.approxPolyDP(cnt, approx, 0.02 * peri, true);
                 const v = approx.rows;
                 approx.delete();
 
@@ -506,8 +509,21 @@ document.body.style.fontFamily = 'sans-serif';
                 //   4-8 vertices, fill > 0.3, solidity > 0.85, landscape aspect 1.2-4.0
                 //const ok = aspect > 1 && aspect <= 3;
                 //const ok = v >= 1 && v <= 12 && fill > 0.1 && solidity > 0.85 && aspect >= 1.2 ;//&& aspect <= 4.0;//y
-                const ok = v >= 4 && v <= 8 && fill > 0.3 && solidity > 0.85 && aspect >= 1.2 && aspect <= 4.0;
+                //const ok = v >= 4 && v <= 8 && fill > 0.3 && solidity > 0.85 && aspect >= 1.2 && aspect <= 4.0;
                 //const ok = v >= 4 && v <= 8 && fill > 0.3 && solidity > 0.35 && aspect >= 1.2 && aspect <= 3.0;
+
+//const br = cv.boundingRect(cnt);
+
+if (br.width <= br.height) continue; // reject portrait or square
+
+//const aspect = br.width / br.height;
+
+const ok =
+    v >= 4 && v <= 8 &&
+    fill > 0.3 &&
+    solidity > 0.85 &&
+    aspect > 1.15 &&
+    aspect < 4.0;
 
                 const tag = `v${v} f${fill.toFixed(2)} a${aspect.toFixed(1)}`;
                 stats.info.push(tag + (ok ? ' ✓' : ''));
