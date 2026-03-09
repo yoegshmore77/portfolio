@@ -502,7 +502,7 @@ document.body.style.fontFamily = 'sans-serif';
 
                 // TIGHTER CHECK:
                 //   4-8 vertices, fill > 0.3, solidity > 0.85, landscape aspect 1.2-4.0
-                const ok = v >= 1 && v <= 12 && fill > 0.3 && solidity > 0.85 && aspect >= 0.6 && aspect <= 4.0;//y
+                const ok = v >= 1 && v <= 12 && fill > 0.1 && solidity > 0.85 && aspect >= 0.6 && aspect <= 4.0;//y
                 //const ok = v >= 4 && v <= 8 && fill > 0.3 && solidity > 0.85 && aspect >= 1.2 && aspect <= 4.0;
                 //const ok = v >= 4 && v <= 8 && fill > 0.3 && solidity > 0.35 && aspect >= 1.2 && aspect <= 3.0;
 
@@ -576,7 +576,7 @@ document.body.style.fontFamily = 'sans-serif';
             // Recompute ROI bounds (same formula as processVideo)
             const _roiW = Math.floor(vw * 0.89);
             //const _roiH = Math.floor(_roiW * 6 / 10);
-            const _roiH = Math.floor(_roiW * 3 / 5);
+            const _roiH = Math.floor(_roiW * 6 / 10);
             const _roiX = Math.floor((vw - _roiW) / 2);
             const _roiY = Math.floor((vh - _roiH) / 2);
 
