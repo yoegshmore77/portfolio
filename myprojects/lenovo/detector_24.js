@@ -417,7 +417,7 @@ document.body.style.fontFamily = 'sans-serif';
         const roiW = Math.floor(vw * 0.89);
         //const roiH = Math.floor(roiW * 7 / 16);  // 16:7 aspect ratio
         //const roiH = Math.floor(roiW * 6 / 10);  // 10:6 aspect ratio
-        const roiH = Math.floor(roiW * 3 / 4);  // 10:6 aspect ratio
+        const roiH = Math.floor(roiW * 6 / 10);  // 10:6 aspect ratio
         const roiX = Math.floor((vw - roiW) / 2);
         const roiY = Math.floor((vh - roiH) / 2);
 
@@ -503,7 +503,7 @@ document.body.style.fontFamily = 'sans-serif';
 
                 // TIGHTER CHECK:
                 //   4-8 vertices, fill > 0.3, solidity > 0.85, landscape aspect 1.2-4.0
-                const ok = aspect >= 1.2;
+                const ok = aspect >= 1.2 && <= 2;
                 //const ok = v >= 1 && v <= 12 && fill > 0.1 && solidity > 0.85 && aspect >= 1.2 ;//&& aspect <= 4.0;//y
                 //const ok = v >= 4 && v <= 8 && fill > 0.3 && solidity > 0.85 && aspect >= 1.2 && aspect <= 4.0;
                 //const ok = v >= 4 && v <= 8 && fill > 0.3 && solidity > 0.35 && aspect >= 1.2 && aspect <= 3.0;
@@ -583,8 +583,8 @@ document.body.style.fontFamily = 'sans-serif';
             const _roiY = Math.floor((vh - _roiH) / 2);
 
             for (const p of aiPreds) {
-                //if (p.score < 0.6) continue;  // Need 60%+ confidence for AI-only---------------------
-                if (p.score < 0.01) continue;  // Need 60%+ confidence for AI-only
+                if (p.score < 0.6) continue;  // Need 60%+ confidence for AI-only---------------------
+                //if (p.score < 0.01) continue;  // Need 60%+ confidence for AI-only
                 const [px, py, pw, ph] = p.bbox;
                 const acx = px + pw / 2, acy = py + ph / 2;
 
