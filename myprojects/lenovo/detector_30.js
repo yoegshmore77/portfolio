@@ -442,8 +442,8 @@ document.body.style.fontFamily = 'sans-serif';
     }
 
 let br = null;
-let x = null;
-let y = null;
+//let x = null;
+//let y = null;
     // ══════════════════════════════════════════════════════════════
     // CV DETECTION — SIMPLE GEOMETRY
     // ══════════════════════════════════════════════════════════════
@@ -515,12 +515,22 @@ if (approx.rows !== 4) {
 let pts = [];
 
 for (let i = 0; i < 4; i++) {
+    const p = approx.intPtr(i, 0);
+    if (!p) {
+        approx.delete();
+        pts = null;
+        break;
+    }
+
     pts.push({
-         x: approx.intPtr(i,0)[0],
-         y: approx.intPtr(i,0)[1]
+        x: p[0],
+        y: p[1]
     });
 }
+
 approx.delete();
+
+if (!pts || pts.length !== 4) continue;
 
 function dist(a,b){
     return Math.hypot(a.x-b.x, a.y-b.y);
@@ -538,7 +548,7 @@ const height = (d1 + d3) / 2;
                 const aspect = br.width / br.height;
 if (aspect < 1.3 || aspect > 4.0) continue;
 
-if (width <= height) continue;
+if (br.width <= br.height) continue;
 
                 // TIGHTER CHECK:
                 //   4-8 vertices, fill > 0.3, solidity > 0.85, landscape aspect 1.2-4.0
