@@ -524,7 +524,8 @@ const ok =
     v >= 4 && v <= 8 &&
     fill > 0.3 &&
     solidity > 0.85 &&
-    aspect > 1.15 &&
+    //aspect > 1.15 &&
+    aspect > 0.85 &&
     aspect < 4.0;
 
                 const tag = `v${v} f${fill.toFixed(2)} a${aspect.toFixed(1)}`;
