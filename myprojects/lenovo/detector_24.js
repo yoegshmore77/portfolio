@@ -634,7 +634,8 @@ let dummy_video_grab = null;
     function checkStability(rect) {
         if (lastRect) {
             const d = Math.hypot(rect.cx - lastRect.cx, rect.cy - lastRect.cy);
-            stabilityCounter = d < 50 ? stabilityCounter + 1 : Math.max(0, stabilityCounter - 1);
+            //stabilityCounter = d < 50 ? stabilityCounter + 1 : Math.max(0, stabilityCounter - 1);
+            stabilityCounter = d < 15 ? stabilityCounter + 1 : Math.max(0, stabilityCounter - 1);
         } else {
             stabilityCounter = 1;
         }
