@@ -441,6 +441,7 @@ document.body.style.fontFamily = 'sans-serif';
         processVideo_id = requestAnimationFrame(processVideo);
     }
 
+let br = null;
     // ══════════════════════════════════════════════════════════════
     // CV DETECTION — SIMPLE GEOMETRY
     // ══════════════════════════════════════════════════════════════
@@ -481,7 +482,8 @@ document.body.style.fontFamily = 'sans-serif';
                 const area = cv.contourArea(cnt);
                 if (area < minA || area > maxA) continue;
 
-                const br = cv.boundingRect(cnt);
+                //const br = cv.boundingRect(cnt);
+                  br = cv.boundingRect(cnt);
 //if (br.width <= br.height) continue; // reject portrait or square
                 const brArea = br.width * br.height;
                 if (brArea <= 0) continue;
