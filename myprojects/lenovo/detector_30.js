@@ -511,10 +511,12 @@ if (approx.rows !== 4) {
 }
 
 let pts = [];
+let x = null;
+let y = null;
 for (let i = 0; i < 4; i++) {
     pts.push({
-        x: approx.intPtr(i,0)[0],
-        y: approx.intPtr(i,0)[1]
+         x: approx.intPtr(i,0)[0],
+         y: approx.intPtr(i,0)[1]
     });
 }
 approx.delete();
