@@ -3075,7 +3075,7 @@ function handlePostCollision(post) {
     
     scoreDisplay.textContent = score;
     flashScore();
-    createScorePopup();
+    //createScorePopup();
     //console.log("-------------Goal By Pole--------------💈 💈 💈 💈 💈 💈 💈 💈 💈 💈");
     //copy_color = "#ffcc00";
     //goalFlash.innerText = "GOAL!";
