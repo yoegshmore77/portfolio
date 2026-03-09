@@ -589,7 +589,7 @@ document.body.style.fontFamily = 'sans-serif';
 
                 const aspect = pw / ph;
                 //if (aspect < 1.0) continue;  // Still require landscape-ish
-                if (aspect < 0.5) continue;  // Still require landscape-ish
+                if (aspect < 0.1) continue;  // Still require landscape-ish
                 pick = {
                     x: Math.round(px), y: Math.round(py),
                     w: Math.round(pw), h: Math.round(ph),
