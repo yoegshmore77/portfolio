@@ -3636,7 +3636,7 @@ function showGoalFlash() {
         }*/
         if(currentAttempt >= total_kick_count){
             ready_to_shoot = false;
-            show_result_Text();
+            //show_result_Text();
         }else{
           ready_to_shoot = true;
           grabber_hand_anim(ball.position,ball.rotation.y);
