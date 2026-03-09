@@ -416,7 +416,8 @@ document.body.style.fontFamily = 'sans-serif';
         // ROI box (landscape band: 90% wide, 16:7 aspect — matches CSS guide)
         const roiW = Math.floor(vw * 0.89);
         //const roiH = Math.floor(roiW * 7 / 16);  // 16:7 aspect ratio
-        const roiH = Math.floor(roiW * 6 / 10);  // 10:6 aspect ratio
+        //const roiH = Math.floor(roiW * 6 / 10);  // 10:6 aspect ratio
+        const roiH = Math.floor(roiW * 3 / 4);  // 10:6 aspect ratio
         const roiX = Math.floor((vw - roiW) / 2);
         const roiY = Math.floor((vh - roiH) / 2);
 
