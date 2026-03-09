@@ -482,7 +482,7 @@ document.body.style.fontFamily = 'sans-serif';
 
                 const br = cv.boundingRect(cnt);
                 const brArea = br.width * br.height;
-                if (brArea <= 1) continue;
+                if (brArea <= 5) continue;
 
                 const fill = area / brArea;  // How rectangular (1.0 = perfect)
 
