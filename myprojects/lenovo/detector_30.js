@@ -507,48 +507,57 @@ let br = null;
                 cv.approxPolyDP(cnt, approx, 0.02 * peri, true);
                 const v = approx.rows;
                 //approx.delete();
+
+
+
+                //const aspect = br.width / br.height;
+
+//const peri = cv.arcLength(cnt, true);
+//const approx = new cv.Mat();
+cv.approxPolyDP(cnt, approx, 0.02 * peri, true);
+
+// must be quadrilateral
 if (approx.rows !== 4) {
     approx.delete();
     continue;
 }
 
-let pts = [];
-
-for (let i = 0; i < 4; i++) {
-    const p = approx.intPtr(i, 0);
-    if (!p) {
-        approx.delete();
-        pts = null;
-        break;
-    }
-
-    pts.push({
-        x: p[0],
-        y: p[1]
-    });
+// reject non-convex shapes
+if (!cv.isContourConvex(approx)) {
+    approx.delete();
+    continue;
 }
+
+// rotated rectangle (very stable)
+const rect = cv.minAreaRect(cnt);
+
+let w = rect.size.width;
+let h = rect.size.height;
 
 approx.delete();
 
-if (!pts || pts.length !== 4) continue;
-
-function dist(a,b){
-    return Math.hypot(a.x-b.x, a.y-b.y);
+// normalize orientation
+if (w < h) {
+    let temp = w;
+    w = h;
+    h = temp;
 }
 
-const d0 = dist(pts[0], pts[1]);
-const d1 = dist(pts[1], pts[2]);
-const d2 = dist(pts[2], pts[3]);
-const d3 = dist(pts[3], pts[0]);
+// reject portrait or square
+if (w <= h) continue;
 
-const width  = (d0 + d2) / 2;
-const height = (d1 + d3) / 2;
+const aspect = w / h;
 
-
-                const aspect = br.width / br.height;
+// strict landscape ratio
 if (aspect < 1.3 || aspect > 4.0) continue;
 
-if (br.width <= br.height) continue;
+cv.dilate(edges, edges, cv.Mat.ones(3,3,cv.CV_8U));
+
+
+
+
+
+
 
                 // TIGHTER CHECK:
                 //   4-8 vertices, fill > 0.3, solidity > 0.85, landscape aspect 1.2-4.0
@@ -599,15 +608,7 @@ const ok =
 
             contours.delete(); hierarchy.delete(); edges.delete(); closed.delete();
             window._cvStats = stats;
-best = {
-    x: br.x + roiX,
-    y: br.y + roiY,
-    w: br.width,
-    h: br.height,
-    cx: br.x + roiX + br.width/2,
-    cy: br.y + roiY + br.height/2,
-    aspect: aspect
-};
+
 
             return best;
         } catch (e) {
