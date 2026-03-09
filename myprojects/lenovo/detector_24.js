@@ -472,6 +472,7 @@ document.body.style.fontFamily = 'sans-serif';
 
             let best = null, bestArea = 0;
             const minA = roiW * roiH * 0.05;  // 5% of ROI (ignore small noise)
+            //const maxA = roiW * roiH * 0.85;  // 85% of ROI
             const maxA = roiW * roiH * 0.85;  // 85% of ROI
             let stats = { total: contours.size(), ok: 0, info: [] };
 
@@ -482,7 +483,7 @@ document.body.style.fontFamily = 'sans-serif';
 
                 const br = cv.boundingRect(cnt);
                 const brArea = br.width * br.height;
-                if (brArea <= 5) continue;
+                if (brArea <= 0) continue;
 
                 const fill = area / brArea;  // How rectangular (1.0 = perfect)
 
@@ -503,9 +504,9 @@ document.body.style.fontFamily = 'sans-serif';
 
                 // TIGHTER CHECK:
                 //   4-8 vertices, fill > 0.3, solidity > 0.85, landscape aspect 1.2-4.0
-                //const ok = aspect >= 1.2 && aspect <= 3;
+                const ok = aspect >= 1.2 && aspect <= 3;
                 //const ok = v >= 1 && v <= 12 && fill > 0.1 && solidity > 0.85 && aspect >= 1.2 ;//&& aspect <= 4.0;//y
-                const ok = v >= 4 && v <= 8 && fill > 0.3 && solidity > 0.85 && aspect >= 1.2 && aspect <= 4.0;
+                //const ok = v >= 4 && v <= 8 && fill > 0.3 && solidity > 0.85 && aspect >= 1.2 && aspect <= 4.0;
                 //const ok = v >= 4 && v <= 8 && fill > 0.3 && solidity > 0.35 && aspect >= 1.2 && aspect <= 3.0;
 
                 const tag = `v${v} f${fill.toFixed(2)} a${aspect.toFixed(1)}`;
