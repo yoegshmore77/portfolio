@@ -574,7 +574,8 @@ document.body.style.fontFamily = 'sans-serif';
         if (!pick && aiPreds.length) {
             // Recompute ROI bounds (same formula as processVideo)
             const _roiW = Math.floor(vw * 0.89);
-            const _roiH = Math.floor(_roiW * 6 / 10);
+            //const _roiH = Math.floor(_roiW * 6 / 10);
+            const _roiH = Math.floor(_roiW * 3 / 5);
             const _roiX = Math.floor((vw - _roiW) / 2);
             const _roiY = Math.floor((vh - _roiH) / 2);
 
