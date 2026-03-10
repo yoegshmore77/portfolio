@@ -483,7 +483,7 @@ document.body.style.fontFamily = 'sans-serif';
 
                 const br = cv.boundingRect(cnt);
 //if (br.width <= br.height) continue; // reject portrait or square
-if (br.width <= br.height) continue; // reject portrait or square
+//if (br.width <= br.height) continue; // reject portrait or square
                 const brArea = br.width * br.height;
                 //if (brArea <= 0) continue;
 
