@@ -638,7 +638,7 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
 
             hull.delete();
 
-            if (solidity < 0.09) {
+            if (solidity < 0.9) {
                 cnt.delete();
                 continue;
             }
