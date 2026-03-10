@@ -528,7 +528,7 @@ const ok =
     solidity > 0.85 &&
     //aspect > 1.15 &&
     aspect > 0.85 &&
-    aspect < 14.0;
+    aspect < 24.0;
 
                 const tag = `v${v} f${fill.toFixed(2)} a${aspect.toFixed(1)}`;
                 stats.info.push(tag + (ok ? ' ✓' : ''));
