@@ -474,8 +474,8 @@ if (rect) {
 
     if (prevX !== null && prevY !== null) {
 
-        if (Math.abs(prevX - newX) < 20 &&
-            Math.abs(prevY - newY) < 20) {
+        if (Math.abs(prevX - newX) < 40 &&
+            Math.abs(prevY - newY) < 40) {
 
             stableFrames++;
 
@@ -554,8 +554,8 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
         gray.delete();
 
         const edges = new cv.Mat();
-        cv.Canny(blur, edges, 60, 150);
-        //cv.Canny(blur, edges, 30, 100);
+        //cv.Canny(blur, edges, 60, 150);
+        cv.Canny(blur, edges, 30, 100);
 
         blur.delete();
 
@@ -567,7 +567,7 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
         let best = null;
         let bestArea = 0;
 
-        const minA = roiW * roiH * 0.05;
+        const minA = roiW * roiH * 0.015;
         const maxA = roiW * roiH * 0.9;
 
         //console.log("contours = "+ contours.size());
@@ -587,7 +587,8 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
             const approx = new cv.Mat();
             cv.approxPolyDP(cnt, approx, 0.02 * peri, true);
 
-            if (approx.rows !== 4) {
+            //if (approx.rows !== 4) {
+            if (approx.rows < 4 || approx.rows > 6) {
                 approx.delete();
                 cnt.delete();
                 continue;
@@ -600,7 +601,7 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
             const w = rect.size.width;
             const h = rect.size.height;
 
-            if (Math.max(w, h) < roiW * 0.25) continue;
+            //if (Math.max(w, h) < roiW * 0.25) continue;
 
             if (w <= 0 || h <= 0) {
                 cnt.delete();
@@ -610,9 +611,9 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
             const aspect = Math.max(w,h) / Math.min(w,h);
 
             // LANDSCAPE ONLY
-             if (aspect < 1 ) {
+             if (aspect >= 1.2 && aspect <= 5.0) {
             //if (aspect <= 1 || aspect > 3.5) {
-                cnt.delete();
+                //cnt.delete();
                 continue;
             }
 
@@ -624,7 +625,7 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
 
             hull.delete();
 
-            if (solidity < 0.85) {
+            if (solidity > 0.75) {
                 cnt.delete();
                 continue;
             }
