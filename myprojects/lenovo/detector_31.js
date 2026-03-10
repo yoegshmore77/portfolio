@@ -421,25 +421,61 @@ document.body.style.fontFamily = 'sans-serif';
         const roiX = Math.floor((vw - roiW) / 2);
         const roiY = Math.floor((vh - roiH) / 2);
 
+/*const roiX = vw * 0.2;
+const roiY = vh * 0.3;
+const roiW = vw * 0.6;
+const roiH = vh * 0.4;*/
+
         // CV detection on ROI (BEFORE drawing overlay so edges don't pollute Canny)
-        const cvResult = runCV(vw, vh, roiX, roiY, roiW, roiH);
+        //const cvResult = runCV(vw, vh, roiX, roiY, roiW, roiH);
 
         // Draw ROI outline AFTER CV extraction so it doesn't pollute edges
-        dbgCtx.strokeStyle = 'rgba(255,255,255,0.5)';
-        dbgCtx.lineWidth = 2;
-        dbgCtx.strokeRect(roiX, roiY, roiW, roiH);
+        //dbgCtx.strokeStyle = 'rgba(255,255,255,1.5)';
+        //dbgCtx.lineWidth = 2;
+        //dbgCtx.strokeRect(roiX, roiY, roiW, roiH);
+
+//dbgCtx.clearRect(0,0,dbgCanvas.width,dbgCanvas.height);
+
+const rect = runCV(vw, vh, roiX, roiY, roiW, roiH);
+
+if(rect){
+
+    dbgCtx.strokeStyle = "lime";
+    dbgCtx.lineWidth = 3;
+
+    dbgCtx.beginPath();
+
+    dbgCtx.moveTo(rect.box[0].x, rect.box[0].y);
+
+    for(let i=1;i<4;i++){
+        dbgCtx.lineTo(rect.box[i].x, rect.box[i].y);
+    }
+
+    dbgCtx.closePath();
+    dbgCtx.stroke();
+
+}
+
+//const rect = runCV(vw, vh, roiX, roiY, roiW, roiH);
+//console.log("CV RESULT:", cvResult);
+
+
 
         // AI for labeling (async)
         if (cocoModel && video.currentTime !== lastVideoTime) {
-            lastVideoTime = video.currentTime;
-            cocoModel.detect(video).then(preds => finalize(cvResult, preds, vw, vh));
+            //lastVideoTime = video.currentTime;
+            //cocoModel.detect(video).then(preds => finalize(cvResult, preds, vw, vh));
         } else {
-            finalize(cvResult, [], vw, vh);
+            //finalize(cvResult, [], vw, vh);
         }
 
         //requestAnimationFrame(processVideo);
         processVideo_id = requestAnimationFrame(processVideo);
     }
+
+//let lockedRect = null;
+//let stableFrames = 0;
+const LOCK_FRAMES = 5;
 
 function angle(p1, p2, p3) {
 
@@ -462,130 +498,10 @@ function angle(p1, p2, p3) {
     // ══════════════════════════════════════════════════════════════
     // CV DETECTION — SIMPLE GEOMETRY
     // ══════════════════════════════════════════════════════════════
-    /*function runCV(vw, vh, roiX, roiY, roiW, roiH) {
-        try {
-            // Extract ROI pixels
-            const roiData = dbgCtx.getImageData(roiX, roiY, roiW, roiH);
-            const src = new cv.Mat(roiH, roiW, cv.CV_8UC4);
-            src.data.set(roiData.data);
-
-            // Gray → Blur → Canny → Close
-            const gray = new cv.Mat(), blur = new cv.Mat();
-            cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
-            cv.GaussianBlur(gray, blur, new cv.Size(5, 5), 0);
-            src.delete();
-
-            const edges = new cv.Mat();
-            //cv.Canny(blur, edges, 50, 120);  // Higher thresholds: ignore weak edges (cables/shadows)
-            cv.Canny(blur, edges, 75, 145); 
-            gray.delete(); blur.delete();
-
-            const kernel = cv.Mat.ones(3, 3, cv.CV_8U);  // Smaller kernel: don't merge separate objects
-            const closed = new cv.Mat();
-            cv.morphologyEx(edges, closed, cv.MORPH_CLOSE, kernel);
-            kernel.delete();
-
-            const contours = new cv.MatVector();
-            const hierarchy = new cv.Mat();
-            cv.findContours(closed, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
-
-            let best = null, bestArea = 0;
-            const minA = roiW * roiH * 0.05;  // 5% of ROI (ignore small noise)
-            //const maxA = roiW * roiH * 0.85;  // 85% of ROI
-            const maxA = roiW * roiH * 0.85;  // 85% of ROI
-            let stats = { total: contours.size(), ok: 0, info: [] };
-
-            for (let i = 0; i < contours.size(); i++) {
-                const cnt = contours.get(i);
-                const area = cv.contourArea(cnt);
-                if (area < minA || area > maxA) continue;
-
-                const br = cv.boundingRect(cnt);
-if (br.width <= br.height) continue; // reject portrait or square
-//if (br.width <= br.height) continue; // reject portrait or square
-                const brArea = br.width * br.height;
-                //if (brArea <= 0) continue;
-
-
-
-                const fill = area / brArea;  // How rectangular (1.0 = perfect)
-
-                // Convexity check: reject merged multi-object blobs
-                const hull = new cv.Mat();
-                cv.convexHull(cnt, hull);
-                const hullArea = cv.contourArea(hull);
-                const solidity = hullArea > 0 ? area / hullArea : 0;
-                hull.delete();
-
-                const peri = cv.arcLength(cnt, true);
-                const approx = new cv.Mat();
-                //cv.approxPolyDP(cnt, approx, 0.04 * peri, true);
-                cv.approxPolyDP(cnt, approx, 0.02 * peri, true);
-                const v = approx.rows;
-                approx.delete();
-
-                const aspect = br.width / br.height;
-
-                // TIGHTER CHECK:
-                //   4-8 vertices, fill > 0.3, solidity > 0.85, landscape aspect 1.2-4.0
-                //const ok = aspect > 1 && aspect <= 30;
-                //const ok = v >= 1 && v <= 12 && fill > 0.1 && solidity > 0.85 && aspect >= 1.2 ;//&& aspect <= 4.0;//y
-                //const ok = v >= 4 && v <= 8 && fill > 0.3 && solidity > 0.85 && aspect >= 1.2 && aspect <= 4.0;
-                //const ok = v >= 4 && v <= 8 && fill > 0.3 && solidity > 0.35 && aspect >= 1.2 && aspect <= 3.0;
-
-//const br = cv.boundingRect(cnt);
-
-
- 
-//const aspect = br.width / br.height;
-
-const ok =
-    v >= 1 && v <= 8 &&
-    //fill > 0.3 &&
-    fill > 0.1 &&
-    solidity > 0.85 &&
-    //aspect > 1.15 &&
-    aspect > 0.85 &&
-    aspect < 34.0;
-
-                const tag = `v${v} f${fill.toFixed(2)} a${aspect.toFixed(1)}`;
-                stats.info.push(tag + (ok ? ' ✓' : ''));
-
-                // Draw all candidates in ROI-offset coords
-                const fx = br.x + roiX, fy = br.y + roiY;
-                dbgCtx.strokeStyle = ok ? 'rgba(0,255,0,0.6)' : 'rgba(255,0,0,0.8)';//'rgba(255,165,0,0.8)'; // yellow line code rgba(255,165,0,0.3
-                dbgCtx.lineWidth = ok ? 2 : 1;
-                dbgCtx.strokeRect(fx, fy, br.width, br.height);
-                dbgCtx.fillStyle = ok ? '#0f0' : 'rgba(255,0,0,0.8)';//'rgba(255,165,0,0.5)';
-                dbgCtx.font = '9px monospace';
-                dbgCtx.fillText(tag, fx, fy - 2);
-
-
-                if (ok) {
-                    stats.ok++;
-                    if (area > bestArea) {
-                        bestArea = area;
-                        best = {
-                            x: fx, y: fy, w: br.width, h: br.height,
-                            cx: Math.round(fx + br.width / 2),
-                            cy: Math.round(fy + br.height / 2),
-                            area, fill: fill.toFixed(2), vertices: v,
-                            label: 'Object', source: 'CV'
-                        };
-                    }
-                }
-            }
-
-            contours.delete(); hierarchy.delete(); edges.delete(); closed.delete();
-            window._cvStats = stats;
-            return best;
-        } catch (e) {
-            log('CV err: ' + e.message);
-            return null;
-        }
-    }*/
+    
 let stableFrames = 0;
 let lockedRect=null;
+
 function runCV(vw, vh, roiX, roiY, roiW, roiH) {
 
     try {
@@ -596,15 +512,18 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
         src.data.set(roiData.data);
 
         const gray = new cv.Mat();
-        cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
+        const blur = new cv.Mat();
 
-        cv.medianBlur(gray, gray, 5);
+        cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
+        cv.GaussianBlur(gray, blur, new cv.Size(5,5), 0);
+
+        src.delete();
+        gray.delete();
 
         const edges = new cv.Mat();
-        cv.Canny(gray, edges, 60, 150);
+        cv.Canny(blur, edges, 30, 100);
 
-        const kernel = cv.Mat.ones(3,3,cv.CV_8U);
-        cv.morphologyEx(edges, edges, cv.MORPH_CLOSE, kernel);
+        blur.delete();
 
         const contours = new cv.MatVector();
         const hierarchy = new cv.Mat();
@@ -614,152 +533,92 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
         let best = null;
         let bestArea = 0;
 
-        const minArea = roiW * roiH * 0.05;
-        const maxArea = roiW * roiH * 0.9;
+        const minA = roiW * roiH * 0.002;
+        const maxA = roiW * roiH * 0.9;
 
-        for (let i=0;i<contours.size();i++) {
+        console.log("contours = "+ contours.size());
+        for (let i = 0; i < contours.size(); i++) {
 
             const cnt = contours.get(i);
+
             const area = cv.contourArea(cnt);
 
-            if(area < minArea || area > maxArea) continue;
-
-            const peri = cv.arcLength(cnt,true);
-
-            const approx = new cv.Mat();
-            cv.approxPolyDP(cnt, approx, 0.02 * peri, true);
-
-            if(approx.rows !== 4){
-                approx.delete();
+            if (area < minA || area > maxA) {
+                cnt.delete();
                 continue;
             }
-
-            if(!cv.isContourConvex(approx)){
-                approx.delete();
-                continue;
-            }
-
-            let pts=[];
-
-            for(let j=0;j<4;j++){
-                let p = approx.intPtr(j,0);
-                pts.push({x:p[0]+roiX, y:p[1]+roiY});
-            }
-
-            approx.delete();
-
-            // ---------- aspect ratio filter ----------
 
             const rect = cv.minAreaRect(cnt);
 
-            let w = rect.size.width;
-            let h = rect.size.height;
+            const w = rect.size.width;
+            const h = rect.size.height;
 
-            if(w < h){
-                let t=w;
-                w=h;
-                h=t;
+            if (w <= 0 || h <= 0) {
+                cnt.delete();
+                continue;
             }
 
-            const aspect = w/h;
+            const aspect = Math.max(w,h) / Math.min(w,h);
 
-            if(aspect < 1.3 || aspect > 4.0) continue;
-
-            // ---------- corner angle validation ----------
-
-            let validAngles = true;
-
-            for(let k=0;k<4;k++){
-
-                const a = pts[(k+3)%4];
-                const b = pts[k];
-                const c = pts[(k+1)%4];
-
-                const ang = angle(a,b,c);
-
-                if(Math.abs(ang-90) > 25){
-                    validAngles=false;
-                    break;
-                }
+            // LANDSCAPE ONLY
+            if (aspect < 1.3) {
+                cnt.delete();
+                continue;
             }
 
-            if(!validAngles) continue;
+            const box = cv.RotatedRect.points(rect);
 
-            // ---------- edge density ----------
+            const pts = [];
 
-            const br = cv.boundingRect(cnt);
+            for (let j = 0; j < 4; j++) {
 
-            const edgeROI = edges.roi(br);
-            const edgeCount = cv.countNonZero(edgeROI);
+                pts.push({
+                    x: box[j].x + roiX,
+                    y: box[j].y + roiY
+                });
 
-            const density = edgeCount/(br.width*br.height);
+            }
 
-            edgeROI.delete();
-
-            if(density < 0.01) continue;
-
-            // ---------- best candidate ----------
-
-            if(area > bestArea){
+            if (area > bestArea) {
 
                 bestArea = area;
 
                 best = {
-                    x: br.x+roiX,
-                    y: br.y+roiY,
-                    w: br.width,
-                    h: br.height,
-                    cx: br.x + br.width/2 + roiX,
-                    cy: br.y + br.height/2 + roiY,
-                    box: pts
+
+                    cx: rect.center.x + roiX,
+                    cy: rect.center.y + roiY,
+
+                    box: pts,
+
+                    w: Math.max(w,h),
+                    h: Math.min(w,h)
+
                 };
+
             }
+
+            cnt.delete();
+
         }
 
         contours.delete();
         hierarchy.delete();
-        gray.delete();
         edges.delete();
-        kernel.delete();
-        src.delete();
 
-        // ---------- temporal stability lock ----------
-
-        if(!best){
-            stableFrames=0;
-            lockedRect=null;
-            return null;
-        }
-
-        if(lockedRect){
-
-            const dx=Math.abs(best.cx-lockedRect.cx);
-            const dy=Math.abs(best.cy-lockedRect.cy);
-
-            if(dx<25 && dy<25){
-                stableFrames++;
-            }else{
-                stableFrames=0;
-            }
-
-        }else{
-            stableFrames=1;
-        }
-
-        lockedRect=best;
-
-        if(stableFrames>=LOCK_FRAMES){
-            return best;
-        }
-
-        return null;
+        return best;
 
     }
     catch(e){
-        console.log("CV err:",e);
+
+        console.log("CV error:", e);
+
         return null;
+
     }
+
 }
+
+
     // ══════════════════════════════════════════════════════════════
     // FINALIZE: label with AI if available, then draw + lock
     // ══════════════════════════════════════════════════════════════
