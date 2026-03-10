@@ -624,8 +624,8 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
             const aspect = Math.max(w,h) / Math.min(w,h);
 
             // LANDSCAPE ONLY
-             if (aspect < 1.3 ) {
-            //if (aspect < 1.3 || aspect > 3.5) {
+             //if (aspect < 1.3 ) {
+            if (aspect < 1.3 || aspect > 3.5) {
                 cnt.delete();
                 continue;
             }
