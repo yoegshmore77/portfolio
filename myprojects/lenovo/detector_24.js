@@ -458,7 +458,8 @@ document.body.style.fontFamily = 'sans-serif';
             src.delete();
 
             const edges = new cv.Mat();
-            cv.Canny(blur, edges, 50, 120);  // Higher thresholds: ignore weak edges (cables/shadows)
+            //cv.Canny(blur, edges, 50, 120);  // Higher thresholds: ignore weak edges (cables/shadows)
+            cv.Canny(blur, edges, 75, 145); 
             gray.delete(); blur.delete();
 
             const kernel = cv.Mat.ones(3, 3, cv.CV_8U);  // Smaller kernel: don't merge separate objects
@@ -509,7 +510,7 @@ if (br.width <= br.height) continue; // reject portrait or square
 
                 // TIGHTER CHECK:
                 //   4-8 vertices, fill > 0.3, solidity > 0.85, landscape aspect 1.2-4.0
-                const ok = aspect > 1 && aspect <= 30;
+                //const ok = aspect > 1 && aspect <= 30;
                 //const ok = v >= 1 && v <= 12 && fill > 0.1 && solidity > 0.85 && aspect >= 1.2 ;//&& aspect <= 4.0;//y
                 //const ok = v >= 4 && v <= 8 && fill > 0.3 && solidity > 0.85 && aspect >= 1.2 && aspect <= 4.0;
                 //const ok = v >= 4 && v <= 8 && fill > 0.3 && solidity > 0.35 && aspect >= 1.2 && aspect <= 3.0;
@@ -520,8 +521,8 @@ if (br.width <= br.height) continue; // reject portrait or square
 
 //const aspect = br.width / br.height;
 
-//const ok =
-    v >= 1 && v <= 18 &&
+const ok =
+    v >= 1 && v <= 8 &&
     //fill > 0.3 &&
     fill > 0.1 &&
     solidity > 0.85 &&
