@@ -542,6 +542,14 @@ const ok =
                 dbgCtx.font = '9px monospace';
                 dbgCtx.fillText(tag, fx, fy - 2);
 
+                                        best = {
+                            x: fx, y: fy, w: br.width, h: br.height,
+                            cx: Math.round(fx + br.width / 2),
+                            cy: Math.round(fy + br.height / 2),
+                            area, fill: fill.toFixed(2), vertices: v,
+                            label: 'Object', source: 'CV'
+                        };
+                checkStability(best);
                 if (ok) {
                     stats.ok++;
                     if (area > bestArea) {
@@ -640,7 +648,7 @@ const ok =
 
         if (pick) {
             // Highlight the pick with a bright box
-            const c = pick.source.includes('AI') ? '#FF00FF' : '#00FFFF';
+            const c = pick.source.includes('AI') ? '#FF00FF' : '#00FFFF'; // pink / skyblue
             dbgCtx.strokeStyle = c; dbgCtx.lineWidth = 3;
             dbgCtx.strokeRect(pick.x, pick.y, pick.w, pick.h);
             dbgCtx.fillStyle = c; 
@@ -722,41 +730,6 @@ let dummy_video_grab = null;
             dbgCtx.moveTo(rect.cx, rect.cy - 20); dbgCtx.lineTo(rect.cx, rect.cy + 20);
             dbgCtx.stroke();
 
-            /*goalFlash.style.setProperty('opacity', '1', 'important');
-            //goalFlash.style.opacity = '1';
-            //goalFlash.style.display = 'block';
-            goalFlash.style.setProperty('display', 'block', 'important');
-            //goalFlash.style.position = 'absolute';
-            goalFlash.style.setProperty('position', 'absolute', 'important');
-            //goalFlash.style.textShadow = '0 0 20px #000000, 0 0 40px #ff6600';
-            goalFlash.style.setProperty('textShadow', '0 0 20px #000000, 0 0 40px #ff6600', 'important');
-
-
-            //goalFlash.style.fontSize = '20px';
-            //goalFlash.style.fontSize = '1.2em';
-            goalFlash.style.setProperty('fontSize', '1.2em', 'important');
-            //goalFlash.style.color = "#ffcc00";//copy_color;
-            goalFlash.style.setProperty('color', '#ffcc00', 'important');
-            goalFlash.innerText = "IT LOOKS LIKE A GOAL!";
-                //goalFlash.style.left = `${rect.cx+(rect.w-rect.w)}px`; ignore
-                //goalFlash.style.top = `${rect.cy+rect.h/2}px`; ignore
-
-             //goalFlash.style.left = `${video.videoWidth/2}px`;
-             goalFlash.style.setProperty('left', '${video.videoWidth/2}px', 'important');
-             //goalFlash.style.top = `${(video.videoHeight-rect.y)+rect.h}px`;
-             goalFlash.style.setProperty('top', '${(video.videoHeight-rect.y)+rect.h}px', 'important');
-            
-            //goalFlash.style.transform = 'translate(-50%, -50%)';
-             //goalFlash.style.setProperty('transform', 'translate(-50%, -50%)', 'important');
-            //goalFlash.style.textAlign = 'center';
-            goalFlash.style.setProperty('textAlign', 'center', 'important');*/
-
-            // Labels
-            /*dbgCtx.fillStyle = '#00FF00'; dbgCtx.font = 'bold 16px monospace';
-            dbgCtx.fillText(`LOCKED [${rect.label}]`, rect.x, rect.y - 8);
-            dbgCtx.font = '14px monospace';
-            dbgCtx.fillText(`Center: (${rect.cx}, ${rect.cy})`, rect.x, rect.y + rect.h + 16);
-            dbgCtx.fillText(`Size: ${rect.w} x ${rect.h}`, rect.x, rect.y + rect.h + 32);*/
 
             statusMsg.textContent = 'LOCKED!';
             statusMsg.style.color = '#00FF00';
