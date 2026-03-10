@@ -528,23 +528,6 @@ if (rect) {
 //let stableFrames = 0;
 const LOCK_FRAMES = 5;
 
-function angle(p1, p2, p3) {
-
-    const v1x = p1.x - p2.x;
-    const v1y = p1.y - p2.y;
-
-    const v2x = p3.x - p2.x;
-    const v2y = p3.y - p2.y;
-
-    const dot = v1x*v2x + v1y*v2y;
-
-    const mag1 = Math.sqrt(v1x*v1x + v1y*v1y);
-    const mag2 = Math.sqrt(v2x*v2x + v2y*v2y);
-
-    const cos = dot / (mag1 * mag2);
-
-    return Math.acos(cos) * 180 / Math.PI;
-}
 
     // ══════════════════════════════════════════════════════════════
     // CV DETECTION — SIMPLE GEOMETRY
@@ -571,8 +554,8 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
         gray.delete();
 
         const edges = new cv.Mat();
-        //cv.Canny(blur, edges, 60, 150);
-        cv.Canny(blur, edges, 30, 100);
+        cv.Canny(blur, edges, 60, 150);
+        //cv.Canny(blur, edges, 30, 100);
 
         blur.delete();
 
@@ -617,6 +600,8 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
             const w = rect.size.width;
             const h = rect.size.height;
 
+            if (Math.max(w, h) < roiW * 0.25) continue;
+
             if (w <= 0 || h <= 0) {
                 cnt.delete();
                 continue;
@@ -625,8 +610,8 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
             const aspect = Math.max(w,h) / Math.min(w,h);
 
             // LANDSCAPE ONLY
-             //if (aspect < 1.3 ) {
-            if (aspect < 1.3 || aspect > 3.5) {
+             if (aspect < 1 ) {
+            //if (aspect <= 1 || aspect > 3.5) {
                 cnt.delete();
                 continue;
             }
@@ -639,7 +624,7 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
 
             hull.delete();
 
-            if (solidity < 0.9) {
+            if (solidity < 0.85) {
                 cnt.delete();
                 continue;
             }
