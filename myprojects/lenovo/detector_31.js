@@ -396,6 +396,15 @@ document.body.style.fontFamily = 'sans-serif';
 
     let processVideo_id = null;
 
+    //let stableFrames = 0;
+let lockedRect=null;
+
+let prevX = null;
+let prevY = null;
+
+let stableFrames = 0;
+const STABLE_THRESHOLD = 5; // frames required to lock
+
     // ── Main Loop ────────────────────────────────────────────────
     function processVideo() {
         //renderer.domElement.style.setProperty('z-index', '200000000000', 'important');
@@ -438,6 +447,7 @@ const roiH = vh * 0.4;*/
 
 const rect = runCV(vw, vh, roiX, roiY, roiW, roiH);
 
+/*
 if(rect){
 
     dbgCtx.strokeStyle = "lime";
@@ -455,7 +465,48 @@ if(rect){
     dbgCtx.stroke();
 
 }
+*/
 
+if (rect) {
+
+    const newX = rect.cx;
+    const newY = rect.cy;
+
+    if (prevX !== null && prevY !== null) {
+
+        if (Math.abs(prevX - newX) < 20 &&
+            Math.abs(prevY - newY) < 20) {
+
+            stableFrames++;
+
+        } else {
+
+            stableFrames = 0;
+        }
+    }
+
+    prevX = newX;
+    prevY = newY;
+
+    if (rect && stableFrames > 5) {
+
+        dbgCtx.strokeStyle = "lime";
+        dbgCtx.lineWidth = 3;
+
+        dbgCtx.beginPath();
+
+        dbgCtx.moveTo(rect.box[0].x, rect.box[0].y);
+
+        for (let i = 1; i < 4; i++) {
+            dbgCtx.lineTo(rect.box[i].x, rect.box[i].y);
+        }
+
+        dbgCtx.closePath();
+        dbgCtx.stroke();
+
+    }
+
+}
 //const rect = runCV(vw, vh, roiX, roiY, roiW, roiH);
 //console.log("CV RESULT:", cvResult);
 
@@ -499,8 +550,7 @@ function angle(p1, p2, p3) {
     // CV DETECTION — SIMPLE GEOMETRY
     // ══════════════════════════════════════════════════════════════
     
-let stableFrames = 0;
-let lockedRect=null;
+
 
 function runCV(vw, vh, roiX, roiY, roiW, roiH) {
 
@@ -521,7 +571,7 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
         gray.delete();
 
         const edges = new cv.Mat();
-        cv.Canny(blur, edges, 30, 100);
+        cv.Canny(blur, edges, 60, 150);
 
         blur.delete();
 
@@ -533,10 +583,10 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
         let best = null;
         let bestArea = 0;
 
-        const minA = roiW * roiH * 0.002;
+        const minA = roiW * roiH * 0.05;
         const maxA = roiW * roiH * 0.9;
 
-        console.log("contours = "+ contours.size());
+        //console.log("contours = "+ contours.size());
         for (let i = 0; i < contours.size(); i++) {
 
             const cnt = contours.get(i);
@@ -547,6 +597,19 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
                 cnt.delete();
                 continue;
             }
+
+            const peri = cv.arcLength(cnt, true);
+
+            const approx = new cv.Mat();
+            cv.approxPolyDP(cnt, approx, 0.02 * peri, true);
+
+            if (approx.rows !== 4) {
+                approx.delete();
+                cnt.delete();
+                continue;
+            }
+
+            approx.delete();
 
             const rect = cv.minAreaRect(cnt);
 
@@ -561,7 +624,21 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
             const aspect = Math.max(w,h) / Math.min(w,h);
 
             // LANDSCAPE ONLY
-            if (aspect < 1.3) {
+             if (aspect < 1.3 ) {
+            //if (aspect < 1.3 || aspect > 3.5) {
+                cnt.delete();
+                continue;
+            }
+
+            const hull = new cv.Mat();
+            cv.convexHull(cnt, hull);
+
+            const hullArea = cv.contourArea(hull);
+            const solidity = area / hullArea;
+
+            hull.delete();
+
+            if (solidity < 0.09) {
                 cnt.delete();
                 continue;
             }
