@@ -571,7 +571,8 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
         gray.delete();
 
         const edges = new cv.Mat();
-        cv.Canny(blur, edges, 60, 150);
+        //cv.Canny(blur, edges, 60, 150);
+        cv.Canny(blur, edges, 30, 100);
 
         blur.delete();
 
