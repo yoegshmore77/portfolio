@@ -521,13 +521,13 @@ if (br.width <= br.height) continue; // reject portrait or square
 //const aspect = br.width / br.height;
 
 const ok =
-    v >= 4 && v <= 8 &&
+    v >= 1 && v <= 8 &&
     //fill > 0.3 &&
     fill > 0.1 &&
     solidity > 0.85 &&
     //aspect > 1.15 &&
     aspect > 0.85 &&
-    aspect < 14.0;
+    aspect < 4.0;
 
                 const tag = `v${v} f${fill.toFixed(2)} a${aspect.toFixed(1)}`;
                 stats.info.push(tag + (ok ? ' ✓' : ''));
