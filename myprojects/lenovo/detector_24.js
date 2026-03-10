@@ -521,7 +521,7 @@ if (br.width <= br.height) continue; // reject portrait or square
 //const aspect = br.width / br.height;
 
 const ok =
-    v >= 1 && v <= 8 &&
+    v >= 1 && v <= 18 &&
     //fill > 0.3 &&
     fill > 0.1 &&
     solidity > 0.85 &&
