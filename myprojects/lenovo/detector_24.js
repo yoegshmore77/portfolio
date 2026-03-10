@@ -535,10 +535,10 @@ const ok =
 
                 // Draw all candidates in ROI-offset coords
                 const fx = br.x + roiX, fy = br.y + roiY;
-                dbgCtx.strokeStyle = ok ? 'rgba(0,255,0,0.6)' : 'rgba(255,165,0,0.8)'; // yellow line code rgba(255,165,0,0.3
+                dbgCtx.strokeStyle = ok ? 'rgba(0,255,0,0.6)' : 'rgba(255,0,0,0.8)';//'rgba(255,165,0,0.8)'; // yellow line code rgba(255,165,0,0.3
                 dbgCtx.lineWidth = ok ? 2 : 1;
                 dbgCtx.strokeRect(fx, fy, br.width, br.height);
-                dbgCtx.fillStyle = ok ? '#0f0' : 'rgba(255,165,0,0.5)';
+                dbgCtx.fillStyle = ok ? '#0f0' : 'rgba(255,0,0,0.8)';//'rgba(255,165,0,0.5)';
                 dbgCtx.font = '9px monospace';
                 dbgCtx.fillText(tag, fx, fy - 2);
 
