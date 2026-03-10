@@ -542,14 +542,7 @@ const ok =
                 dbgCtx.font = '9px monospace';
                 dbgCtx.fillText(tag, fx, fy - 2);
 
-                                        best = {
-                            x: fx, y: fy, w: br.width, h: br.height,
-                            cx: Math.round(fx + br.width / 2),
-                            cy: Math.round(fy + br.height / 2),
-                            area, fill: fill.toFixed(2), vertices: v,
-                            label: 'Object', source: 'CV'
-                        };
-                checkStability(best);
+
                 if (ok) {
                     stats.ok++;
                     if (area > bestArea) {
