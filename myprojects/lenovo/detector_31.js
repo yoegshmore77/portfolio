@@ -436,7 +436,7 @@ const roiW = vw * 0.6;
 const roiH = vh * 0.4;*/
 
         // CV detection on ROI (BEFORE drawing overlay so edges don't pollute Canny)
-        //const cvResult = runCV(vw, vh, roiX, roiY, roiW, roiH);
+        const cvResult = runCV(vw, vh, roiX, roiY, roiW, roiH);
 
         // Draw ROI outline AFTER CV extraction so it doesn't pollute edges
         //dbgCtx.strokeStyle = 'rgba(255,255,255,1.5)';
@@ -445,8 +445,40 @@ const roiH = vh * 0.4;*/
 
 //dbgCtx.clearRect(0,0,dbgCanvas.width,dbgCanvas.height);
 
-const rect = runCV(vw, vh, roiX, roiY, roiW, roiH);
+//const rect = runCV(vw, vh, roiX, roiY, roiW, roiH);
 
+/*const roiW = vw * 0.6;
+const roiH = vh * 0.4;
+
+const roiX = (vw - roiW) / 2;
+const roiY = (vh - roiH) / 2;
+
+const cvResult = runCV(vw, vh, roiX, roiY, roiW, roiH);
+
+if (cvResult) {
+
+    const pts = cvResult.box;
+
+    dbgCtx.strokeStyle = "lime";
+    dbgCtx.lineWidth = 3;
+
+    dbgCtx.beginPath();
+
+    dbgCtx.moveTo(pts[0].x, pts[0].y);
+
+    for (let i = 1; i < 4; i++) {
+        dbgCtx.lineTo(pts[i].x, pts[i].y);
+    }
+
+    dbgCtx.closePath();
+    dbgCtx.stroke();
+
+
+}
+dbgCtx.strokeStyle = "yellow";
+dbgCtx.lineWidth = 2;
+dbgCtx.strokeRect(roiX, roiY, roiW, roiH);
+*/
 /*
 if(rect){
 
@@ -466,7 +498,7 @@ if(rect){
 
 }
 */
-
+/*
 if (rect) {
 
     const newX = rect.cx;
@@ -506,7 +538,7 @@ if (rect) {
 
     }
 
-}
+}*/
 //const rect = runCV(vw, vh, roiX, roiY, roiW, roiH);
 //console.log("CV RESULT:", cvResult);
 
@@ -514,10 +546,10 @@ if (rect) {
 
         // AI for labeling (async)
         if (cocoModel && video.currentTime !== lastVideoTime) {
-            //lastVideoTime = video.currentTime;
-            //cocoModel.detect(video).then(preds => finalize(cvResult, preds, vw, vh));
+            lastVideoTime = video.currentTime;
+            cocoModel.detect(video).then(preds => finalize(cvResult, preds, vw, vh));
         } else {
-            //finalize(cvResult, [], vw, vh);
+            finalize(cvResult, [], vw, vh);
         }
 
         //requestAnimationFrame(processVideo);
@@ -534,7 +566,7 @@ const LOCK_FRAMES = 5;
     // ══════════════════════════════════════════════════════════════
     
 
-
+/*
 function runCV(vw, vh, roiX, roiY, roiW, roiH) {
 
     try {
@@ -684,8 +716,265 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
 
     }
 
-}
+}*/
 
+/*
+function runCV(vw, vh, roiX, roiY, roiW, roiH) {
+
+    try {
+
+        const roiData = dbgCtx.getImageData(roiX, roiY, roiW, roiH);
+
+        const src = new cv.Mat(roiH, roiW, cv.CV_8UC4);
+        src.data.set(roiData.data);
+
+        const gray = new cv.Mat();
+        const blur = new cv.Mat();
+
+        cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
+        cv.GaussianBlur(gray, blur, new cv.Size(5,5), 0);
+
+        const edges = new cv.Mat();
+        cv.Canny(blur, edges, 20, 80);
+        //cv.Canny(blur, edges, 30, 100);
+
+        const kernel = cv.Mat.ones(3,3,cv.CV_8U);
+        const closed = new cv.Mat();
+        cv.morphologyEx(edges, closed, cv.MORPH_CLOSE, kernel);
+
+        const contours = new cv.MatVector();
+        const hierarchy = new cv.Mat();
+
+        cv.findContours(
+            closed,
+            contours,
+            hierarchy,
+            cv.RETR_EXTERNAL,
+            cv.CHAIN_APPROX_SIMPLE
+        );
+
+        let best = null;
+        let bestArea = 0;
+
+        const minArea = roiW * roiH * 0.02;
+
+        for (let i = 0; i < contours.size(); i++) {
+
+            const cnt = contours.get(i);
+            const area = cv.contourArea(cnt);
+
+            if (area < minArea) {
+                cnt.delete();
+                continue;
+            }
+
+            const peri = cv.arcLength(cnt, true);
+
+            const approx = new cv.Mat();
+            cv.approxPolyDP(cnt, approx, 0.02 * peri, true);
+
+            // Only rectangles
+            if (approx.rows !== 4) {
+                approx.delete();
+                cnt.delete();
+                continue;
+            }
+
+            // Convert to points
+            let pts = [];
+            for (let j = 0; j < 4; j++) {
+
+                const x = approx.intPtr(j,0)[0] + roiX;
+                const y = approx.intPtr(j,0)[1] + roiY;
+
+                pts.push({x,y});
+            }
+
+            // Compute width and height
+            const w = Math.hypot(
+                pts[0].x - pts[1].x,
+                pts[0].y - pts[1].y
+            );
+
+            const h = Math.hypot(
+                pts[1].x - pts[2].x,
+                pts[1].y - pts[2].y
+            );
+
+            const aspect = w / h;
+
+            // Only landscape rectangles
+            if (aspect < 1.0) {
+                approx.delete();
+                cnt.delete();
+                continue;
+            }
+
+            if (area > bestArea) {
+
+                bestArea = area;
+
+                best = {
+                    box: pts,
+                    cx: (pts[0].x + pts[2].x) / 2,
+                    cy: (pts[0].y + pts[2].y) / 2
+                };
+
+            }
+
+            approx.delete();
+            cnt.delete();
+        }
+
+        contours.delete();
+        hierarchy.delete();
+        src.delete();
+        gray.delete();
+        blur.delete();
+        edges.delete();
+        closed.delete();
+        kernel.delete();
+
+        return best;
+
+    }
+    catch(e) {
+
+        console.log("CV error:", e);
+        return null;
+
+    }
+}
+*/
+
+//This forces the rectangle to occupy at least 25% of the ROI, eliminating small objects.
+//if (Math.max(w, h) < roiW * 0.25) continue;
+
+function runCV(vw, vh, roiX, roiY, roiW, roiH) {
+        try {
+            // Extract ROI pixels
+            const roiData = dbgCtx.getImageData(roiX, roiY, roiW, roiH);
+            const src = new cv.Mat(roiH, roiW, cv.CV_8UC4);
+            src.data.set(roiData.data);
+
+            // Gray → Blur → Canny → Close
+            const gray = new cv.Mat(), blur = new cv.Mat();
+            cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
+            cv.GaussianBlur(gray, blur, new cv.Size(5, 5), 0);
+            src.delete();
+
+            const edges = new cv.Mat();
+            //cv.Canny(blur, edges, 50, 120);  // Higher thresholds: ignore weak edges (cables/shadows)
+            cv.Canny(blur, edges, 75, 145); 
+            gray.delete(); blur.delete();
+
+            const kernel = cv.Mat.ones(3, 3, cv.CV_8U);  // Smaller kernel: don't merge separate objects
+            const closed = new cv.Mat();
+            cv.morphologyEx(edges, closed, cv.MORPH_CLOSE, kernel);
+            kernel.delete();
+
+            const contours = new cv.MatVector();
+            const hierarchy = new cv.Mat();
+            cv.dilate(edges, edges, cv.Mat.ones(3,3,cv.CV_8U));//yy
+            cv.findContours(closed, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
+
+            let best = null, bestArea = 0;
+            const minA = roiW * roiH * 0.05;  // 5% of ROI (ignore small noise)
+            //const maxA = roiW * roiH * 0.85;  // 85% of ROI
+            const maxA = roiW * roiH * 0.85;  // 85% of ROI
+            let stats = { total: contours.size(), ok: 0, info: [] };
+
+            for (let i = 0; i < contours.size(); i++) {
+                const cnt = contours.get(i);
+                const area = cv.contourArea(cnt);
+                if (area < minA || area > maxA) continue;
+
+                const br = cv.boundingRect(cnt);
+if (br.width <= br.height) continue; // reject portrait or square
+//if (br.width <= br.height) continue; // reject portrait or square
+                const brArea = br.width * br.height;
+                //if (brArea <= 0) continue;
+
+
+
+                const fill = area / brArea;  // How rectangular (1.0 = perfect)
+
+                // Convexity check: reject merged multi-object blobs
+                const hull = new cv.Mat();
+                cv.convexHull(cnt, hull);
+                const hullArea = cv.contourArea(hull);
+                const solidity = hullArea > 0 ? area / hullArea : 0;
+                hull.delete();
+
+                const peri = cv.arcLength(cnt, true);
+                const approx = new cv.Mat();
+                //cv.approxPolyDP(cnt, approx, 0.04 * peri, true);
+                cv.approxPolyDP(cnt, approx, 0.02 * peri, true);
+                const v = approx.rows;
+                approx.delete();
+
+                const aspect = br.width / br.height;
+                //console.log("aspect = "+ aspect + " solidity = " + solidity + " fill = " + fill + " v = " + v);
+
+                // TIGHTER CHECK:
+                //   4-8 vertices, fill > 0.3, solidity > 0.85, landscape aspect 1.2-4.0
+                //const ok = aspect > 1 && aspect <= 30;
+                //const ok = v >= 1 && v <= 12 && fill > 0.1 && solidity > 0.85 && aspect >= 1.2 ;//&& aspect <= 4.0;//y
+                //const ok = v >= 4 && v <= 8 && fill > 0.3 && solidity > 0.85 && aspect >= 1.2 && aspect <= 4.0;
+                //const ok = v >= 4 && v <= 8 && fill > 0.3 && solidity > 0.35 && aspect >= 1.2 && aspect <= 3.0;
+
+//const br = cv.boundingRect(cnt);
+
+
+ 
+//const aspect = br.width / br.height;
+
+const ok =
+    v >= 4 && v <= 18 &&
+    //fill > 0.3 &&
+    fill > 0.1 &&
+    //solidity > 0.85 &&
+    solidity > 0.15 &&
+    //aspect > 1.15 &&
+    aspect > 1 &&
+    aspect < 34.0;
+
+                const tag = `v${v} f${fill.toFixed(2)} a${aspect.toFixed(1)}`;
+                stats.info.push(tag + (ok ? ' ✓' : ''));
+
+                // Draw all candidates in ROI-offset coords
+                const fx = br.x + roiX, fy = br.y + roiY;
+                dbgCtx.strokeStyle = ok ? 'rgba(0,255,0,0.6)' : 'rgba(255,165,0,0.3)';//'rgba(255,165,0,0.8)'; // yellow line code rgba(255,165,0,0.3
+                dbgCtx.lineWidth = ok ? 2 : 1;
+                dbgCtx.strokeRect(fx, fy, br.width, br.height);
+                dbgCtx.fillStyle = ok ? '#0f0' : 'rgba(255,165,0,0.8)';//'rgba(255,165,0,0.5)';
+                dbgCtx.font = '9px monospace';
+                dbgCtx.fillText(tag, fx, fy - 2);
+
+
+                if (ok) {
+                    stats.ok++;
+                    if (area > bestArea) {
+                        bestArea = area;
+                        best = {
+                            x: fx, y: fy, w: br.width, h: br.height,
+                            cx: Math.round(fx + br.width / 2),
+                            cy: Math.round(fy + br.height / 2),
+                            area, fill: fill.toFixed(2), vertices: v,
+                            label: 'Object', source: 'CV'
+                        };
+                    }
+                }
+            }
+
+            contours.delete(); hierarchy.delete(); edges.delete(); closed.delete();
+            window._cvStats = stats;
+            return best;
+        } catch (e) {
+            log('CV err: ' + e.message);
+            return null;
+        }
+    }
 
     // ══════════════════════════════════════════════════════════════
     // FINALIZE: label with AI if available, then draw + lock
@@ -1524,6 +1813,7 @@ scene = new THREE.Scene();
 
           //gameWorld.position.set(0,2.0,-1.5); //gw postion to get it in the scanner box outline
           gameWorld.position.set(0 ,0.5, 2.3);//gameWorld.position.set(0 ,1, =2.0)
+          //gameWorld.position.set(0 ,-1.0, 3.3);
 
           gameWorld.scale.set(2.8,2.8,2.8);
 
@@ -1557,6 +1847,8 @@ scene = new THREE.Scene();
           //renderer.domElement.style.zIndex = '100000';  
           //renderer.domElement.style.setProperty('z-index', '200000000000', 'important');
           //renderer.style.zIndex = '200000000';
+          renderer.domElement.style.top = "7.5%";
+
 
 
           // Lighting
@@ -3775,7 +4067,15 @@ function loading_check(){
         st_btn.style.display = 'none';
         testing_is_on = true;
         //current_kick_score = 100;
-        showGoalFlash();*/
+
+        timer_wrapper.style.display = 'block';
+        btn1.style.display = 'block';
+        btn2.style.display = 'block';
+        btn3.style.display = 'block';
+        scorePanel.style.display = "block";
+        ratingPanel.style.display = "block";*/
+
+        //showGoalFlash();
 
         
         //----
