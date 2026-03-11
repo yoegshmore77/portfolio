@@ -609,11 +609,13 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
             }
 
             const aspect = Math.max(w,h) / Math.min(w,h);
+            
 
             // LANDSCAPE ONLY
-             if (aspect >= 1.2 && aspect <= 5.0) {
-            //if (aspect <= 1 || aspect > 3.5) {
-                //cnt.delete();
+             //if (aspect > 1){
+             //if (aspect >= 1.2 && aspect <= 15.0) {
+            if (aspect <= 1 || aspect > 13.5) {
+                cnt.delete();
                 continue;
             }
 
@@ -623,11 +625,13 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
             const hullArea = cv.contourArea(hull);
             const solidity = area / hullArea;
 
+            console.log("aspect = "+ aspect + " solidity = "+ solidity);
+
             hull.delete();
 
-            if (solidity > 0.75) {
-                cnt.delete();
-                continue;
+            if (solidity > 0.5) {
+                //cnt.delete();
+                //continue;
             }
 
             const box = cv.RotatedRect.points(rect);
