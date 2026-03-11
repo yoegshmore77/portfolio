@@ -890,6 +890,13 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
                 if (area < minA || area > maxA) continue;
 
                 const br = cv.boundingRect(cnt);
+
+                const rotRect = cv.minAreaRect(cnt);
+const w = rotRect.size.width;
+const h = rotRect.size.height;
+const aspect = Math.max(w, h) / Math.min(w, h);
+
+
 if (br.width <= br.height) continue; // reject portrait or square
 //if (br.width <= br.height) continue; // reject portrait or square
                 const brArea = br.width * br.height;
@@ -909,12 +916,20 @@ if (br.width <= br.height) continue; // reject portrait or square
                 const peri = cv.arcLength(cnt, true);
                 const approx = new cv.Mat();
                 //cv.approxPolyDP(cnt, approx, 0.04 * peri, true);
+                //if (!cv.isContourConvex(cnt)) continue;
                 cv.approxPolyDP(cnt, approx, 0.02 * peri, true);
                 const v = approx.rows;
                 approx.delete();
 
-                const aspect = br.width / br.height;
-                //console.log("aspect = "+ aspect + " solidity = " + solidity + " fill = " + fill + " v = " + v);
+                //const aspect = br.width / br.height;
+
+ 
+
+
+                const normAspect = aspect > 1 ? aspect : 1 / aspect;
+
+
+                console.log("aspect = "+ aspect + " solidity = " + solidity + " fill = " + fill + " v = " + v);
 
                 // TIGHTER CHECK:
                 //   4-8 vertices, fill > 0.3, solidity > 0.85, landscape aspect 1.2-4.0
@@ -935,8 +950,9 @@ const ok =
     fill > 0.1 &&
     //solidity > 0.85 &&
     solidity > 0.05 &&
+    normAspect > 1 &&
     //aspect > 1.15 &&
-    aspect > 1 &&
+    //aspect > 1 &&
     aspect < 34.0;
 
                 const tag = `v${v} f${fill.toFixed(2)} a${aspect.toFixed(1)}`;
