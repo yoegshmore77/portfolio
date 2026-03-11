@@ -934,7 +934,7 @@ const ok =
     //fill > 0.3 &&
     fill > 0.1 &&
     //solidity > 0.85 &&
-    solidity > 0.15 &&
+    solidity > 0.05 &&
     //aspect > 1.15 &&
     aspect > 1 &&
     aspect < 34.0;
