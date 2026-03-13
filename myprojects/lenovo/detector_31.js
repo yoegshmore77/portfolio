@@ -1033,7 +1033,7 @@ const ok =
         let pick = cvBest;  // CV is primary source
 
         // If AI found something overlapping CV, use its label
-        if (pick && aiPreds.length) {
+        /*if (pick && aiPreds.length) {
             for (const p of aiPreds) {
                 if (p.score < 0.02) continue;//-------------------------------------------------------
                 //if (p.score < 0.08) continue;
@@ -1048,10 +1048,10 @@ const ok =
                     break;
                 }
             }
-        }
+        }*/
 
         // If CV found nothing, let AI be an independent source (high confidence only)
-        if (!pick && aiPreds.length) {
+        /*if (!pick && aiPreds.length) {
             // Recompute ROI bounds (same formula as processVideo)
             const _roiW = Math.floor(vw * 0.89);
             //const _roiH = Math.floor(_roiW * 6 / 10);
@@ -1081,7 +1081,7 @@ const ok =
                 };
                 break;
             }
-        }
+        }*/
 
         // HUD
         //const top = cvS.info ? cvS.info.slice(0, 4).join(' | ') : '—';
@@ -1131,13 +1131,13 @@ let dummy_video_grab = null;
             // ═══ LOCKED ═══ ==== ==== ==== ==== ==== ==== ==== ==== ==== ====
 
             dbgCanvas.style.opacity = 1; 
-            scan_status_msg.innerHTML = "";
+            /*scan_status_msg.innerHTML = "";
             scan_status_msg.innerHTML = `<svg viewBox="0 0 24 24">
 
               <circle cx="12" cy="12" r="10"></circle>
               <path d="M7 12.5L10 15.5L17 8.5"></path>
               </svg>
-              <span>Found goal post!</span>`;
+              <span>Found goal post!</span>`;*/
 
             bufferCtx.drawImage(video, 0, 0, dbgCanvas.width, dbgCanvas.height);
 
