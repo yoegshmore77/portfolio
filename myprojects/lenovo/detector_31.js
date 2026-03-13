@@ -891,13 +891,16 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
             const minA = roiW * roiH * 0.05;  // 5% of ROI (ignore small noise)
             //const maxA = roiW * roiH * 0.85;  // 85% of ROI
             const maxA = roiW * roiH * 0.85;  // 85% of ROI
+
+
             let stats = { total: contours.size(), ok: 0, info: [] };
 
             for (let i = 0; i < contours.size(); i++) {
                 const cnt = contours.get(i);
                 const area = cv.contourArea(cnt);
                 //if (area < minA || area > maxA) continue;
-                if (area < roiW * roiH * 0.003) continue;
+
+                if (area < roiW * roiH * 0.01) continue;
 
                 const br = cv.boundingRect(cnt);
 
@@ -905,6 +908,8 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
 const w = rotRect.size.width;
 const h = rotRect.size.height;
 const aspect = Math.max(w, h) / Math.min(w, h);
+
+                if (Math.max(w, h) < roiW * 0.25) continue;
 
 
 if (br.width <= br.height) continue; // reject portrait or square
