@@ -900,7 +900,7 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
                 const area = cv.contourArea(cnt);
                 //if (area < minA || area > maxA) continue;
 
-                if (area < roiW * roiH * 0.005) continue;
+                //if (area < roiW * roiH * 0.005) continue;
 
                 const br = cv.boundingRect(cnt);
 
