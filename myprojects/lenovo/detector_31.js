@@ -437,11 +437,12 @@ const roiH = vh * 0.4;*/
 
         // CV detection on ROI (BEFORE drawing overlay so edges don't pollute Canny)
         const cvResult = runCV(vw, vh, roiX, roiY, roiW, roiH);
-
+        if(cvResult){
         // Draw ROI outline AFTER CV extraction so it doesn't pollute edges
-        //dbgCtx.strokeStyle = 'rgba(255,255,255,1.5)';
-        //dbgCtx.lineWidth = 2;
-        //dbgCtx.strokeRect(roiX, roiY, roiW, roiH);
+        dbgCtx.strokeStyle = 'rgba(255,255,255,1.5)';
+        dbgCtx.lineWidth = 2;
+        dbgCtx.strokeRect(cvResult.x, cvResult.t, cvResult.w, cvResult.h);
+        }
 
 //dbgCtx.clearRect(0,0,dbgCanvas.width,dbgCanvas.height);
 
@@ -546,14 +547,18 @@ if (rect) {
 
         // AI for labeling (async)
         if (cocoModel && video.currentTime !== lastVideoTime) {
-            lastVideoTime = video.currentTime;
-            cocoModel.detect(video).then(preds => finalize(cvResult, preds, vw, vh));
+            //lastVideoTime = video.currentTime;
+            //cocoModel.detect(video).then(preds => finalize(cvResult, preds, vw, vh));
         } else {
-            finalize(cvResult, [], vw, vh);
+            //finalize(cvResult, [], vw, vh);
         }
 
         //requestAnimationFrame(processVideo);
         processVideo_id = requestAnimationFrame(processVideo);
+
+
+
+
     }
 
 //let lockedRect = null;
@@ -870,8 +875,12 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
 
             const kernel = cv.Mat.ones(3, 3, cv.CV_8U);  // Smaller kernel: don't merge separate objects
             const closed = new cv.Mat();
+            //cv.morphologyEx(edges, closed, cv.MORPH_CLOSE, kernel);
             cv.morphologyEx(edges, closed, cv.MORPH_CLOSE, kernel);
+            cv.morphologyEx(closed, closed, cv.MORPH_DILATE, kernel);
             kernel.delete();
+
+
 
             const contours = new cv.MatVector();
             const hierarchy = new cv.Mat();
@@ -898,19 +907,26 @@ const aspect = Math.max(w, h) / Math.min(w, h);
 
 
 if (br.width <= br.height) continue; // reject portrait or square
+//if (w <= h) continue; 
 //if (br.width <= br.height) continue; // reject portrait or square
-                const brArea = br.width * br.height;
+                //const brArea = br.width * br.height;
+                const brArea = w * h;
                 //if (brArea <= 0) continue;
 
 
 
-                const fill = area / brArea;  // How rectangular (1.0 = perfect)
+                //const fill = area / brArea;  // How rectangular (1.0 = perfect)
 
                 // Convexity check: reject merged multi-object blobs
                 const hull = new cv.Mat();
                 cv.convexHull(cnt, hull);
                 const hullArea = cv.contourArea(hull);
+               
+
+                const fill = hullArea / brArea;
+
                 const solidity = hullArea > 0 ? area / hullArea : 0;
+
                 hull.delete();
 
                 const peri = cv.arcLength(cnt, true);
@@ -947,13 +963,13 @@ if (br.width <= br.height) continue; // reject portrait or square
 const ok =
     v >= 4 && v <= 18 &&
     //fill > 0.3 &&
-    fill > 0.1 &&
+    fill > 0.2 &&
     //solidity > 0.85 &&
-    solidity > 0.05 &&
-    normAspect > 1 &&
-    //aspect > 1.15 &&
-    //aspect > 1 &&
-    aspect < 34.0;
+    solidity > 0.3 &&
+    //normAspect > 1 &&
+    //aspect > 1.15 //&&
+    aspect > 1 ;//&&
+    //normAspect < 14.0;
 
                 const tag = `v${v} f${fill.toFixed(2)} a${aspect.toFixed(1)}`;
                 stats.info.push(tag + (ok ? ' ✓' : ''));
@@ -1083,6 +1099,7 @@ const ok =
 let dummy_video_grab = null;
     // ── Stability → Lock ─────────────────────────────────────────
     let base64Image = null;
+
     function checkStability(rect) {
         if (lastRect) {
             const d = Math.hypot(rect.cx - lastRect.cx, rect.cy - lastRect.cy);
