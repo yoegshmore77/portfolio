@@ -982,7 +982,7 @@ const ok =
     normAspect > 1.25 &&
     //aspect > 1.15 //&&
     //aspect > 1 ;//&&
-    normAspect < 20.0 && w > 50 && w < 150;
+    normAspect < 20.0 && w > 50 && w < 350;
 
                 const tag = `v${v} f${fill.toFixed(2)} a${aspect.toFixed(1)}`;
                 stats.info.push(tag + (ok ? ' ✓' : ''));
