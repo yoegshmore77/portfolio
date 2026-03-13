@@ -437,12 +437,12 @@ const roiH = vh * 0.4;*/
 
         // CV detection on ROI (BEFORE drawing overlay so edges don't pollute Canny)
         const cvResult = runCV(vw, vh, roiX, roiY, roiW, roiH);
-        if(cvResult){
+        /*if(cvResult){
         // Draw ROI outline AFTER CV extraction so it doesn't pollute edges
         dbgCtx.strokeStyle = 'rgba(255,255,255,1.5)';
         dbgCtx.lineWidth = 2;
         dbgCtx.strokeRect(cvResult.x, cvResult.t, cvResult.w, cvResult.h);
-        }
+        }*/
 
 //dbgCtx.clearRect(0,0,dbgCanvas.width,dbgCanvas.height);
 
@@ -869,8 +869,8 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
             src.delete();
 
             const edges = new cv.Mat();
-            //cv.Canny(blur, edges, 50, 120);  // Higher thresholds: ignore weak edges (cables/shadows)
-            cv.Canny(blur, edges, 75, 145); 
+            cv.Canny(blur, edges, 50, 120);  // Higher thresholds: ignore weak edges (cables/shadows)
+            //cv.Canny(blur, edges, 75, 145); 
             gray.delete(); blur.delete();
 
             const kernel = cv.Mat.ones(3, 3, cv.CV_8U);  // Smaller kernel: don't merge separate objects
@@ -896,7 +896,8 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
             for (let i = 0; i < contours.size(); i++) {
                 const cnt = contours.get(i);
                 const area = cv.contourArea(cnt);
-                if (area < minA || area > maxA) continue;
+                //if (area < minA || area > maxA) continue;
+                if (area < roiW * roiH * 0.003) continue;
 
                 const br = cv.boundingRect(cnt);
 
@@ -963,20 +964,20 @@ if (br.width <= br.height) continue; // reject portrait or square
 const ok =
     v >= 4 && v <= 18 &&
     //fill > 0.3 &&
-    fill > 0.2 &&
+    fill > 0.15 &&
     //solidity > 0.85 &&
     solidity > 0.3 &&
-    //normAspect > 1 &&
+    normAspect > 1 &&
     //aspect > 1.15 //&&
-    aspect > 1 ;//&&
-    //normAspect < 14.0;
+    //aspect > 1 ;//&&
+    normAspect < 3.0;
 
                 const tag = `v${v} f${fill.toFixed(2)} a${aspect.toFixed(1)}`;
                 stats.info.push(tag + (ok ? ' ✓' : ''));
 
                 // Draw all candidates in ROI-offset coords
                 const fx = br.x + roiX, fy = br.y + roiY;
-                dbgCtx.strokeStyle = ok ? 'rgba(0,255,0,0.6)' : 'rgba(255,165,0,0.3)';//'rgba(255,165,0,0.8)'; // yellow line code rgba(255,165,0,0.3
+                dbgCtx.strokeStyle = ok ? 'rgba(0,255,0,0.6)' : 'rgba(255,165,0,0.8)';//'rgba(255,165,0,0.8)'; // yellow line code rgba(255,165,0,0.3
                 dbgCtx.lineWidth = ok ? 2 : 1;
                 dbgCtx.strokeRect(fx, fy, br.width, br.height);
                 dbgCtx.fillStyle = ok ? '#0f0' : 'rgba(255,165,0,0.8)';//'rgba(255,165,0,0.5)';
