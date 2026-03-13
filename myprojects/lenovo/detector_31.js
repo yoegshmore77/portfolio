@@ -978,12 +978,12 @@ const ok =
     //fill > 0.3 &&
     fill > 0.25 &&
     //solidity > 0.85 &&
-    solidity > 0.25 &&
+    solidity > 0.05 &&
     normAspect > 1.25 &&
     //aspect > 1.15 //&&
     //aspect > 1 ;//&&
     normAspect < 20.0 && 
-    w > 25;
+    w > 50;
     // && w < 350;
 
                 const tag = `v${v} f${fill.toFixed(2)} a${aspect.toFixed(1)}`;
