@@ -909,7 +909,7 @@ const w = rotRect.size.width;
 const h = rotRect.size.height;
 const aspect = Math.max(w, h) / Math.min(w, h);
 
-scan_status_msg.innerHTML = w;
+
 
                 if (Math.max(w, h) < roiW * 0.15) continue;
                 //if(w > 50) continue;
@@ -954,7 +954,9 @@ if (br.width <= br.height) continue; // reject portrait or square
                 const normAspect = aspect > 1 ? aspect : 1 / aspect;
 
 
-                console.log("aspect = "+ aspect + " solidity = " + solidity + " fill = " + fill + " v = " + v);
+                //console.log("aspect = "+ aspect + " solidity =  " + solidity + " fill =  " + fill + " v = " + v);
+
+                scan_status_msg.innerHTML = Math.round(aspect) + " = " + Math.round(w) + " = " + Math.round(solidity) + " = " + Math.round(fill);
 
                 // TIGHTER CHECK:
                 //   4-8 vertices, fill > 0.3, solidity > 0.85, landscape aspect 1.2-4.0
