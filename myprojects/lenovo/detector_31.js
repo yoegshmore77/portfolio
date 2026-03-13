@@ -547,10 +547,10 @@ if (rect) {
 
         // AI for labeling (async)
         if (cocoModel && video.currentTime !== lastVideoTime) {
-            //lastVideoTime = video.currentTime;
+            lastVideoTime = video.currentTime;
             //cocoModel.detect(video).then(preds => finalize(cvResult, preds, vw, vh));
         } else {
-            //finalize(cvResult, [], vw, vh);
+            finalize(cvResult, [], vw, vh);
         }
 
         //requestAnimationFrame(processVideo);
