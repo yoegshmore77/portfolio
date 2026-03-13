@@ -909,7 +909,7 @@ const w = rotRect.size.width;
 const h = rotRect.size.height;
 const aspect = Math.max(w, h) / Math.min(w, h);
 
-                if (Math.max(w, h) < roiW * 0.65) continue;
+                if (Math.max(w, h) < roiW * 0.35) continue;
 
 
 if (br.width <= br.height) continue; // reject portrait or square
