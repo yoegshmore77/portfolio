@@ -909,7 +909,7 @@ const w = rotRect.size.width;
 const h = rotRect.size.height;
 const aspect = Math.max(w, h) / Math.min(w, h);
 
-                if (Math.max(w, h) < roiW * 0.35) continue;
+                if (Math.max(w, h) < roiW * 0.15) continue;
 
 
 if (br.width <= br.height) continue; // reject portrait or square
@@ -971,11 +971,11 @@ const ok =
     //fill > 0.3 &&
     fill > 0.15 &&
     //solidity > 0.85 &&
-    solidity > 0.3 &&
+    solidity > 0.2 &&
     normAspect > 1.25 &&
     //aspect > 1.15 //&&
     //aspect > 1 ;//&&
-    normAspect < 3.0;
+    normAspect < 2.0;
 
                 const tag = `v${v} f${fill.toFixed(2)} a${aspect.toFixed(1)}`;
                 stats.info.push(tag + (ok ? ' ✓' : ''));
