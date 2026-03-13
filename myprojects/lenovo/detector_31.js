@@ -976,9 +976,9 @@ if (br.width <= br.height) continue; // reject portrait or square
 const ok =
     v >= 4 && v <= 18 &&
     //fill > 0.3 &&
-    fill > 0.7 &&
+    fill > 0.5 &&
     //solidity > 0.85 &&
-    solidity > 0.8 &&
+    solidity > 0.5 &&
     normAspect > 1.25 &&
     //aspect > 1.15 //&&
     //aspect > 1 ;//&&
