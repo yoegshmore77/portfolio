@@ -982,7 +982,7 @@ const ok =
     normAspect > 1.25 &&
     //aspect > 1.15 //&&
     //aspect > 1 ;//&&
-    normAspect < 20.0;// && w < 100;
+    normAspect < 20.0 && w > 100;
 
                 const tag = `v${v} f${fill.toFixed(2)} a${aspect.toFixed(1)}`;
                 stats.info.push(tag + (ok ? ' ✓' : ''));
@@ -1269,7 +1269,7 @@ let dummy_video_grab = null;
             animate_game_container();
             gameWorld.visible = true;
             play_ground_anim_Sound();
-            scan_status_msg.innerHTML = "";
+            //scan_status_msg.innerHTML = "";
             //scan_status_msg.innerHTML = "Starting game in a moment";
             
           }
