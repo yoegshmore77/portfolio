@@ -909,6 +909,8 @@ const w = rotRect.size.width;
 const h = rotRect.size.height;
 const aspect = Math.max(w, h) / Math.min(w, h);
 
+scan_status_msg.innerHTML = w;
+
                 if (Math.max(w, h) < roiW * 0.15) continue;
 
 
