@@ -911,8 +911,8 @@ const aspect = Math.max(w, h) / Math.min(w, h);
 
 
 
-                if (Math.max(w, h) < roiW * 0.15) continue;
-                //if(w > 50) continue;
+                //if (Math.max(w, h) < roiW * 0.15) continue;
+                if(w > 99) continue;
 
 
 if (br.width <= br.height) continue; // reject portrait or square
