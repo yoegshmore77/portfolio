@@ -977,8 +977,8 @@ if (br.width <= br.height) continue; // reject portrait or square
 
                 //scan_status_msg.innerHTML = Math.round(aspect) + " = " + Math.round(w) + " = " + Math.round(solidity) + " = " + Math.round(fill);
                 scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
-                //scan_status_msg.style.color = "yellow";
-                scan_status_msg.style.color = "white";
+                scan_status_msg.style.color = "yellow";
+                //scan_status_msg.style.color = "white";
 
                 // TIGHTER CHECK:
                 //   4-8 vertices, fill > 0.3, solidity > 0.85, landscape aspect 1.2-4.0
@@ -992,6 +992,20 @@ if (br.width <= br.height) continue; // reject portrait or square
 
  
 //const aspect = br.width / br.height;
+
+const roiCX = roiX + roiW / 2;
+const roiCY = roiY + roiH / 2;
+
+const cx = Math.round(fx + br.width / 2);
+const cy = Math.round(fy + br.height / 2);
+
+const dx = Math.abs(cx - roiCX);
+const dy = Math.abs(cy - roiCY);
+
+const centerToleranceX = roiW * 0.45;
+const centerToleranceY = roiH * 0.45;
+
+
 
 /*const ok =
     v >= 4 && v <= 18 &&
@@ -1009,11 +1023,13 @@ if (br.width <= br.height) continue; // reject portrait or square
 const ok =
     v >= 4 && v <= 12 &&
     fill > 0.45 &&
-    solidity > 0.65 && // solidity > 0.65 &&
+    solidity > 0.65 &&
     normAspect > 1.25 &&
     normAspect < 4.0 &&
     w > 60 &&
-    w < roiW * 0.9;
+    w < roiW * 0.9 &&
+    dx < centerToleranceX &&
+    dy < centerToleranceY;
 
                 const tag = `v${v} f${fill.toFixed(2)} a${aspect.toFixed(1)}`;
                 stats.info.push(tag + (ok ? ' ✓' : ''));
@@ -1142,31 +1158,7 @@ const ok =
 
 //----------------------
 
-let trackedRect = null;
-let stableFrames = 0;
 
-const STABLE_REQUIRED = 4;   // frames needed before accepting
-const MOVE_TOLERANCE = 40;   // allowed center movement
-const SIZE_TOLERANCE = 0.25; // allowed size change
-
-
-function sameRectangle(r1, r2) {
-
-    if (!r1 || !r2) return false;
-
-    const dx = Math.abs(r1.cx - r2.cx);
-    const dy = Math.abs(r1.cy - r2.cy);
-
-    const dw = Math.abs(r1.w - r2.w) / r1.w;
-    const dh = Math.abs(r1.h - r2.h) / r1.h;
-
-    return (
-        dx < MOVE_TOLERANCE &&
-        dy < MOVE_TOLERANCE &&
-        dw < SIZE_TOLERANCE &&
-        dh < SIZE_TOLERANCE
-    );
-}
 
 
 let dummy_video_grab = null;
@@ -1174,30 +1166,6 @@ let dummy_video_grab = null;
     let base64Image = null;
 
     function checkStability(rect) {
-
-            if (sameRectangle(rect, trackedRect)) {
-
-                    stableFrames++;
-
-                } else {
-
-                    stableFrames = 0;
-                }
-
-                trackedRect = rect;
-
-                if (trackedRect && stableFrames >= STABLE_REQUIRED) {
-
-                    dbgCtx.strokeStyle = "red";
-                    dbgCtx.lineWidth = 5;
-
-                    dbgCtx.strokeRect(
-                        trackedRect.x,
-                        trackedRect.y,
-                        trackedRect.w,
-                        trackedRect.h
-                    );
-                }
 
 
         if (lastRect) {
