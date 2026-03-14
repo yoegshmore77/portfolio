@@ -977,8 +977,9 @@ if (br.width <= br.height) continue; // reject portrait or square
 
                 //scan_status_msg.innerHTML = Math.round(aspect) + " = " + Math.round(w) + " = " + Math.round(solidity) + " = " + Math.round(fill);
                 scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
-                scan_status_msg.style.color = "yellow";
+                //scan_status_msg.style.color = "yellow";
                 //scan_status_msg.style.color = "white";
+                scan_status_msg.style.color = "orange";
 
                 // TIGHTER CHECK:
                 //   4-8 vertices, fill > 0.3, solidity > 0.85, landscape aspect 1.2-4.0
@@ -993,6 +994,8 @@ if (br.width <= br.height) continue; // reject portrait or square
  
 //const aspect = br.width / br.height;
 
+const fx = br.x + roiX, fy = br.y + roiY;
+
 const roiCX = roiX + roiW / 2;
 const roiCY = roiY + roiH / 2;
 
@@ -1002,8 +1005,8 @@ const cy = Math.round(fy + br.height / 2);
 const dx = Math.abs(cx - roiCX);
 const dy = Math.abs(cy - roiCY);
 
-const centerToleranceX = roiW * 0.45;
-const centerToleranceY = roiH * 0.45;
+const centerToleranceX = roiW * 0.25;
+const centerToleranceY = roiH * 0.25;
 
 
 
@@ -1035,7 +1038,7 @@ const ok =
                 stats.info.push(tag + (ok ? ' ✓' : ''));
 
                 // Draw all candidates in ROI-offset coords
-                const fx = br.x + roiX, fy = br.y + roiY;
+                
                 dbgCtx.strokeStyle = ok ? 'rgba(0,255,0,0.6)' : 'rgba(255,165,0,0.8)';//'rgba(255,165,0,0.8)'; // yellow line code rgba(255,165,0,0.3
                 dbgCtx.lineWidth = ok ? 2 : 1;
                 dbgCtx.strokeRect(fx, fy, br.width, br.height);
