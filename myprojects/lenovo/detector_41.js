@@ -574,8 +574,8 @@ if (br.width <= br.height) continue; // reject portrait or square
                 //console.log("aspect = "+ aspect + " solidity =  " + solidity + " fill =  " + fill + " v = " + v);
 
                 
-                scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
-                scan_status_msg.style.color = "yellow";
+                //scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
+                //scan_status_msg.style.color = "yellow";
                 //scan_status_msg.style.color = "white";
 
                 // TIGHTER CHECK:
