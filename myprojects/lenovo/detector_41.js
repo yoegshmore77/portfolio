@@ -591,6 +591,20 @@ if (br.width <= br.height) continue; // reject portrait or square
  
 //const aspect = br.width / br.height;
 
+const fx = br.x + roiX, fy = br.y + roiY;
+
+const roiCX = roiX + roiW / 2;
+const roiCY = roiY + roiH / 2;
+
+const cx = Math.round(fx + br.width / 2);
+const cy = Math.round(fy + br.height / 2);
+
+const dx = Math.abs(cx - roiCX);
+const dy = Math.abs(cy - roiCY);
+
+const centerToleranceX = roiW * 0.20;
+const centerToleranceY = roiH * 0.20;
+
 /*const ok =
     v >= 4 && v <= 18 &&
     //fill > 0.3 &&
@@ -617,7 +631,7 @@ const ok =
                 stats.info.push(tag + (ok ? ' ✓' : ''));
 
                 // Draw all candidates in ROI-offset coords
-                const fx = br.x + roiX, fy = br.y + roiY;
+                //const fx = br.x + roiX, fy = br.y + roiY;
                 dbgCtx.strokeStyle = ok ? 'rgba(0,255,0,0.6)' : 'rgba(255,165,0,0.6)';//'rgba(255,165,0,0.8)'; // yellow line code rgba(255,165,0,0.3
                 dbgCtx.lineWidth = ok ? 2 : 1;
                 dbgCtx.strokeRect(fx, fy, br.width, br.height);
