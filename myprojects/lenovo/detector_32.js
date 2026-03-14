@@ -961,7 +961,8 @@ if (br.width <= br.height) continue; // reject portrait or square
                 const approx = new cv.Mat();
                 //cv.approxPolyDP(cnt, approx, 0.04 * peri, true);
                 //if (!cv.isContourConvex(cnt)) continue;
-                cv.approxPolyDP(cnt, approx, 0.02 * peri, true);
+                //cv.approxPolyDP(cnt, approx, 0.02 * peri, true);
+                cv.approxPolyDP(cnt, approx, 0.05 * peri, true);
                 const v = approx.rows;
                 approx.delete();
 
@@ -1005,8 +1006,8 @@ const cy = Math.round(fy + br.height / 2);
 const dx = Math.abs(cx - roiCX);
 const dy = Math.abs(cy - roiCY);
 
-const centerToleranceX = roiW * 0.25;
-const centerToleranceY = roiH * 0.25;
+const centerToleranceX = roiW * 0.20;
+const centerToleranceY = roiH * 0.20;
 
 
 
@@ -1025,8 +1026,9 @@ const centerToleranceY = roiH * 0.25;
 
 const ok =
     v >= 4 && v <= 12 &&
-    fill > 0.45 &&
-    solidity > 0.65 &&
+    //fill > 0.45 &&
+    fill > 0.35 &&
+    //solidity > 0.65 &&
     normAspect > 1.25 &&
     normAspect < 4.0 &&
     w > 60 &&
