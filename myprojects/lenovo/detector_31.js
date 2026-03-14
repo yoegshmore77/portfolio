@@ -885,7 +885,14 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
             const contours = new cv.MatVector();
             const hierarchy = new cv.Mat();
             cv.dilate(edges, edges, cv.Mat.ones(3,3,cv.CV_8U));//yy
-            cv.findContours(closed, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
+            //cv.findContours(closed, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
+            cv.findContours(
+                    closed,
+                    contours,
+                    hierarchy,
+                    cv.RETR_TREE,
+                    cv.CHAIN_APPROX_SIMPLE
+                );
 
             let best = null, bestArea = 0;
             const minA = roiW * roiH * 0.05;  // 5% of ROI (ignore small noise)
@@ -896,8 +903,18 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
             let stats = { total: contours.size(), ok: 0, info: [] };
 
             for (let i = 0; i < contours.size(); i++) {
+
+                    const hh = hierarchy.intPtr(0, i);
+
+                    // h[2] = firstChild
+                    // h[3] = parent
+
+                    if (hh[2] === -1) {
+                        continue;
+                    }
                 const cnt = contours.get(i);
                 const area = cv.contourArea(cnt);
+
                 //if (area < minA || area > maxA) continue;
 
                 //if (area < roiW * roiH * 0.005) continue;
@@ -958,8 +975,8 @@ if (br.width <= br.height) continue; // reject portrait or square
 
                 //scan_status_msg.innerHTML = Math.round(aspect) + " = " + Math.round(w) + " = " + Math.round(solidity) + " = " + Math.round(fill);
                 scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
-                scan_status_msg.style.color = "yellow";
-                //scan_status_msg.style.color = "white";
+                //scan_status_msg.style.color = "yellow";
+                scan_status_msg.style.color = "red";
 
                 // TIGHTER CHECK:
                 //   4-8 vertices, fill > 0.3, solidity > 0.85, landscape aspect 1.2-4.0
