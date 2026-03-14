@@ -574,9 +574,9 @@ if (br.width <= br.height) continue; // reject portrait or square
                 //console.log("aspect = "+ aspect + " solidity =  " + solidity + " fill =  " + fill + " v = " + v);
 
                 
-                scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
+                //scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
                 //scan_status_msg.style.color = "yellow";
-                scan_status_msg.style.color = "white";
+                //scan_status_msg.style.color = "white";
 
                 // TIGHTER CHECK:
                 //   4-8 vertices, fill > 0.3, solidity > 0.85, landscape aspect 1.2-4.0
@@ -613,8 +613,8 @@ const ok =
     w > 60 &&
     w < roiW * 0.9;
 
-                //const tag = `v${v} f${fill.toFixed(2)} a${aspect.toFixed(1)}`;
-                //stats.info.push(tag + (ok ? ' ✓' : ''));
+                const tag = `v${v} f${fill.toFixed(2)} a${aspect.toFixed(1)}`;
+                stats.info.push(tag + (ok ? ' ✓' : ''));
 
                 // Draw all candidates in ROI-offset coords
                 const fx = br.x + roiX, fy = br.y + roiY;
@@ -725,10 +725,10 @@ const ok =
 
         if (pick) {
             // Highlight the pick with a bright box
-            //const c = pick.source.includes('AI') ? '#FF00FF' : '#00FFFF'; // pink / skyblue
+            const c = pick.source.includes('AI') ? '#FF00FF' : '#00FFFF'; // pink / skyblue
             dbgCtx.strokeStyle = c; dbgCtx.lineWidth = 3;
             dbgCtx.strokeRect(pick.x, pick.y, pick.w, pick.h);
-            dbgCtx.fillStyle = '#00FFFF'; 
+            dbgCtx.fillStyle = c;//'#00FFFF'; 
             //dbgCtx.font = '12px monospace';
             //dbgCtx.fillText(`${pick.label} [${pick.source}]`, pick.x, pick.y - 3);
             checkStability(pick);
