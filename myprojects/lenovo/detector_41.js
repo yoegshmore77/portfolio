@@ -575,8 +575,8 @@ if (br.width <= br.height) continue; // reject portrait or square
 
                 
                 scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
-                scan_status_msg.style.color = "yellow";
-                //scan_status_msg.style.color = "white";
+                //scan_status_msg.style.color = "yellow";
+                scan_status_msg.style.color = "white";
 
                 // TIGHTER CHECK:
                 //   4-8 vertices, fill > 0.3, solidity > 0.85, landscape aspect 1.2-4.0
@@ -725,10 +725,10 @@ const ok =
 
         if (pick) {
             // Highlight the pick with a bright box
-            const c = pick.source.includes('AI') ? '#FF00FF' : '#00FFFF'; // pink / skyblue
+            //const c = pick.source.includes('AI') ? '#FF00FF' : '#00FFFF'; // pink / skyblue
             dbgCtx.strokeStyle = c; dbgCtx.lineWidth = 3;
             dbgCtx.strokeRect(pick.x, pick.y, pick.w, pick.h);
-            dbgCtx.fillStyle = c; 
+            dbgCtx.fillStyle = '#00FFFF'; 
             //dbgCtx.font = '12px monospace';
             //dbgCtx.fillText(`${pick.label} [${pick.source}]`, pick.x, pick.y - 3);
             checkStability(pick);
