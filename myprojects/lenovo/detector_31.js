@@ -911,7 +911,7 @@ const aspect = Math.max(w, h) / Math.min(w, h);
 
 
 
-                //if (Math.max(w, h) < roiW * 0.25) continue;
+                if (Math.max(w, h) < roiW * 0.25) continue;
                 //if(w > 99) continue;
 
 
@@ -958,8 +958,8 @@ if (br.width <= br.height) continue; // reject portrait or square
 
                 //scan_status_msg.innerHTML = Math.round(aspect) + " = " + Math.round(w) + " = " + Math.round(solidity) + " = " + Math.round(fill);
                 scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
-                scan_status_msg.style.color = "yellow";
-                //scan_status_msg.style.color = "white";
+                //scan_status_msg.style.color = "yellow";
+                scan_status_msg.style.color = "white";
 
                 // TIGHTER CHECK:
                 //   4-8 vertices, fill > 0.3, solidity > 0.85, landscape aspect 1.2-4.0
@@ -983,7 +983,7 @@ const ok =
     normAspect > 1.25 &&
     //aspect > 1.15 //&&
     //aspect > 1 ;//&&
-    normAspect < 20.0 && 
+    normAspect < 4.0 && 
     w > 20
      && w < 300;
 
