@@ -613,8 +613,8 @@ const ok =
     w > 60 &&
     w < roiW * 0.9;
 
-                const tag = `v${v} f${fill.toFixed(2)} a${aspect.toFixed(1)}`;
-                stats.info.push(tag + (ok ? ' ✓' : ''));
+                //const tag = `v${v} f${fill.toFixed(2)} a${aspect.toFixed(1)}`;
+                //stats.info.push(tag + (ok ? ' ✓' : ''));
 
                 // Draw all candidates in ROI-offset coords
                 const fx = br.x + roiX, fy = br.y + roiY;
