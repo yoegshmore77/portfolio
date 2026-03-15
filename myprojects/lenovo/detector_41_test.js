@@ -474,7 +474,7 @@ document.body.style.fontFamily = 'sans-serif';
             
             gray.delete(); blur.delete();
 
-            const kernel = cv.Mat.ones(2, 2, cv.CV_8U);//3  // Smaller kernel: don't merge separate objects
+            const kernel = cv.Mat.ones(2.5 , 2.5 , cv.CV_8U);//3  // Smaller kernel: don't merge separate objects
             const closed = new cv.Mat();
             cv.morphologyEx(edges, closed, cv.MORPH_CLOSE, kernel);
             cv.morphologyEx(closed, closed, cv.MORPH_DILATE, kernel);
