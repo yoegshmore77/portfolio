@@ -476,7 +476,6 @@ document.body.style.fontFamily = 'sans-serif';
 
             const kernel = cv.Mat.ones(3, 3, cv.CV_8U);  // Smaller kernel: don't merge separate objects
             const closed = new cv.Mat();
-            //cv.morphologyEx(edges, closed, cv.MORPH_CLOSE, kernel);
             cv.morphologyEx(edges, closed, cv.MORPH_CLOSE, kernel);
             cv.morphologyEx(closed, closed, cv.MORPH_DILATE, kernel);
             kernel.delete();
@@ -561,7 +560,7 @@ if (br.width <= br.height) continue; // reject portrait or square
                 //cv.approxPolyDP(cnt, approx, 0.04 * peri, true);
                 //if (!cv.isContourConvex(cnt)) continue;
                 //cv.approxPolyDP(cnt, approx, 0.02 * peri, true);
-                cv.approxPolyDP(cnt, approx, 0.035 * peri, true);
+                cv.approxPolyDP(cnt, approx, 0.02 * peri, true);
                 const v = approx.rows;
                 approx.delete();
 
@@ -579,7 +578,8 @@ if (br.width <= br.height) continue; // reject portrait or square
                 
                 scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
                 //scan_status_msg.style.color = "yellow";
-                scan_status_msg.style.color = "white";
+                //scan_status_msg.style.color = "white";
+                scan_status_msg.style.color = "orange";
 
                 // TIGHTER CHECK:
                 //   4-8 vertices, fill > 0.3, solidity > 0.85, landscape aspect 1.2-4.0
@@ -622,13 +622,13 @@ const centerToleranceY = roiH * 0.20;
      && w < 300;*/
 
 const ok =
-    v >= 4 && v <= 8 &&
+    v >= 4 && v <= 12 &&
     fill > 0.65 &&
     //solidity > 0.65 && // solidity > 0.65 &&
     normAspect > 1.25 &&
     normAspect < 4.0 &&
     w > 60 &&
-    w < roiW * 0.6
+    w < roiW * 0.6 &&
     dx < centerToleranceX &&
     dy < centerToleranceY;
 
