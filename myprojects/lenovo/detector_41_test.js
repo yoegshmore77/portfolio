@@ -469,8 +469,8 @@ document.body.style.fontFamily = 'sans-serif';
             const edges = new cv.Mat();
             //cv.Canny(blur, edges, 50, 120);  // Higher thresholds: ignore weak edges (cables/shadows)
             //cv.Canny(blur, edges, 20, 80); 
-            //cv.Canny(blur, edges, 30, 90);   
-            cv.Canny(blur, edges, 75, 150);        
+            cv.Canny(blur, edges, 30, 90);   
+            //cv.Canny(blur, edges, 75, 150);        
             
             gray.delete(); blur.delete();
 
@@ -561,7 +561,7 @@ if (br.width <= br.height) continue; // reject portrait or square
                 //cv.approxPolyDP(cnt, approx, 0.04 * peri, true);
                 //if (!cv.isContourConvex(cnt)) continue;
                 //cv.approxPolyDP(cnt, approx, 0.02 * peri, true);
-                cv.approxPolyDP(cnt, approx, 0.015 * peri, true);
+                cv.approxPolyDP(cnt, approx, 0.035 * peri, true);
                 const v = approx.rows;
                 approx.delete();
 
@@ -578,8 +578,8 @@ if (br.width <= br.height) continue; // reject portrait or square
 
                 
                 scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
-                scan_status_msg.style.color = "yellow";
-                //scan_status_msg.style.color = "white";
+                //scan_status_msg.style.color = "yellow";
+                scan_status_msg.style.color = "white";
 
                 // TIGHTER CHECK:
                 //   4-8 vertices, fill > 0.3, solidity > 0.85, landscape aspect 1.2-4.0
