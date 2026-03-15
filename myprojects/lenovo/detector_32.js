@@ -875,13 +875,12 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
             
             gray.delete(); blur.delete();
 
-            //const kernel = cv.Mat.ones(3, 3, cv.CV_8U);  // Smaller kernel: don't merge separate objects
+            const kernel = cv.Mat.ones(3, 3, cv.CV_8U);  // Smaller kernel: don't merge separate objects
             const closed = new cv.Mat();
-            
             //cv.morphologyEx(edges, closed, cv.MORPH_CLOSE, kernel);
-            //cv.morphologyEx(closed, closed, cv.MORPH_DILATE, kernel);
-            
-            //kernel.delete();
+            cv.morphologyEx(edges, closed, cv.MORPH_CLOSE, kernel);
+            cv.morphologyEx(closed, closed, cv.MORPH_DILATE, kernel);
+            kernel.delete();
 
 
 
@@ -924,17 +923,15 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
 
                 const br = cv.boundingRect(cnt);
 
-const rotRect = cv.minAreaRect(cnt);
+                const rotRect = cv.minAreaRect(cnt);
 const w = rotRect.size.width;
 const h = rotRect.size.height;
-//const aspect = Math.max(w, h) / Math.min(w, h);
+const aspect = Math.max(w, h) / Math.min(w, h);
 
 
 
-                //if (Math.max(w, h) < roiW * 0.25) continue;
+                if (Math.max(w, h) < roiW * 0.25) continue;
                 //if(w > 99) continue;
-const isLandscape = br.width > br.height;
-const aspect = br.width / br.height;
 
 
 if (br.width <= br.height) continue; // reject portrait or square
@@ -974,18 +971,16 @@ if (br.width <= br.height) continue; // reject portrait or square
  
 
 
-                //const normAspect = aspect > 1 ? aspect : 1 / aspect;
-                const normAspect = aspect;
-
+                const normAspect = aspect > 1 ? aspect : 1 / aspect;
 
 
                 //console.log("aspect = "+ aspect + " solidity =  " + solidity + " fill =  " + fill + " v = " + v);
 
                 //scan_status_msg.innerHTML = Math.round(aspect) + " = " + Math.round(w) + " = " + Math.round(solidity) + " = " + Math.round(fill);
                 scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
-                //scan_status_msg.style.color = "yellow";
+                scan_status_msg.style.color = "yellow";
                 //scan_status_msg.style.color = "white";
-                scan_status_msg.style.color = "orange";
+                //scan_status_msg.style.color = "orange";
 
                 // TIGHTER CHECK:
                 //   4-8 vertices, fill > 0.3, solidity > 0.85, landscape aspect 1.2-4.0
@@ -1030,9 +1025,9 @@ const centerToleranceY = roiH * 0.12;//.20;
      && w < 300;*/
 
 const ok =
-    v >= 4 && v <= 8 &&
-    isLandscape &&
+    v >= 4 && v <= 12 &&
     //fill > 0.45 &&
+    //fill > 0.35 &&
     fill > 0.45 &&
     //solidity > 0.65 &&
     normAspect > 1.25 &&
