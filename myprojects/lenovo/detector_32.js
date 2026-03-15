@@ -871,16 +871,17 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
             const edges = new cv.Mat();
             //cv.Canny(blur, edges, 50, 120);  // Higher thresholds: ignore weak edges (cables/shadows)
             //cv.Canny(blur, edges, 20, 80); 
-            cv.Canny(blur, edges, 30, 90);           
+            cv.Canny(blur, edges, 30, 90);
+            const closed = edges;           
             
             gray.delete(); blur.delete();
 
-            const kernel = cv.Mat.ones(3, 3, cv.CV_8U);  // Smaller kernel: don't merge separate objects
+            /*const kernel = cv.Mat.ones(3, 3, cv.CV_8U);  // Smaller kernel: don't merge separate objects
             const closed = new cv.Mat();
-            //cv.morphologyEx(edges, closed, cv.MORPH_CLOSE, kernel);
+            
             cv.morphologyEx(edges, closed, cv.MORPH_CLOSE, kernel);
             cv.morphologyEx(closed, closed, cv.MORPH_DILATE, kernel);
-            kernel.delete();
+            kernel.delete();*/
 
 
 
@@ -978,9 +979,9 @@ if (br.width <= br.height) continue; // reject portrait or square
 
                 //scan_status_msg.innerHTML = Math.round(aspect) + " = " + Math.round(w) + " = " + Math.round(solidity) + " = " + Math.round(fill);
                 scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
-                scan_status_msg.style.color = "yellow";
+                //scan_status_msg.style.color = "yellow";
                 //scan_status_msg.style.color = "white";
-                //scan_status_msg.style.color = "orange";
+                scan_status_msg.style.color = "orange";
 
                 // TIGHTER CHECK:
                 //   4-8 vertices, fill > 0.3, solidity > 0.85, landscape aspect 1.2-4.0
@@ -1025,7 +1026,7 @@ const centerToleranceY = roiH * 0.12;//.20;
      && w < 300;*/
 
 const ok =
-    v >= 4 && v <= 12 &&
+    v >= 4 && v <= 8 &&
     //fill > 0.45 &&
     //fill > 0.35 &&
     fill > 0.45 &&
@@ -1065,7 +1066,7 @@ const ok =
                 }
             }
 
-            contours.delete(); hierarchy.delete(); edges.delete(); closed.delete();
+            contours.delete(); hierarchy.delete(); edges.delete(); //closed.delete();
             window._cvStats = stats;
             return best;
         } catch (e) {
