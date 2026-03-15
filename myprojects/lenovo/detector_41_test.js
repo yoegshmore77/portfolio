@@ -569,7 +569,7 @@ if (br.width <= br.height) continue; // reject portrait or square
                 const shortSide = Math.min(w, h);
                 const aspect = longSide / shortSide;
 
-                const compactness = (peri * peri) / area;
+                //const compactness = (peri * peri) / area;
                 //const aspect = br.width / br.height;
                 const normAspect = aspect;
 
@@ -583,8 +583,8 @@ if (br.width <= br.height) continue; // reject portrait or square
 
                 
                 scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + roiW * 0.9.toFixed(2) + " = " + fill.toFixed(2);
-                scan_status_msg.style.color = "yellow";
-                //scan_status_msg.style.color = "white";
+                //scan_status_msg.style.color = "yellow";
+                scan_status_msg.style.color = "white";
                 //scan_status_msg.style.color = "orange";
                 //scan_status_msg.style.color = "red";
 
@@ -641,7 +641,6 @@ const ok =
     longSide > 60 &&
     longSide < roiW * 0.6 &&
     shortSide > 30 &&
-    compactness < 80 &&
     dx < centerToleranceX &&
     dy < centerToleranceY;
 
