@@ -877,7 +877,7 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
             
             gray.delete(); blur.delete();
 
-            const kernel = cv.Mat.ones(2, 2, cv.CV_8U);  // Smaller kernel: don't merge separate objects
+            const kernel = cv.Mat.ones(3, 3, cv.CV_8U);  // Smaller kernel: don't merge separate objects
             const closed = new cv.Mat();
 
             cv.dilate(edges, closed, kernel);
@@ -890,7 +890,7 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
 
             const contours = new cv.MatVector();
             const hierarchy = new cv.Mat();
-            //cv.dilate(edges, edges, cv.Mat.ones(2,2,cv.CV_8U));//yy
+            cv.dilate(edges, edges, cv.Mat.ones(3,3,cv.CV_8U));//yy
             //cv.findContours(closed, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
             cv.findContours(
                     closed,
@@ -990,8 +990,8 @@ const aspect = br.width / br.height;
 
                 //scan_status_msg.innerHTML = Math.round(aspect) + " = " + Math.round(w) + " = " + Math.round(solidity) + " = " + Math.round(fill);
                 scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
-                scan_status_msg.style.color = "yellow";
-                //scan_status_msg.style.color = "white";
+                //scan_status_msg.style.color = "yellow";
+                scan_status_msg.style.color = "white";
                 //scan_status_msg.style.color = "orange";
 
                 // TIGHTER CHECK:
