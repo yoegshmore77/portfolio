@@ -923,10 +923,10 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
 
                 const br = cv.boundingRect(cnt);
 
-/*const rotRect = cv.minAreaRect(cnt);
+const rotRect = cv.minAreaRect(cnt);
 const w = rotRect.size.width;
 const h = rotRect.size.height;
-const aspect = Math.max(w, h) / Math.min(w, h);*/
+//const aspect = Math.max(w, h) / Math.min(w, h);
 
 
 
@@ -981,8 +981,8 @@ if (br.width <= br.height) continue; // reject portrait or square
 
                 //scan_status_msg.innerHTML = Math.round(aspect) + " = " + Math.round(w) + " = " + Math.round(solidity) + " = " + Math.round(fill);
                 scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
-                scan_status_msg.style.color = "yellow";
-                //scan_status_msg.style.color = "white";
+                //scan_status_msg.style.color = "yellow";
+                scan_status_msg.style.color = "white";
                 //scan_status_msg.style.color = "orange";
 
                 // TIGHTER CHECK:
