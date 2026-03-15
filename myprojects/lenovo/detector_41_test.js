@@ -524,7 +524,7 @@ document.body.style.fontFamily = 'sans-serif';
                 const rotRect = cv.minAreaRect(cnt);
 const w = rotRect.size.width;
 const h = rotRect.size.height;
-const aspect = Math.max(w, h) / Math.min(w, h);
+//const aspect = Math.max(w, h) / Math.min(w, h);
 
 
 
@@ -559,24 +559,26 @@ if (br.width <= br.height) continue; // reject portrait or square
                 const approx = new cv.Mat();
                 //cv.approxPolyDP(cnt, approx, 0.04 * peri, true);
                 //if (!cv.isContourConvex(cnt)) continue;
-                cv.approxPolyDP(cnt, approx, 0.02 * peri, true);
+                //cv.approxPolyDP(cnt, approx, 0.02 * peri, true);
+                cv.approxPolyDP(cnt, approx, 0.05 * peri, true);
                 const v = approx.rows;
                 approx.delete();
 
-                //const aspect = br.width / br.height;
+                const aspect = br.width / br.height;
+                const normAspect = aspect;
 
  
 
 
-                const normAspect = aspect > 1 ? aspect : 1 / aspect;
+                //const normAspect = aspect > 1 ? aspect : 1 / aspect;
 
 
                 //console.log("aspect = "+ aspect + " solidity =  " + solidity + " fill =  " + fill + " v = " + v);
 
                 
                 scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
-                //scan_status_msg.style.color = "yellow";
-                scan_status_msg.style.color = "white";
+                scan_status_msg.style.color = "yellow";
+                //scan_status_msg.style.color = "white";
 
                 // TIGHTER CHECK:
                 //   4-8 vertices, fill > 0.3, solidity > 0.85, landscape aspect 1.2-4.0
@@ -625,7 +627,9 @@ const ok =
     normAspect > 1.25 &&
     normAspect < 4.0 &&
     w > 60 &&
-    w < roiW * 0.6;
+    w < roiW * 0.6
+    dx < centerToleranceX &&
+    dy < centerToleranceY;
 
                 const tag = `v${v} f${fill.toFixed(2)} a${aspect.toFixed(1)}`;
                 stats.info.push(tag + (ok ? ' ✓' : ''));
@@ -761,7 +765,7 @@ let dummy_video_grab = null;
         if (lastRect) {
             const d = Math.hypot(rect.cx - lastRect.cx, rect.cy - lastRect.cy);
             //stabilityCounter = d < 50 ? stabilityCounter + 1 : Math.max(0, stabilityCounter - 1);
-            stabilityCounter = d < 50 ? stabilityCounter + 1 : Math.max(0, stabilityCounter - 1);
+            stabilityCounter = d < 25 ? stabilityCounter + 1 : Math.max(0, stabilityCounter - 1);
         } else {
             stabilityCounter = 1;
         }
