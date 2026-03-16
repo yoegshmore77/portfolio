@@ -496,7 +496,7 @@ document.body.style.fontFamily = 'sans-serif';
                 );
 
             let best = null, bestArea = 0;
-            const minA = roiW * roiH * 0.05;  // 5% of ROI (ignore small noise)
+            const minA = roiW * roiH * 0.01;  // 5% of ROI (ignore small noise)
             //const maxA = roiW * roiH * 0.85;  // 85% of ROI
             const maxA = roiW * roiH * 0.85;  // 85% of ROI
 
@@ -586,9 +586,9 @@ if (br.width <= br.height) continue; // reject portrait or square
 
                 
                 scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
-                //scan_status_msg.style.color = "yellow";
+                scan_status_msg.style.color = "yellow";
                 //scan_status_msg.style.color = "white";
-                scan_status_msg.style.color = "orange";
+                //scan_status_msg.style.color = "orange";
                 //scan_status_msg.style.color = "red";
 
                 // TIGHTER CHECK:
