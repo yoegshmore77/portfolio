@@ -634,7 +634,7 @@ const centerToleranceY = roiH * 0.20;
 const ok =
     v >= 4 && v <= 12 &&
     //fill > 0.80 &&
-    fill > 0.70 &&
+    fill > 0.73 &&
     //solidity > 0.65 && // solidity > 0.65 &&
     normAspect > 1.25 &&
     normAspect < 4.0 &&
