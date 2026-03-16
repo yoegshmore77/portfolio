@@ -475,7 +475,7 @@ document.body.style.fontFamily = 'sans-serif';
             
             gray.delete(); blur.delete();
 
-            const kernel = cv.Mat.ones(2.0 , 2.0 , cv.CV_8U);//3  // Smaller kernel: don't merge separate objects
+            const kernel = cv.Mat.ones(3.0 , 3.0 , cv.CV_8U);//3  // Smaller kernel: don't merge separate objects
             const closed = new cv.Mat();
             cv.morphologyEx(edges, closed, cv.MORPH_CLOSE, kernel);
             cv.morphologyEx(closed, closed, cv.MORPH_DILATE, kernel);
@@ -587,8 +587,8 @@ if (br.width <= br.height) continue; // reject portrait or square
                 
                 scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
                 //scan_status_msg.style.color = "yellow";
-                scan_status_msg.style.color = "white";
-                //scan_status_msg.style.color = "orange";
+                //scan_status_msg.style.color = "white";
+                scan_status_msg.style.color = "orange";
                 //scan_status_msg.style.color = "red";
 
                 // TIGHTER CHECK:
