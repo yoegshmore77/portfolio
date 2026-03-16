@@ -641,7 +641,7 @@ const ok =
     //w > 60 &&
     //w < roiW * 0.9 &&
     //longSide > 60 &&
-    longSide > 15 &&
+    longSide > 30 &&
     longSide < roiW * 0.6 &&
     //shortSide > 30 &&
     dx < centerToleranceX &&
