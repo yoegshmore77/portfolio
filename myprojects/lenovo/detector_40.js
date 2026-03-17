@@ -38,10 +38,10 @@
 
             /*Object.entries(response).forEach(([key, value]) => {
                 console.log(`Key: ${key}, Value:`, value);
-            });
-            console.log("response -----" + response);
-            console.log("refid =============>>>>> "+ response.data.data.refId);
-            console.log("baseScore =============>>>>> "+ response.data.data.config.baseScore);
+            });*/
+            //console.log("response -----" + response);
+            //console.log("refid =============>>>>> "+ response.data.data.refId);
+            /*console.log("baseScore =============>>>>> "+ response.data.data.config.baseScore);
             console.log("cornerMultiplier =============>>>>> "+ response.data.data.config.cornerMultiplier);
             console.log("gameDurationTimer =============>>>>> "+ response.data.data.config.gameDurationTimer);*/
 
@@ -181,14 +181,19 @@
 
           }
 
-          function show_end_screen(){
+    function show_end_screen(){
 
-            Quit_Game();
+        Quit_Game();
             // call angular function to show the end screen
 
+        timer_wrapper.style.display = 'none';
+        btn1.style.display = 'none';
+        btn2.style.display = 'none';
+        btn3.style.display = 'none';
+        scorePanel.style.display = "none";
+        ratingPanel.style.display = "none";
 
-
-          }
+    }
           //-------------------------------
         function Submit_Timeout(){
 
@@ -538,10 +543,10 @@ const ok =
 
                 // Draw all candidates in ROI-offset coords
                 const fx = br.x + roiX, fy = br.y + roiY;
-                dbgCtx.strokeStyle = ok ? 'rgba(0,255,0,0.6)' : 'rgba(255,0,0,0.8)';//'rgba(255,165,0,0.8)'; // yellow line code rgba(255,165,0,0.3
+                dbgCtx.strokeStyle = ok ? 'rgba(0,255,0,0.6)' : 'rgba(255,165,0,0.3)';//'rgba(255,165,0,0.8)'; // yellow line code rgba(255,165,0,0.3
                 dbgCtx.lineWidth = ok ? 2 : 1;
                 dbgCtx.strokeRect(fx, fy, br.width, br.height);
-                dbgCtx.fillStyle = ok ? '#0f0' : 'rgba(255,0,0,0.8)';//'rgba(255,165,0,0.5)';
+                dbgCtx.fillStyle = ok ? '#0f0' : 'rgba(255,165,0,0.8)';//'rgba(255,165,0,0.5)';
                 dbgCtx.font = '9px monospace';
                 dbgCtx.fillText(tag, fx, fy - 2);
 
@@ -712,7 +717,8 @@ let dummy_video_grab = null;
             //dbgCanvas.style.opacity = 1;
 
             dbgCtx.clearRect(0, 0, dbgCanvas.width, dbgCanvas.height);
-            dbgCtx.drawImage(video, 0, 0, dbgCanvas.width, dbgCanvas.height);
+            //dbgCtx.drawImage(video, 0, 0, dbgCanvas.width, dbgCanvas.height);
+            dbgCtx.drawImage(bufferCanvas, 0, 0, dbgCanvas.width, dbgCanvas.height);
 
 
 
@@ -819,7 +825,7 @@ let dummy_video_grab = null;
             gameWorld.visible = true;
             play_ground_anim_Sound();
             scan_status_msg.innerHTML = "";
-            //scan_status_msg.innerHTML = "Starting game in a moment";
+            //scan_status_msg.innerHTML = "Preparing game";
             
           }
                 
@@ -897,7 +903,8 @@ let dummy_video_grab = null;
             gameWorld.position.set(0 ,0.8, 2.0);
             //ctx_1.clearRect(0, 0, canvas.width, canvas.height);
             console.log("scaling animation completed");
-            scannerOvl.style.display = 'none';
+            //scannerOvl.style.display = 'none';
+            
             //ground.visible = true;
             //ball.visible = true;
             //updateTimer();
@@ -910,9 +917,16 @@ let dummy_video_grab = null;
             //play_countdown_trumpet_Sound();
             //console.log("received_gameId = "+ received_gameId);
 
-
+                //received_gameId = false;
                 check_received_gameId();
                 cancelAnimationFrame(animate_game_container_id);
+                scannerBox.style.display = "none";
+                scannerLine.style.display = "none";
+                // scan_status_msg.innerHTML = "Preparing game";
+                //scan_status_msg.innerHTML = "Starting game in";
+                scan_status_msg.style.marginBottom = "95%";
+                scannerOvl.style.background = "rgba(0, 0, 0, 0.0)";
+                
 
                 //received_gameId = true;//ttt to be deleted later only for testing
 
@@ -921,24 +935,35 @@ let dummy_video_grab = null;
 
 
   }
+    
+   
+  const scannerBox = document.querySelector('.scanner-box');
+  const scannerLine = document.querySelector('.scanner-line');
+
   let check_received_gameId_id = null;
+
   function check_received_gameId(){
 
-
+   
     if(received_gameId){
 
         console.log("received_gameId");
 
         received_gameId = false;
 
-
+        scan_status_msg.innerHTML = "";
         scan_status_msg.innerHTML = "Starting game in";
         show_Countdown();
         play_countdown_trumpet_Sound();
         cancelAnimationFrame(check_received_gameId_id);
+
+    }else{
+        
+        scan_status_msg.innerHTML = "Preparing game";
+        check_received_gameId_id = requestAnimationFrame(check_received_gameId);
     }
 
-    check_received_gameId_id = requestAnimationFrame(check_received_gameId);
+    
   }
 
     //----- Create the "GOAL!" flash element
@@ -1857,7 +1882,8 @@ function init_1(){
     gameWorld.add(ball);
     //ball.position.set(0, 0.4, -1.2);//original pos
     //ball.position.set(0, 0.4, -0.1);//original pos later
-    ball.position.set(0, 0.4, -1.7);
+    //ball.position.set(0, 0.4, -1.7);
+    ball.position.set(0, 0.2, -1.7);
 
     //ball.position.set(0, 0.1, -1.2);
     // maybe scale if needed
@@ -2400,7 +2426,7 @@ function resetBall() {
   //ball.position.set(0, 0.2, 0);
   //ball.position.set(0, 0.4, -0.7);
   //ball.position.set(0, 0.4, 0.1);//original pos later
-  ball.position.set(0, 0.4, -1.7);//original pos
+  ball.position.set(0, 0.2, -1.7);//original pos
   //ball.position.set(0, 0.4, -1.7);
 
   //ball.position.set(0, 0.1, -1.2);
@@ -2763,7 +2789,8 @@ function updateBallPosition(delta) {
             showGoalFlash();
             //setTimeout(showGoalFlash, 1000);
     }
-     if (ball.position.y <0.4){
+     //if (ball.position.y <0.4){
+        if (ball.position.y <0.2){
       //ball.position.y = ball.position.y+ballRadius;
       //ballInFlight = false;
       //hit_Flag = true;
@@ -2790,7 +2817,7 @@ function updateBallPosition(delta) {
       }else{
          //ball.position.y = ball.position.y+ballRadius;
       }
-      ball.position.y = 0.4;//ball.position.y+ballRadius;//yyy
+      ball.position.y = 0.21;//ball.position.y+ballRadius;//yyy
       //ball_in_air = 0;
         //velocity.z *= 0.5;
   //velocity.x *= 0.5;
@@ -3247,6 +3274,9 @@ countDown_Text.style.display = 'block'
 
         scan_status_msg.innerHTML = "";
         scan_status_msg.style.display = 'none';
+        scan_status_msg.style.marginBottom = "85%";
+        scannerOvl.style.background = "rgba(0, 0, 0, 0.3)";
+        scannerOvl.style.display = "none";
       }
 
 
@@ -5033,7 +5063,7 @@ function Restart_The_Game(){
     play_countdown_trumpet_Sound();
 
     reset_Score_Panel();
-    currentRating =0;
+    currentRating = 0;
     currentAttempt = 0;
     countDown_count = 0;
     resetTimer();
