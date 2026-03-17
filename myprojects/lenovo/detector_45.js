@@ -586,8 +586,8 @@ if (br.width <= br.height) continue; // reject portrait or square
 
                 
                 scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
-                scan_status_msg.style.color = "yellow";
-                //scan_status_msg.style.color = "white";
+                //scan_status_msg.style.color = "yellow";
+                scan_status_msg.style.color = "white";
                 //scan_status_msg.style.color = "orange";
                 //scan_status_msg.style.color = "red";
 
@@ -703,7 +703,7 @@ const ok =
         // If AI found something overlapping CV, use its label
         if (pick && aiPreds.length) {
             for (const p of aiPreds) {
-                if(p.class === "cell phone" || p.class === "laptop" || p.class === "keyboard" || p.class === "tv" ) continue
+                if(p.class === "cell phone" || p.class === "laptop" || p.class === "keyboard" || p.class === "tv" ){ 
                 if (p.score < 0.02) continue;//-------------------------------------------------------
                 //if (p.score < 0.08) continue;
                 //if (p.score < 0.02) continue;
@@ -715,6 +715,7 @@ const ok =
                     pick.label = p.class;
                     pick.source = 'AI+CV';
                     break;
+                    }
                 }
             }
         }
@@ -730,7 +731,7 @@ const ok =
 
             for (const p of aiPreds) {
 
-                if(p.class === "cell phone" || p.class === "laptop" || p.class === "keyboard" || p.class === "tv" ) continue
+                if(p.class === "cell phone" || p.class === "laptop" || p.class === "keyboard" || p.class === "tv" ) {
                 if (p.score < 0.6) continue;  // Need 60%+ confidence for AI-only---------------------
                 //if (p.score < 0.01) continue;  // Need 60%+ confidence for AI-only
                 const [px, py, pw, ph] = p.bbox;
@@ -751,6 +752,7 @@ const ok =
                     label: p.class, source: 'AI'
                 };
                 break;
+              }
             }
         }
 
