@@ -457,7 +457,7 @@ document.body.style.fontFamily = 'sans-serif';
     function runCV(vw, vh, roiX, roiY, roiW, roiH) {
         try {
 
-            if(!isDetecting) return;
+            if(!isDetecting){
 
             // Extract ROI pixels
             const roiData = dbgCtx.getImageData(roiX, roiY, roiW, roiH);
@@ -672,9 +672,9 @@ const ok =
                 if (ok) {
 
                 //scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
-                //scan_status_msg.style.color = "yellow";
+                scan_status_msg.style.color = "yellow";
                 //scan_status_msg.style.color = "white";
-                scan_status_msg.style.color = "orange";
+                //scan_status_msg.style.color = "orange";
                 //scan_status_msg.style.color = "red";
 
                     stats.ok++;
@@ -699,6 +699,7 @@ const ok =
             log('CV err: ' + e.message);
             return null;
         }
+      }
     }
 
 
@@ -707,7 +708,7 @@ const ok =
     // ══════════════════════════════════════════════════════════════
     function finalize(cvBest, aiPreds, vw, vh) {
 
-        if(!isDetecting) return;
+        if(!isDetecting){
         const aiInfo = aiPreds.length
             ? aiPreds.slice(0, 3).map(p => `${p.class} ${(p.score * 100) | 0}%`).join(', ')
             : '—';
@@ -800,6 +801,7 @@ const ok =
             statusMsg.textContent = 'Scanning..';
             statusMsg.style.color = 'white';
         }
+    }
     }
 
 let dummy_video_grab = null;
