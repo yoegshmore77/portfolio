@@ -646,13 +646,14 @@ const ok =
     //w < roiW * 0.9 &&
     longSide > 60 &&
     //longSide > 45 &&
-    //longSide < roiW * 0.6 &&
+    longSide < roiW * 0.6 &&
     //longSide < roiW * 0.6 &&
     //shortSide > 30 &&
     dx < centerToleranceX &&
     dy < centerToleranceY;
 
-                const tag = `v${v} f${fill.toFixed(2)} a${aspect.toFixed(1)}`;
+                //const tag = `v${v} f${fill.toFixed(2)} a${aspect.toFixed(1)}`;
+                const tag = `w${w} f${fill.toFixed(2)} a${aspect.toFixed(1)}`;
                 stats.info.push(tag + (ok ? ' ✓' : ''));
 
                 // Draw all candidates in ROI-offset coords
@@ -661,17 +662,17 @@ const ok =
                 dbgCtx.lineWidth = ok ? 2 : 1;
                 dbgCtx.strokeRect(fx, fy, br.width, br.height);
                 dbgCtx.fillStyle = ok ? '#0f0' : 'rgba(255,165,0,0.8)';//'rgba(255,165,0,0.5)';
-                dbgCtx.font = '9px monospace';
+                dbgCtx.font = '14px monospace';
                 dbgCtx.fillText(tag, fx, fy - 2);
 
 
                 if (ok) {
 
                 scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
-                //scan_status_msg.style.color = "yellow";
+                scan_status_msg.style.color = "yellow";
                 //scan_status_msg.style.color = "white";
                 //scan_status_msg.style.color = "orange";
-                scan_status_msg.style.color = "red";
+                //scan_status_msg.style.color = "red";
 
                     stats.ok++;
                     if (area > bestArea) {
