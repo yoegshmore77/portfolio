@@ -335,8 +335,8 @@ document.body.style.fontFamily = 'sans-serif';
     let stabilityCounter = 0;
     let lastRect = null;
     let lastVideoTime = -1;
-    //const LOCK_TARGET = 15;
-    const LOCK_TARGET = 5;
+    const LOCK_TARGET = 15;
+    //const LOCK_TARGET = 5;
 
     // Debug HUD Top corner debug box
     /*const hud = Object.assign(document.createElement('div'), { id: 'dbg-hud' });
@@ -669,9 +669,9 @@ const ok =
                 if (ok) {
 
                 //scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
-                //scan_status_msg.style.color = "yellow";
+                scan_status_msg.style.color = "yellow";
                 //scan_status_msg.style.color = "white";
-                scan_status_msg.style.color = "orange";
+                //scan_status_msg.style.color = "orange";
                 //scan_status_msg.style.color = "red";
 
                     stats.ok++;
@@ -726,6 +726,8 @@ const ok =
                     pick.source = 'AI+CV';
                     break;
                     }
+              }else{
+                pick = null;
               }
             }
         }
