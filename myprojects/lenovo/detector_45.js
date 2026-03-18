@@ -664,7 +664,7 @@ const ok =
 
                 // Draw all candidates in ROI-offset coords
                 //const fx = br.x + roiX, fy = br.y + roiY;
-                dbgCtx.strokeStyle = ok ? 'rgba(0,255,0,0.6)' : 'rgba(255,165,0,0.1)';//'rgba(255,165,0,0.8)'; // yellow line code rgba(255,165,0,0.3
+                dbgCtx.strokeStyle = ok ? 'rgba(0,255,0,0.6)' : 'rgba(255,165,0,0.3)';//'rgba(255,165,0,0.8)'; // yellow line code rgba(255,165,0,0.3
                 dbgCtx.lineWidth = ok ? 2 : 1;
                 dbgCtx.strokeRect(fx, fy, br.width, br.height);
                 dbgCtx.fillStyle = ok ? '#0f0' : 'rgba(255,165,0,0.6)';//'rgba(255,165,0,0.5)';
@@ -675,10 +675,10 @@ const ok =
                 if (ok) {
 
                 //scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
-                scan_status_msg.style.color = "yellow";
+                //scan_status_msg.style.color = "yellow";
                 //scan_status_msg.style.color = "white";
                 //scan_status_msg.style.color = "orange";
-                //scan_status_msg.style.color = "red";
+                scan_status_msg.style.color = "red";
 
                     stats.ok++;
                     if (area > bestArea) {
@@ -819,7 +819,7 @@ let dummy_video_grab = null;
         if (lastRect) {
             const d = Math.hypot(rect.cx - lastRect.cx, rect.cy - lastRect.cy);
             //stabilityCounter = d < 50 ? stabilityCounter + 1 : Math.max(0, stabilityCounter - 1);
-            stabilityCounter = d < 200 ? stabilityCounter + 1 : Math.max(0, stabilityCounter - 1);
+            stabilityCounter = d < 20 ? stabilityCounter + 1 : Math.max(0, stabilityCounter - 1);
         } else {
             stabilityCounter = 1;
         }
