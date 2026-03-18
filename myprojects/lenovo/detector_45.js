@@ -513,7 +513,8 @@ document.body.style.fontFamily = 'sans-serif';
                     if (hh[2] === -1) {
                         continue;
                     }
-                const cnt = contours.get(i);
+                //const cnt = contours.get(i);
+                const cnt = contours.get(0);//yy
                 const area = cv.contourArea(cnt);
 
                 //if (area < minA || area > maxA) continue;
@@ -588,8 +589,8 @@ if (br.width <= br.height) continue; // reject portrait or square
                 scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
                 //scan_status_msg.style.color = "yellow";
                 //scan_status_msg.style.color = "white";
-                scan_status_msg.style.color = "orange";
-                //scan_status_msg.style.color = "red";
+                //scan_status_msg.style.color = "orange";
+                scan_status_msg.style.color = "red";
 
                 // TIGHTER CHECK:
                 //   4-8 vertices, fill > 0.3, solidity > 0.85, landscape aspect 1.2-4.0
@@ -638,7 +639,7 @@ const ok =
     //fill > 0.80 &&
     fill > 0.73 &&
     //fill > 0.53 &&
-    solidity > 0.65 && // solidity > 0.65 &&
+    //solidity > 0.65 && // solidity > 0.65 &&
     normAspect > 1.25 &&
     normAspect < 4.0 &&
     //w > 60 &&
@@ -807,12 +808,12 @@ let dummy_video_grab = null;
 
             dbgCanvas.style.opacity = 1; 
             scan_status_msg.innerHTML = "";
-            scan_status_msg.innerHTML = `<svg viewBox="0 0 24 24">
+            /*scan_status_msg.innerHTML = `<svg viewBox="0 0 24 24">
 
               <circle cx="12" cy="12" r="10"></circle>
               <path d="M7 12.5L10 15.5L17 8.5"></path>
               </svg>
-              <span>Found goal post!</span>`;
+              <span>Found goal post!</span>`;*/
 
             bufferCtx.drawImage(video, 0, 0, dbgCanvas.width, dbgCanvas.height);
 
