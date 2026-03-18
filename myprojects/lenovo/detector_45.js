@@ -664,12 +664,12 @@ const ok =
 
                 // Draw all candidates in ROI-offset coords
                 //const fx = br.x + roiX, fy = br.y + roiY;
-                dbgCtx.strokeStyle = ok ? 'rgba(0,255,0,0.6)' : 'rgba(255,165,0,0.6)';//'rgba(255,165,0,0.8)'; // yellow line code rgba(255,165,0,0.3
+                dbgCtx.strokeStyle = ok ? 'rgba(0,255,0,0.6)' : 'rgba(255,165,0,0.1)';//'rgba(255,165,0,0.8)'; // yellow line code rgba(255,165,0,0.3
                 dbgCtx.lineWidth = ok ? 2 : 1;
                 dbgCtx.strokeRect(fx, fy, br.width, br.height);
                 dbgCtx.fillStyle = ok ? '#0f0' : 'rgba(255,165,0,0.6)';//'rgba(255,165,0,0.5)';
-                dbgCtx.font = '14px monospace';
-                dbgCtx.fillText(tag, fx, fy - 2);
+                //dbgCtx.font = '14px monospace';
+                //dbgCtx.fillText(tag, fx, fy - 2);
 
 
                 if (ok) {
@@ -678,7 +678,7 @@ const ok =
                 //scan_status_msg.style.color = "yellow";
                 //scan_status_msg.style.color = "white";
                 //scan_status_msg.style.color = "orange";
-                scan_status_msg.style.color = "red";
+                //scan_status_msg.style.color = "red";
 
                     stats.ok++;
                     if (area > bestArea) {
@@ -789,7 +789,7 @@ const ok =
             Pick: pick ? `${pick.source} [${pick.label}] ${pick.w}x${pick.h}` : '—',
             Lock: `${stabilityCounter}/${LOCK_TARGET}`
         });*/
-        if(isDetecting === true){
+        //if(isDetecting === true){
         if (pick) {
             // Highlight the pick with a bright box
             const c = pick.source.includes('AI') ? '#FF00FF' : '#00FFFF'; // pink / skyblue
@@ -804,7 +804,7 @@ const ok =
             statusMsg.textContent = 'Scanning..';
             statusMsg.style.color = 'white';
         }
-       }
+       //}
      //}
     }
 
@@ -815,11 +815,11 @@ let dummy_video_grab = null;
     //LOCK_TARGET = 5;
 
     function checkStability(rect) {
-        if(isDetecting === true){
+        //if(isDetecting === true){
         if (lastRect) {
             const d = Math.hypot(rect.cx - lastRect.cx, rect.cy - lastRect.cy);
             //stabilityCounter = d < 50 ? stabilityCounter + 1 : Math.max(0, stabilityCounter - 1);
-            stabilityCounter = d < 50 ? stabilityCounter + 1 : Math.max(0, stabilityCounter - 1);
+            stabilityCounter = d < 80 ? stabilityCounter + 1 : Math.max(0, stabilityCounter - 1);
         } else {
             stabilityCounter = 1;
         }
@@ -894,7 +894,7 @@ let dummy_video_grab = null;
             blink_viewfinder();
             
         }
-     }
+     //}
     }
 
 
@@ -958,7 +958,7 @@ let dummy_video_grab = null;
             //dbgCtx.clearRect(0, 0, video.videoWidth, video.videoHeight);
             //dbgCtx.putImageData(dummy_video_grab, 0, 0);
             dbgCtx.drawImage(bufferCanvas, 0, 0, dbgCanvas.width, dbgCanvas.height);
-            //disposeBuffer();
+            disposeBuffer();
             goalFlash.innerText = "";
 
             //animate_game_container();
