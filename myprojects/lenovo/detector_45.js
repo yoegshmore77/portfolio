@@ -513,8 +513,8 @@ document.body.style.fontFamily = 'sans-serif';
                     if (hh[2] === -1) {
                         continue;
                     }
-                //const cnt = contours.get(i);
-                const cnt = contours.get(contours.size()-1);//yy
+                const cnt = contours.get(i);
+                
                 const area = cv.contourArea(cnt);
 
                 //if (area < minA || area > maxA) continue;
@@ -587,8 +587,8 @@ if (br.width <= br.height) continue; // reject portrait or square
 
                 
                 scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
-                scan_status_msg.style.color = "yellow";
-                //scan_status_msg.style.color = "white";
+                //scan_status_msg.style.color = "yellow";
+                scan_status_msg.style.color = "white";
                 //scan_status_msg.style.color = "orange";
                 //scan_status_msg.style.color = "red";
 
