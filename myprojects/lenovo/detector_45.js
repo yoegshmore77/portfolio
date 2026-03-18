@@ -675,10 +675,10 @@ const ok =
                 if (ok) {
 
                 //scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
-                //scan_status_msg.style.color = "yellow";
+                scan_status_msg.style.color = "yellow";
                 //scan_status_msg.style.color = "white";
                 //scan_status_msg.style.color = "orange";
-                scan_status_msg.style.color = "red";
+                //scan_status_msg.style.color = "red";
 
                     stats.ok++;
                     if (area > bestArea) {
@@ -955,7 +955,7 @@ let dummy_video_grab = null;
             //dbgCtx.clearRect(0, 0, video.videoWidth, video.videoHeight);
             //dbgCtx.putImageData(dummy_video_grab, 0, 0);
             dbgCtx.drawImage(bufferCanvas, 0, 0, dbgCanvas.width, dbgCanvas.height);
-            disposeBuffer();
+            //disposeBuffer();
             goalFlash.innerText = "";
 
             //animate_game_container();
