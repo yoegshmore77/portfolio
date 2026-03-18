@@ -650,8 +650,8 @@ const ok =
     normAspect < 6.0 &&
     //w > 60 &&
     //w < roiW * 0.9 &&
-    //longSide > 60 &&
-    longSide > 45 &&
+    longSide > 60 &&
+    //longSide > 45 &&
     longSide < roiW * 0.6 &&
     //longSide < roiW * 0.6 &&
     //shortSide > 30 &&
