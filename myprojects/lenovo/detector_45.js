@@ -669,10 +669,10 @@ const ok =
                 if (ok) {
 
                 //scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
-                //scan_status_msg.style.color = "yellow";
+                scan_status_msg.style.color = "yellow";
                 //scan_status_msg.style.color = "white";
                 //scan_status_msg.style.color = "orange";
-                scan_status_msg.style.color = "red";
+                //scan_status_msg.style.color = "red";
 
                     stats.ok++;
                     if (area > bestArea) {
@@ -742,8 +742,9 @@ const ok =
             for (const p of aiPreds) {
 
             if( p.class === "cell phone" || p.class === "laptop" || p.class === "keyboard" || p.class === "tv" ||  p.class === "book" || p.class === "remote" || p.class === "handbag" || p.class === "couch" || p.class === "microwave" || p.class === "oven" || p.class === "sink" || p.class === "car" || p.class === "bus" || p.class === "bench"){ 
-                if (p.score < 0.6) continue;  // Need 60%+ confidence for AI-only---------------------
+                //if (p.score < 0.6) continue;  // Need 60%+ confidence for AI-only---------------------
                 //if (p.score < 0.01) continue;  // Need 60%+ confidence for AI-only
+                if (p.score < 0.2) continue; 
                 const [px, py, pw, ph] = p.bbox;
                 const acx = px + pw / 2, acy = py + ph / 2;
 
