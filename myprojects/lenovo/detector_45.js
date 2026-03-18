@@ -807,8 +807,8 @@ let dummy_video_grab = null;
             // ═══ LOCKED ═══ ==== ==== ==== ==== ==== ==== ==== ==== ==== ====
 
             dbgCanvas.style.opacity = 1; 
-            scan_status_msg.innerHTML = "";
-            /*scan_status_msg.innerHTML = `<svg viewBox="0 0 24 24">
+            /*scan_status_msg.innerHTML = "";
+            scan_status_msg.innerHTML = `<svg viewBox="0 0 24 24">
 
               <circle cx="12" cy="12" r="10"></circle>
               <path d="M7 12.5L10 15.5L17 8.5"></path>
