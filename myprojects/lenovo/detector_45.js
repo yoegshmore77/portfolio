@@ -668,8 +668,8 @@ const ok =
                 if (ok) {
 
                 scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
-                scan_status_msg.style.color = "yellow";
-                //scan_status_msg.style.color = "white";
+                //scan_status_msg.style.color = "yellow";
+                scan_status_msg.style.color = "white";
                 //scan_status_msg.style.color = "orange";
                 //scan_status_msg.style.color = "red";
 
@@ -685,7 +685,7 @@ const ok =
                         };
                     }
                 }
-                break;
+                
             }
 
             contours.delete(); hierarchy.delete(); edges.delete(); closed.delete();
