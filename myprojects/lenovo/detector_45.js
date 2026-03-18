@@ -678,7 +678,7 @@ const ok =
                 //scan_status_msg.style.color = "yellow";
                 //scan_status_msg.style.color = "white";
                 //scan_status_msg.style.color = "orange";
-                scan_status_msg.style.color = "red";
+                //scan_status_msg.style.color = "red";
 
                     stats.ok++;
                     if (area > bestArea) {
