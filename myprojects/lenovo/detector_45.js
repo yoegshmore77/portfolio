@@ -675,9 +675,9 @@ const ok =
                 if (ok) {
 
                 //scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
-                scan_status_msg.style.color = "yellow";
+                //scan_status_msg.style.color = "yellow";
                 //scan_status_msg.style.color = "white";
-                //scan_status_msg.style.color = "orange";
+                scan_status_msg.style.color = "orange";
                 //scan_status_msg.style.color = "red";
 
                     stats.ok++;
@@ -815,6 +815,7 @@ let dummy_video_grab = null;
     //LOCK_TARGET = 5;
 
     function checkStability(rect) {
+        if(isDetecting === true){
         if (lastRect) {
             const d = Math.hypot(rect.cx - lastRect.cx, rect.cy - lastRect.cy);
             //stabilityCounter = d < 50 ? stabilityCounter + 1 : Math.max(0, stabilityCounter - 1);
@@ -851,7 +852,7 @@ let dummy_video_grab = null;
  
             isDetecting = false;
             cancelAnimationFrame(processVideo_id);
-            //Create_Game(base64Image);
+            Create_Game(base64Image);
 
             
            
@@ -889,6 +890,7 @@ let dummy_video_grab = null;
             blink_viewfinder();
             
         }
+     }
     }
 
 
