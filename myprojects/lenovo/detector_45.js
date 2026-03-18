@@ -658,20 +658,20 @@ const ok =
 
                 // Draw all candidates in ROI-offset coords
                 //const fx = br.x + roiX, fy = br.y + roiY;
-                dbgCtx.strokeStyle = ok ? 'rgba(0,255,0,0.6)' : 'rgba(255,165,0,0.6)';//'rgba(255,165,0,0.8)'; // yellow line code rgba(255,165,0,0.3
+                dbgCtx.strokeStyle = ok ? 'rgba(0,255,0,0.6)' : 'rgba(255,165,0,0.1)';//'rgba(255,165,0,0.8)'; // yellow line code rgba(255,165,0,0.3
                 dbgCtx.lineWidth = ok ? 2 : 1;
                 dbgCtx.strokeRect(fx, fy, br.width, br.height);
-                dbgCtx.fillStyle = ok ? '#0f0' : 'rgba(255,165,0,0.8)';//'rgba(255,165,0,0.5)';
-                dbgCtx.font = '14px monospace';
-                dbgCtx.fillText(tag, fx, fy - 2);
+                dbgCtx.fillStyle = ok ? '#0f0' : 'rgba(255,165,0,0.1)';//'rgba(255,165,0,0.5)';
+                //dbgCtx.font = '14px monospace';
+                //dbgCtx.fillText(tag, fx, fy - 2);
 
 
                 if (ok) {
 
-                scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
+                //scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
                 //scan_status_msg.style.color = "yellow";
                 //scan_status_msg.style.color = "white";
-                scan_status_msg.style.color = "orange";
+                //scan_status_msg.style.color = "orange";
                 //scan_status_msg.style.color = "red";
 
                     stats.ok++;
@@ -713,7 +713,7 @@ const ok =
         // If AI found something overlapping CV, use its label
         if (pick && aiPreds.length) {
             for (const p of aiPreds) {
-                if( p.class === "cell phone" || p.class === "laptop" || p.class === "keyboard" || p.class === "tv" || p.class === "suitcase" || p.class === "book" || p.class === "remote" ){ 
+                if( p.class === "cell phone" || p.class === "laptop" || p.class === "keyboard" || p.class === "tv" ||  p.class === "book" || p.class === "remote" || p.class === "handbag" || p.class === "couch" || p.class === "microwave" || p.class === "oven" || p.class === "sink" || p.class === "car" || p.class === "bus" || p.class === "bench"){ 
                 if ( p.score < 0.02 ) continue;//-------------------------------------------------------
                 //if (p.score < 0.08) continue;
                 //if (p.score < 0.02) continue;
@@ -741,7 +741,7 @@ const ok =
 
             for (const p of aiPreds) {
 
-                if(p.class === "cell phone" || p.class === "laptop" || p.class === "keyboard" || p.class === "tv" ) {
+                if( p.class === "cell phone" || p.class === "laptop" || p.class === "keyboard" || p.class === "tv" ||  p.class === "book" || p.class === "remote" || p.class === "handbag" || p.class === "couch" || p.class === "microwave" || p.class === "oven" || p.class === "sink" || p.class === "car" || p.class === "bus" || p.class === "bench"){ 
                 if (p.score < 0.6) continue;  // Need 60%+ confidence for AI-only---------------------
                 //if (p.score < 0.01) continue;  // Need 60%+ confidence for AI-only
                 const [px, py, pw, ph] = p.bbox;
@@ -816,13 +816,13 @@ let dummy_video_grab = null;
             // ═══ LOCKED ═══ ==== ==== ==== ==== ==== ==== ==== ==== ==== ====
 
             dbgCanvas.style.opacity = 1; 
-            /*scan_status_msg.innerHTML = "";
+            scan_status_msg.innerHTML = "";
             scan_status_msg.innerHTML = `<svg viewBox="0 0 24 24">
 
               <circle cx="12" cy="12" r="10"></circle>
               <path d="M7 12.5L10 15.5L17 8.5"></path>
               </svg>
-              <span>Found goal post!</span>`;*/
+              <span>Found goal post!</span>`;
 
             bufferCtx.drawImage(video, 0, 0, dbgCanvas.width, dbgCanvas.height);
 
