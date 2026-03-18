@@ -336,7 +336,7 @@ document.body.style.fontFamily = 'sans-serif';
     let lastRect = null;
     let lastVideoTime = -1;
     //const LOCK_TARGET = 15;
-    const LOCK_TARGET = 5;
+    const LOCK_TARGET = 10;
 
     // Debug HUD Top corner debug box
     /*const hud = Object.assign(document.createElement('div'), { id: 'dbg-hud' });
@@ -675,9 +675,9 @@ const ok =
                 if (ok) {
 
                 //scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
-                scan_status_msg.style.color = "yellow";
+                //scan_status_msg.style.color = "yellow";
                 //scan_status_msg.style.color = "white";
-                //scan_status_msg.style.color = "orange";
+                scan_status_msg.style.color = "orange";
                 //scan_status_msg.style.color = "red";
 
                     stats.ok++;
@@ -753,7 +753,7 @@ const ok =
             for (const p of aiPreds) {
 
             if( p.class === "cell phone" || p.class === "laptop" || p.class === "keyboard" || p.class === "tv" ||  p.class === "book" || p.class === "remote" || p.class === "handbag" || p.class === "couch" || p.class === "microwave" || p.class === "oven" || p.class === "sink" || p.class === "car" || p.class === "bus" || p.class === "bench"){ 
-                //if (p.score < 0.6) continue;  // Need 60%+ confidence for AI-only---------------------
+                if (p.score < 0.6) continue;  // Need 60%+ confidence for AI-only---------------------
                 //if (p.score < 0.01) continue;  // Need 60%+ confidence for AI-only
                 //if (p.score < 0.2) continue; 
                 const [px, py, pw, ph] = p.bbox;
@@ -832,6 +832,9 @@ let dummy_video_grab = null;
         } //else 
         if (stabilityCounter >= LOCK_TARGET) {
             // ═══ LOCKED ═══ ==== ==== ==== ==== ==== ==== ==== ==== ==== ====
+            isDetecting = false;
+
+            console.log("isDetecting = "+ isDetecting);
 
             dbgCanvas.style.opacity = 1; 
             scan_status_msg.innerHTML = "";
@@ -851,7 +854,7 @@ let dummy_video_grab = null;
             // returns: "data:image/png;base64,iVBORw0KGgoAAAANS..." 
 
  
-            isDetecting = false;
+            
             cancelAnimationFrame(processVideo_id);
             Create_Game(base64Image);
 
