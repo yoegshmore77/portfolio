@@ -762,6 +762,8 @@ const ok =
                     label: p.class, source: 'AI'
                 };
                 break;
+              }else{
+                pick = null;
               }
             }
         }
@@ -847,7 +849,7 @@ let dummy_video_grab = null;
 
             //dbgCanvas.style.opacity = 1;
 
-            //dbgCtx.clearRect(0, 0, dbgCanvas.width, dbgCanvas.height);
+            dbgCtx.clearRect(0, 0, dbgCanvas.width, dbgCanvas.height);
             //dbgCtx.drawImage(video, 0, 0, dbgCanvas.width, dbgCanvas.height);
             dbgCtx.drawImage(bufferCanvas, 0, 0, dbgCanvas.width, dbgCanvas.height);
 
