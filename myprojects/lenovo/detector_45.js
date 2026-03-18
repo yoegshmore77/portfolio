@@ -595,8 +595,8 @@ if (br.width <= br.height) continue; // reject portrait or square
                 //scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
                 //scan_status_msg.style.color = "yellow";
                 //scan_status_msg.style.color = "white";
-                //scan_status_msg.style.color = "orange";
-                scan_status_msg.style.color = "red";
+                scan_status_msg.style.color = "orange";
+                //scan_status_msg.style.color = "red";
 
                 // TIGHTER CHECK:
                 //   4-8 vertices, fill > 0.3, solidity > 0.85, landscape aspect 1.2-4.0
@@ -822,7 +822,7 @@ let dummy_video_grab = null;
             //stabilityCounter = d < 50 ? stabilityCounter + 1 : Math.max(0, stabilityCounter - 1);
             stabilityCounter = d < 50 ? stabilityCounter + 1 : Math.max(0, stabilityCounter - 1);
         } else {
-            stabilityCounter = 1;
+            //stabilityCounter = 1;
         }
         lastRect = rect;
 
