@@ -646,7 +646,7 @@ const ok =
     //fill > 0.73 &&
     fill > 0.53 &&
     //solidity > 0.65 && // solidity > 0.65 &&
-    normAspect > 1.25 &&
+    normAspect > 1.15 &&
     normAspect < 6.0 &&
     //w > 60 &&
     //w < roiW * 0.9 &&
@@ -677,8 +677,8 @@ const ok =
                 //scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
                 //scan_status_msg.style.color = "yellow";
                 //scan_status_msg.style.color = "white";
-                scan_status_msg.style.color = "orange";
-                //scan_status_msg.style.color = "red";
+                //scan_status_msg.style.color = "orange";
+                scan_status_msg.style.color = "red";
 
                     stats.ok++;
                     if (area > bestArea) {
@@ -723,7 +723,7 @@ const ok =
         if (pick && aiPreds.length) {
             for (const p of aiPreds) {
               if( p.class === "cell phone" || p.class === "laptop" || p.class === "keyboard" || p.class === "tv" ||  p.class === "book" || p.class === "remote" || p.class === "handbag" || p.class === "couch" || p.class === "microwave" || p.class === "oven" || p.class === "sink" || p.class === "car" || p.class === "bus" || p.class === "bench"){ 
-                if ( p.score < 0.02 ) continue;//-------------------------------------------------------
+                if ( p.score < 0.04 ) continue;//-------------------------------------------------------
                 //if (p.score < 0.08) continue;
                 //if (p.score < 0.02) continue;
                 //if (p.score < 0.4) continue;//original
@@ -753,7 +753,7 @@ const ok =
             for (const p of aiPreds) {
 
             if( p.class === "cell phone" || p.class === "laptop" || p.class === "keyboard" || p.class === "tv" ||  p.class === "book" || p.class === "remote" || p.class === "handbag" || p.class === "couch" || p.class === "microwave" || p.class === "oven" || p.class === "sink" || p.class === "car" || p.class === "bus" || p.class === "bench"){ 
-                if (p.score < 0.6) continue;  // Need 60%+ confidence for AI-only---------------------
+                //if (p.score < 0.6) continue;  // Need 60%+ confidence for AI-only---------------------
                 //if (p.score < 0.01) continue;  // Need 60%+ confidence for AI-only
                 //if (p.score < 0.2) continue; 
                 const [px, py, pw, ph] = p.bbox;
