@@ -658,18 +658,18 @@ const ok =
 
                 // Draw all candidates in ROI-offset coords
                 //const fx = br.x + roiX, fy = br.y + roiY;
-                dbgCtx.strokeStyle = ok ? 'rgba(0,255,0,0.6)' : 'rgba(255,165,0,0.1)';//'rgba(255,165,0,0.8)'; // yellow line code rgba(255,165,0,0.3
+                dbgCtx.strokeStyle = ok ? 'rgba(0,255,0,0.6)' : 'rgba(255,165,0,0.6)';//'rgba(255,165,0,0.8)'; // yellow line code rgba(255,165,0,0.3
                 dbgCtx.lineWidth = ok ? 2 : 1;
                 dbgCtx.strokeRect(fx, fy, br.width, br.height);
-                dbgCtx.fillStyle = ok ? '#0f0' : 'rgba(255,165,0,0.1)';//'rgba(255,165,0,0.5)';
-                //dbgCtx.font = '14px monospace';
-                //dbgCtx.fillText(tag, fx, fy - 2);
+                dbgCtx.fillStyle = ok ? '#0f0' : 'rgba(255,165,0,0.6)';//'rgba(255,165,0,0.5)';
+                dbgCtx.font = '14px monospace';
+                dbgCtx.fillText(tag, fx, fy - 2);
 
 
                 if (ok) {
 
                 //scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
-                //scan_status_msg.style.color = "yellow";
+                scan_status_msg.style.color = "yellow";
                 //scan_status_msg.style.color = "white";
                 //scan_status_msg.style.color = "orange";
                 //scan_status_msg.style.color = "red";
