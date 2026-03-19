@@ -564,8 +564,8 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
         // 🔥 FINAL FILTER
         const ok =
             //isLandscape &&
-            aspect > 1.25 &&
-            aspect < 4.0 &&
+            aspect > 1.15 &&
+            aspect < 6.0 &&
             v >= 4 && v <= 8 &&
             fill > 0.45 &&
             longSide > 60 &&
@@ -588,7 +588,7 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
 
             //checkStability(rect);
 
-                scan_status_msg.style.color = "red";
+                scan_status_msg.style.color = "orange";
 
                     //stats.ok++;
                     if (area > bestArea) {
@@ -603,10 +603,11 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
                     }
         }
 
-                dbgCtx.strokeStyle = "lime";
-        dbgCtx.lineWidth = 3;
-
-        dbgCtx.strokeRect(br.x, br.y, br.w, br.h);
+                dbgCtx.strokeStyle = ok ? 'rgba(0,255,0,0.6)' : 'rgba(255,165,0,0.6)';//'rgba(255,165,0,0.8)'; // yellow line code rgba(255,165,0,0.3
+                dbgCtx.lineWidth = ok ? 2 : 1;
+                dbgCtx.strokeRect(fx, fy, br.width, br.height);
+                dbgCtx.fillStyle = ok ? '#0f0' : 'rgba(255,165,0,0.6)';//'rgba(255,165,0,0.5)';
+                dbgCtx.font = '14px monospace';
 
         cnt.delete();
     }
