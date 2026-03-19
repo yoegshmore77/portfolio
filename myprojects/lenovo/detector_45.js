@@ -337,7 +337,7 @@ document.body.style.fontFamily = 'sans-serif';
     let lastVideoTime = -1;
     //const LOCK_TARGET = 15;
     //const LOCK_TARGET = 10;
-    const LOCK_TARGET = 5;
+    const LOCK_TARGET = 8;
 
     // Debug HUD Top corner debug box
     /*const hud = Object.assign(document.createElement('div'), { id: 'dbg-hud' });
@@ -678,8 +678,8 @@ const ok =
                 //scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
                 //scan_status_msg.style.color = "yellow";
                 //scan_status_msg.style.color = "white";
-                scan_status_msg.style.color = "orange";
-                //scan_status_msg.style.color = "red";
+                //scan_status_msg.style.color = "orange";
+                scan_status_msg.style.color = "red";
 
                     //stabilityCounter++;
                     stats.ok++;
@@ -841,9 +841,10 @@ let dummy_video_grab = null;
                     );
 
                     //check size stability, not just position
-                    const sizeChange = Math.abs(rect.w - lastRect.w) / lastRect.w;
+                    //const sizeChange = Math.abs(rect.w - lastRect.w) / lastRect.w;
 
-                    if (d < 40 && sizeChange < 0.2) {
+                    //if (d < 40 && sizeChange < 0.2) {
+                    if (d < 40 ) {
                         stabilityCounter++;
                     } else {
                         stabilityCounter = 0; // 🔥 reset instead of decreasing
