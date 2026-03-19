@@ -513,8 +513,8 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
         const area = cv.contourArea(cnt);
 
         if (area < roiW * roiH * 0.02) {
-            cnt.delete();
-            continue;
+            //cnt.delete();
+            //continue;
         }
 
         const br = cv.boundingRect(cnt);
@@ -550,6 +550,7 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
         const aspect = longSide / shortSide;
 
         const isLandscape = w > h;
+        //const isLandscape = w < h;
 
         // position
         const fx = br.x + roiX;
@@ -563,7 +564,7 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
 
         // 🔥 FINAL FILTER
         const ok =
-            //isLandscape &&
+            isLandscape &&
             aspect > 1.15 &&
             aspect < 6.0 &&
             v >= 4 && v <= 12 &&
@@ -588,7 +589,7 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
 
             //checkStability(rect);
 
-                scan_status_msg.style.color = "yellow";
+                scan_status_msg.style.color = "green";
 
                     //stats.ok++;
                     if (area > bestArea) {
