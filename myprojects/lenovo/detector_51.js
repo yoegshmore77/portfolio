@@ -566,7 +566,7 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
             //isLandscape &&
             aspect > 1.15 &&
             aspect < 6.0 &&
-            v >= 4 && v <= 8 &&
+            v >= 4 && v <= 12 &&
             fill > 0.45 &&
             longSide > 60 &&
             longSide < roiW * 0.45 &&
@@ -575,7 +575,7 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
             dy < roiH * 0.25;
 
         if (ok) {
-            console.log("running cv");
+            
             detections.push({
                 x: fx,
                 y: fy,
@@ -588,7 +588,7 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
 
             //checkStability(rect);
 
-                scan_status_msg.style.color = "orange";
+                scan_status_msg.style.color = "yellow";
 
                     //stats.ok++;
                     if (area > bestArea) {
