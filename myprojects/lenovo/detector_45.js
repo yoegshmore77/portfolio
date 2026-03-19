@@ -626,6 +626,16 @@ const dy = Math.abs(cy - roiCY);
 const centerToleranceX = roiW * 0.20;
 const centerToleranceY = roiH * 0.20;
 
+                const distFromCenter = Math.hypot(
+                    dx,
+                    dy
+                );
+
+                //if (distFromCenter > roiW * 0.25) {
+                    //stabilityCounter = 0;
+                    
+                //}
+
 /*const ok =
     v >= 4 && v <= 18 &&
     //fill > 0.3 &&
@@ -654,10 +664,13 @@ const ok =
     longSide > 60 &&
     //longSide > 45 &&
     longSide < roiW * 0.6 &&
-    //longSide < roiW * 0.6 &&
+    //longSide < roiW * 0.6;
     //shortSide > 30 &&
-    dx < centerToleranceX &&
-    dy < centerToleranceY;
+    
+    //dx < centerToleranceX &&
+    //dy < centerToleranceY;
+
+    distFromCenter < roiW * 0.25;
 
                 //const tag = `v${v} f${fill.toFixed(2)} a${aspect.toFixed(1)}`;
                 const tag = `w${w.toFixed(2)} l${longSide.toFixed(1)} f${fill.toFixed(2)}`;
@@ -676,9 +689,9 @@ const ok =
                 if (ok) {
 
                 //scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
-                scan_status_msg.style.color = "yellow";
+                //scan_status_msg.style.color = "yellow";
                 //scan_status_msg.style.color = "white";
-                //scan_status_msg.style.color = "orange";
+                scan_status_msg.style.color = "orange";
                 //scan_status_msg.style.color = "red";
 
                     //stabilityCounter++;
@@ -855,6 +868,8 @@ let dummy_video_grab = null;
                 }
 
                 lastRect = rect;
+
+
 
 
         if (stabilityCounter < LOCK_TARGET) {
