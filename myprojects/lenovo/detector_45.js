@@ -491,8 +491,8 @@ document.body.style.fontFamily = 'sans-serif';
 
             const contours = new cv.MatVector();
             const hierarchy = new cv.Mat();
-            //cv.dilate(edges, edges, cv.Mat.ones(3,3,cv.CV_8U));//yy
-            cv.findContours(closed, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
+            cv.dilate(edges, edges, cv.Mat.ones(3,3,cv.CV_8U));//yy
+            //cv.findContours(closed, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
             cv.findContours(
                     closed,
                     contours,
