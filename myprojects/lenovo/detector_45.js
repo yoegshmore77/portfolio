@@ -677,7 +677,7 @@ const ok =
                 //scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
                 //scan_status_msg.style.color = "yellow";
                 //scan_status_msg.style.color = "white";
-                //scan_status_msg.style.color = "orange";
+                scan_status_msg.style.color = "orange";
                 //scan_status_msg.style.color = "red";
 
                     //stabilityCounter++;
@@ -817,14 +817,41 @@ let dummy_video_grab = null;
 
     function checkStability(rect) {
         //if(isDetecting === true){
-        if (lastRect) {
+        /*if (lastRect) {
             const d = Math.hypot(rect.cx - lastRect.cx, rect.cy - lastRect.cy);
             //stabilityCounter = d < 50 ? stabilityCounter + 1 : Math.max(0, stabilityCounter - 1);
             stabilityCounter = d < 50 ? stabilityCounter + 1 : Math.max(0, stabilityCounter - 1);
         } else {
             stabilityCounter = 1;
         }
-        lastRect = rect;
+        lastRect = rect;*/
+
+            if (!rect) {
+                    stabilityCounter = 0;
+                    lastRect = null;
+                    return false;
+                }
+
+                if (lastRect) {
+
+                    const d = Math.hypot(
+                        rect.cx - lastRect.cx,
+                        rect.cy - lastRect.cy
+                    );
+
+                    if (d < 40) {
+                        stabilityCounter++;
+                    } else {
+                        stabilityCounter = 0; // 🔥 reset instead of decreasing
+                    }
+
+                } else {
+                    stabilityCounter = 1;
+                }
+
+                lastRect = rect;
+
+
 
         if (stabilityCounter < LOCK_TARGET) {
             const pct = Math.floor((stabilityCounter / LOCK_TARGET) * 100);
