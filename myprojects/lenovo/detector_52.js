@@ -650,7 +650,8 @@ const rectangularity = area / rectArea;
 
 
 const ok =
-    v >= 4 && v <= 12 &&
+    //v >= 4 && v <= 12 &&
+     v === 4 && v <= 12 &&
     //fill > 0.80 &&
     //fill > 0.73 &&
     fill > 0.53 &&
@@ -687,8 +688,8 @@ const ok =
                 //scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
                 //scan_status_msg.style.color = "yellow";
                 //scan_status_msg.style.color = "white";
-                //scan_status_msg.style.color = "orange";
-                scan_status_msg.style.color = "red";
+                scan_status_msg.style.color = "orange";
+                //scan_status_msg.style.color = "red";
 
                     //stabilityCounter++;
                     stats.ok++;
