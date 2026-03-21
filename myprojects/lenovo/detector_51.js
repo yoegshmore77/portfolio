@@ -703,9 +703,9 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
 
         // 🔥 convex check
         if (!cv.isContourConvex(approx)) {
-            approx.delete();
-            cnt.delete();
-            continue;
+            //approx.delete();
+            //cnt.delete();
+            //continue;
         }
 
         // bounding box (for drawing)
@@ -780,7 +780,7 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
 
             //checkStability(rect);
 
-                scan_status_msg.style.color = "blue";
+                scan_status_msg.style.color = "red";
 
                     //stats.ok++;
                     if (area > bestArea) {
