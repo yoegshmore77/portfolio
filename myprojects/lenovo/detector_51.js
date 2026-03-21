@@ -750,9 +750,9 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
 
         //if (rectangularity < 0.6) {
         if (rectangularity < 0.1) {
-            approx.delete();
-            cnt.delete();
-            continue;
+            //approx.delete();
+            //cnt.delete();
+            //continue;
         }
 
         // 🔥 size filter
@@ -780,7 +780,7 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
 
             //checkStability(rect);
 
-                scan_status_msg.style.color = "red";
+                scan_status_msg.style.color = "green";
 
                     //stats.ok++;
                     if (area > bestArea) {
