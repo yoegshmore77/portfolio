@@ -643,6 +643,9 @@ const centerToleranceY = roiH * 0.20;
     w > 20
      && w < 300;*/
 
+     const rectArea = br.width * br.height;
+const rectangularity = area / rectArea;
+
 
 
 const ok =
@@ -650,7 +653,7 @@ const ok =
     //fill > 0.80 &&
     //fill > 0.73 &&
     fill > 0.53 &&
-    solidity > 0.25 && // solidity > 0.65 &&
+    //solidity > 0.25 && // solidity > 0.65 &&
     normAspect > 1.15 &&
     normAspect < 6.0 &&
     //w > 60 &&
@@ -660,6 +663,7 @@ const ok =
     longSide < roiW * 0.6 &&
     //longSide < roiW * 0.6 &&
     //shortSide > 30 &&
+    rectangularity > 0.5 &&
     dx < centerToleranceX &&
     dy < centerToleranceY;
 
@@ -682,8 +686,8 @@ const ok =
                 //scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
                 //scan_status_msg.style.color = "yellow";
                 //scan_status_msg.style.color = "white";
-                //scan_status_msg.style.color = "orange";
-                scan_status_msg.style.color = "red";
+                scan_status_msg.style.color = "orange";
+                //scan_status_msg.style.color = "red";
 
                     //stabilityCounter++;
                     stats.ok++;
