@@ -748,7 +748,8 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
         const rectArea = br.width * br.height;
         const rectangularity = area / rectArea;
 
-        if (rectangularity < 0.6) {
+        //if (rectangularity < 0.6) {
+        if (rectangularity < 0.4) {
             approx.delete();
             cnt.delete();
             continue;
@@ -779,7 +780,7 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
 
             //checkStability(rect);
 
-                scan_status_msg.style.color = "blue";
+                scan_status_msg.style.color = "yellow";
 
                     //stats.ok++;
                     if (area > bestArea) {
