@@ -456,7 +456,7 @@ document.body.style.fontFamily = 'sans-serif';
     // ══════════════════════════════════════════════════════════════
     // CV DETECTION — SIMPLE GEOMETRY
     // ══════════════════════════════════════════════════════════════
-
+/*
 function runCV(vw, vh, roiX, roiY, roiW, roiH) {
 
 
@@ -509,12 +509,20 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
 
     for (let i = 0; i < contours.size(); i++) {
 
+                    //const hh = hierarchy.intPtr(0, i);
+                    // h[2] = firstChild
+                    // h[3] = parent
+
+                    //if (hh[2] === -1) {
+                      //  continue;
+                    //}
+
         const cnt = contours.get(i);
         const area = cv.contourArea(cnt);
 
         if (area < roiW * roiH * 0.02) {
-            //cnt.delete();
-            //continue;
+            cnt.delete();
+            continue;
         }
 
         const br = cv.boundingRect(cnt);
@@ -549,6 +557,7 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
         const shortSide = Math.min(w, h);
         const aspect = longSide / shortSide;
 
+
         const isLandscape = w > h;
         //const isLandscape = w < h;
 
@@ -564,7 +573,7 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
 
         // 🔥 FINAL FILTER
         const ok =
-            isLandscape &&
+            //isLandscape &&
             aspect > 1.15 &&
             aspect < 6.0 &&
             v >= 4 && v <= 12 &&
@@ -589,7 +598,7 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
 
             //checkStability(rect);
 
-                scan_status_msg.style.color = "green";
+                scan_status_msg.style.color = "yellow";
 
                     //stats.ok++;
                     if (area > bestArea) {
@@ -618,6 +627,190 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
 
     //return detections;
      return best;
+}
+*/
+function runCV(vw, vh, roiX, roiY, roiW, roiH) {
+
+    const roiData = dbgCtx.getImageData(roiX, roiY, roiW, roiH);
+
+    const src = new cv.Mat(roiH, roiW, cv.CV_8UC4);
+    src.data.set(roiData.data);
+
+    const gray = new cv.Mat();
+    const blur = new cv.Mat();
+
+    cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
+    cv.GaussianBlur(gray, blur, new cv.Size(5,5), 0);
+    src.delete();
+
+    const edges = new cv.Mat();
+    cv.Canny(blur, edges, 40, 120);
+
+    gray.delete();
+    blur.delete();
+
+    const kernel = cv.Mat.ones(2,2,cv.CV_8U);
+    const processed = new cv.Mat();
+    cv.dilate(edges, processed, kernel);
+
+    edges.delete();
+    kernel.delete();
+
+    const contours = new cv.MatVector();
+    const hierarchy = new cv.Mat();
+
+    cv.findContours(
+        processed,
+        contours,
+        hierarchy,
+        cv.RETR_EXTERNAL,
+        cv.CHAIN_APPROX_SIMPLE
+    );
+
+    processed.delete();
+
+    let detections = [];
+
+    let best = null, bestArea = 0;
+
+    const roiCX = roiX + roiW / 2;
+    const roiCY = roiY + roiH / 2;
+
+    for (let i = 0; i < contours.size(); i++) {
+
+        const cnt = contours.get(i);
+        const area = cv.contourArea(cnt);
+
+        if (area < roiW * roiH * 0.03) {
+            //cnt.delete();
+            //continue;
+        }
+
+        const peri = cv.arcLength(cnt, true);
+
+        // 🔥 polygon approximation
+        const approx = new cv.Mat();
+        cv.approxPolyDP(cnt, approx, 0.02 * peri, true);
+
+        const v = approx.rows;
+
+        // 🔥 STRICT: must be 4 corners
+        if (v >= 4) {
+            approx.delete();
+            cnt.delete();
+            continue;
+        }
+
+        // 🔥 convex check
+        if (!cv.isContourConvex(approx)) {
+            approx.delete();
+            cnt.delete();
+            continue;
+        }
+
+        // bounding box (for drawing)
+        const br = cv.boundingRect(approx);
+
+        const fx = br.x + roiX;
+        const fy = br.y + roiY;
+
+        const cx = fx + br.width / 2;
+        const cy = fy + br.height / 2;
+
+        // 🔥 center restriction
+        const dx = Math.abs(cx - roiCX);
+        const dy = Math.abs(cy - roiCY);
+
+        if (dx > roiW * 0.25 || dy > roiH * 0.25) {
+            approx.delete();
+            cnt.delete();
+            continue;
+        }
+
+        // 🔥 aspect ratio using rotated rect
+        const rotRect = cv.minAreaRect(cnt);
+        const w = rotRect.size.width;
+        const h = rotRect.size.height;
+
+        const longSide = Math.max(w, h);
+        const shortSide = Math.min(w, h);
+        const aspect = longSide / shortSide;
+
+        const isLandscape = w > h;
+        if ( aspect < 1.25 || aspect > 14.0) {
+        //if (!isLandscape || aspect < 1.25 || aspect > 4.0) {
+            approx.delete();
+            cnt.delete();
+            continue;
+        }
+
+        // 🔥 rectangularity check
+        const rectArea = br.width * br.height;
+        const rectangularity = area / rectArea;
+
+        if (rectangularity < 0.6) {
+            approx.delete();
+            cnt.delete();
+            continue;
+        }
+
+        // 🔥 size filter
+        //if (longSide < 60 || longSide > roiW * 0.5 || shortSide < 30) {
+        if (longSide < 40 || longSide > roiW * 0.5 || shortSide < 30) {
+            approx.delete();
+            cnt.delete();
+            continue;
+        }
+
+        detections.push({
+            x: fx,
+            y: fy,
+            w: br.width,
+            h: br.height,
+            cx,
+            cy,
+            label: 'Object', source: 'CV'
+        });
+
+        //
+            
+            
+
+
+            //checkStability(rect);
+
+                scan_status_msg.style.color = "blue";
+
+                    //stats.ok++;
+                    if (area > bestArea) {
+                        bestArea = area;
+                        best = {
+                            x: fx, y: fy, w: br.width, h: br.height,
+                            cx: Math.round(fx + br.width / 2),
+                            cy: Math.round(fy + br.height / 2),
+                            area, 
+                            //fill: fill.toFixed(2), 
+                            vertices: v,
+                            label: 'Object', source: 'CV'
+                        };
+                    }
+        
+
+                dbgCtx.strokeStyle =  'rgba(0,255,0,0.6)';//'rgba(255,165,0,0.8)'; // yellow line code rgba(255,165,0,0.3
+                dbgCtx.lineWidth =  2 ;
+                dbgCtx.strokeRect(fx, fy, br.width, br.height);
+                dbgCtx.fillStyle =  '#0f0';//'rgba(255,165,0,0.5)';
+                dbgCtx.font = '14px monospace';
+        //
+
+        approx.delete();
+        cnt.delete();
+    }
+
+    contours.delete();
+    hierarchy.delete();
+
+    return best;
 }
 
 
