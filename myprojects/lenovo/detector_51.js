@@ -722,9 +722,9 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
         const dy = Math.abs(cy - roiCY);
 
         if (dx > roiW * 0.25 || dy > roiH * 0.25) {
-            approx.delete();
-            cnt.delete();
-            continue;
+            //approx.delete();
+            //cnt.delete();
+            //continue;
         }
 
         // 🔥 aspect ratio using rotated rect
@@ -780,7 +780,7 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
 
             //checkStability(rect);
 
-                scan_status_msg.style.color = "blue";
+                scan_status_msg.style.color = "orange";
 
                     //stats.ok++;
                     if (area > bestArea) {
