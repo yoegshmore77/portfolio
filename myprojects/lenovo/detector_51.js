@@ -758,9 +758,9 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
         // 🔥 size filter
         //if (longSide < 60 || longSide > roiW * 0.5 || shortSide < 30) {
         if (longSide < 40 || longSide > roiW * 0.5 || shortSide < 30) {
-            approx.delete();
-            cnt.delete();
-            continue;
+            //approx.delete();
+            //cnt.delete();
+            //continue;
         }
 
         detections.push({
