@@ -780,7 +780,7 @@ function runCV(vw, vh, roiX, roiY, roiW, roiH) {
 
             //checkStability(rect);
 
-                scan_status_msg.style.color = "yellow";
+                scan_status_msg.style.color = "blue";
 
                     //stats.ok++;
                     if (area > bestArea) {
