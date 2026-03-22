@@ -571,7 +571,7 @@ if (br.width <= br.height) continue; // reject portrait or square
                 const approx = new cv.Mat();
                 //cv.approxPolyDP(cnt, approx, 0.04 * peri, true);
                 //if (!cv.isContourConvex(cnt)) continue;
-                if (!cv.isContourConvex(cnt)) continue;
+                //if (!cv.isContourConvex(cnt)) continue;
                 
                 //cv.approxPolyDP(cnt, approx, 0.02 * peri, true);
                 cv.approxPolyDP(cnt, approx, 0.01 * peri, true);
@@ -597,10 +597,10 @@ if (br.width <= br.height) continue; // reject portrait or square
 
                 
                 //scan_status_msg.innerHTML = aspect.toFixed(2) + " = " + w.toFixed(2) + " = " + solidity.toFixed(2) + " = " + fill.toFixed(2);
-                //scan_status_msg.style.color = "yellow";
+                scan_status_msg.style.color = "yellow";
                 //scan_status_msg.style.color = "white";
                 //scan_status_msg.style.color = "orange";
-                scan_status_msg.style.color = "red";
+                //scan_status_msg.style.color = "red";
 
                 // TIGHTER CHECK:
                 //   4-8 vertices, fill > 0.3, solidity > 0.85, landscape aspect 1.2-4.0
