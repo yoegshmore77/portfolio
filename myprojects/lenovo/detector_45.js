@@ -571,7 +571,7 @@ if (br.width <= br.height) continue; // reject portrait or square
                 //cv.approxPolyDP(cnt, approx, 0.04 * peri, true);
                 //if (!cv.isContourConvex(cnt)) continue;
                 //cv.approxPolyDP(cnt, approx, 0.02 * peri, true);
-                cv.approxPolyDP(cnt, approx, 0.02 * peri, true);
+                cv.approxPolyDP(cnt, approx, 0.018 * peri, true);
                 const v = approx.rows;
                 approx.delete();
 
