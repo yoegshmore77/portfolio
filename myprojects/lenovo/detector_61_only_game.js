@@ -4725,6 +4725,8 @@ function registerShot(isGoal_done) {
 
 const scorePanel = document.querySelector(".scorePanel");
 const ratingPanel = document.querySelector(".ratingPanel");
+const crowdPanel = document.querySelector(".stadium_crowd-panel");
+crowdPanel.style.display = "none";
 
 function showScorePanel() {
   //scorePanel.classList.add("visible");
@@ -5175,6 +5177,7 @@ st_btn.addEventListener("click", () => {
     dbgCanvas.style.opacity = 1;
     video.style.display = 'block';
     scan_status_msg.style.display = 'flex';
+    crowdPanel.style.display = "block";
 
     //btn1.style.display = 'block';
     //btn2.style.display = 'block';
