@@ -4939,7 +4939,7 @@ masterGain.gain.value = 1; // global volume
 masterGain.connect(audioContext.destination);
 
 const crowdGain = audioContext.createGain();
-crowdGain.gain.value = 0.2;  // softer background
+crowdGain.gain.value = 0.5; // 0.2 // softer background
 
 const goalGain = audioContext.createGain();
 goalGain.gain.value = 0.6;   // louder celebration
