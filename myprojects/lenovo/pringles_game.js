@@ -1734,7 +1734,9 @@ function init_1(){
 
     // load pringles tin model
     const loader_tin = new GLTFLoader();
-    loader_tin.load('./pringles_tin.glb', gltf => {
+    //loader_tin.load('./pringles_tin.glb', gltf => {
+    loader_tin.load('./wink_red_bottle.glb', gltf => {
+
     model_loaded_count++;
     pringles_tin = gltf.scene;
     //scene.add(goalpost);
@@ -1955,7 +1957,8 @@ function init_1(){
                 hitSpheres.push(createHitSphere(9, obj));
 
                 pringles_tin.position.set(0, 0, 0); // center on the bone
-                pringles_tin.scale.set(100, 100, 100);
+                //pringles_tin.scale.set(100, 100, 100);
+                pringles_tin.scale.set(150, 150, 150);
                 
                 //pringles_tin.rotation.set(0,-110,90);
                 //pringles_tin.rotation.set(1.7,109.5,89.5);
