@@ -1719,7 +1719,7 @@ scene.add(dirLight);*/
 
 //-----------------------------------------
 let model_loaded_count = 0;
-const model_total_count = 4;
+const model_total_count = 5;
 let sound_loaded_count = 0;
 const sound_total_count = 8;
 
