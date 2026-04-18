@@ -1737,7 +1737,7 @@ function init_1(){
             const loader = new GLTFLoader();
             
            
-            loader.load('./goli_lenovo_new.glb', gltf => {
+            loader.load('./goli_no_branding.glb', gltf => {//goli_lenovo_new.glb
                 model_loaded_count++;
             //loader.load('./goli_lenovo.glb', gltf => {
             //loader.load('./new_export/player.glb', gltf => {
