@@ -1,3 +1,4 @@
+//removed sideways sliding movement on the goli
 //no backend
 //Derived from 45 readded AI and now it has both AI +CV
 // Loading the GLTF loader from CDN so there will be no dependency
@@ -2143,7 +2144,8 @@ function init_1(){
 
 
     const loader_ground = new GLTFLoader();
-    loader_ground.load("./grass_lenevo_1.glb", gltf => {
+    //loader_ground.load("./grass_lenevo_1.glb", gltf => {
+    loader_ground.load("./grass_no_branding.glb", gltf => {//thinner strips
     //loader_ground.load("./grass_dummy.glb", gltf => {
         model_loaded_count++;
       ground = gltf.scene;
@@ -2530,6 +2532,14 @@ function decideKeeperDive(angleRad) {
             speedNormal = 1.5;//sp_factor;
              playSegment("save_upper_right");
              console.log("************" + "save_upper_right" + " range = "+ range);
+          }else{
+
+            // nothing in the range then forefully play
+             speedNormal = sp_factor;
+             playSegment("save_lower_left");
+             console.log("************" + "save_lower_left" + " range = "+ range);
+             console.log(" -------------> out of range");
+
           }
       }else if(lottery === 1){ // play random animation 
          if(currentForce < 0.8 && currentAngle < 0 && currentAngle > -0.13){
@@ -2568,7 +2578,14 @@ function decideKeeperDive(angleRad) {
             speedNormal = 1.5;//sp_factor;
              playSegment("save_upper_left");
              console.log("Random ************" + "save_upper_right" + " range = "+ range);
+          }else{ 
+            // nothing in the range then forefully play
+             speedNormal = sp_factor;
+             playSegment("save_lower_left");
+             console.log("Random ************" + "save_lower_right" + " range = "+ range);
+             console.log(" -------------> out of range");
           }
+
       }else{
 
       }
@@ -4469,6 +4486,7 @@ function animate() {
   if (keeperMixer) {
     action.timeScale = animation_speed;
     keeperMixer.update(delta);
+    //slide the goli
     goalkeeper.position.x += (keeperTargetX - goalkeeper.position.x) * goli_mov_speed;
   }
 
