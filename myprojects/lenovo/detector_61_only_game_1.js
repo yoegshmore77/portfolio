@@ -2156,7 +2156,7 @@ function init_1(){
       ground = gltf.scene;
       //ground.scale.set(0.6, 0.6, 0.6);
       //ground.scale.set(3, 1, 3.6);
-      ground.scale.set(3, 3.6, 3.6);
+      ground.scale.set(3, 3.0, 3.6);
      // ground.position.set(0, 0, 5);
        ground.position.set(0, 0, 5);
       //ground.visible = false;
