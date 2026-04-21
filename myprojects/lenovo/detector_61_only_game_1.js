@@ -2150,7 +2150,7 @@ function init_1(){
     const loader_ground = new GLTFLoader();
     //loader_ground.load("./grass_lenevo_1.glb", gltf => {
     //loader_ground.load("./grass_no_branding.glb", gltf => {//thinner strips
-    loader_ground.load("./grass_stadium_2.glb", gltf => {//grass with stadium
+    loader_ground.load("./grass_stadium_3.glb", gltf => {//grass with stadium
     
         model_loaded_count++;
       ground = gltf.scene;
