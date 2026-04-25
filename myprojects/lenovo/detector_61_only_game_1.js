@@ -1,4 +1,4 @@
-//removed sideways sliding movement on the goli
+
 //no backend
 //Derived from 45 readded AI and now it has both AI +CV
 // Loading the GLTF loader from CDN so there will be no dependency
@@ -1645,9 +1645,11 @@ scene = new THREE.Scene();
           scene.add(hemiLight);*/
 
           //copied from file 25
-          const hemiLight = new THREE.HemisphereLight(0xFFFFFF, 0x444444, 3.5);
-          hemiLight.position.set(0, 1, -5);
-          scene.add(hemiLight);
+          //const hemiLight = new THREE.HemisphereLight(0xFFFFFF, 0x444444, 12.5);
+          //hemiLight.position.set(0, 1, -5);
+          //hemiLight.position.set(0, 1, 25);
+          //hemiLight.position.set(0, 10, -10);
+          //scene.add(hemiLight);
 
           /*const hemiLight = new THREE.HemisphereLight( 0xffffff, 0x8d8d8d, 3 );
                 hemiLight.position.set( 0, 20, 0 );
@@ -1664,11 +1666,19 @@ scene = new THREE.Scene();
                  scene.add(dirLight);*/
 
                  //copied from file 25
-                const dirLight = new THREE.DirectionalLight( 0xffffff, 5);
+                //const dirLight = new THREE.DirectionalLight( 0xffffff, 5);
+                //const dirLight = new THREE.DirectionalLight( 0xffffff, 2.7);
                 //dirLight.position.set( - 2, 5, - 3 );
-                dirLight.position.set( 0, 1.0, -5 );
-                dirLight.castShadow = true;
-                scene.add(dirLight);
+                //dirLight.position.set( 0, 10.0, -5.1 );
+               //dirLight.position.set( 1, 10.0, -100.1 );
+                //dirLight.rotation.set( 90, 90, 0 );
+                //dirLight.castShadow = true;
+                //dirLight.scale.set(200,200,200);
+                //scene.add(dirLight);
+
+                 //const dirLight1 = new THREE.DirectionalLight( 0xffffff, 2.7);
+                  //dirLight1.position.set( -1, 14.0, -100.1 );
+                  //scene.add(dirLight1);
 
                   /*const dirLight = new THREE.DirectionalLight(0xffffff, 1);
                   dirLight.position.set(0, 2, 0);
@@ -1720,6 +1730,41 @@ dirLight.shadow.camera.bottom = -30;
 dirLight.shadow.bias = -0.0005;
 
 scene.add(dirLight);*/
+
+
+
+                const hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 3 );
+                hemiLight.color.setHSL( 0.6, 1, 0.6 );
+                hemiLight.groundColor.setHSL( 0.095, 1, 0.75 );
+                //hemiLight.position.set( 0, 50, 0 );
+                //scene.add( hemiLight );
+
+                const ambient = new THREE.HemisphereLight( 0xffffff, 0x8d8d8d, 7.25 );
+                //ambient.position.set( 10, 50, -1 );
+                scene.add( ambient );
+
+                //
+
+                const dirLight = new THREE.DirectionalLight( 0xffffff, 5 );
+                dirLight.color.setHSL( 0.1, 1, 0.95 );
+                dirLight.position.set( 0, 1.75, -7 );
+                //dirLight.position.multiplyScalar( 30 );
+                //scene.add( dirLight );
+
+                /*const spotLight = new THREE.SpotLight( 0xffffff, 500 );
+                spotLight.name = 'spotLight';
+                spotLight.position.set( 2.5, 5, -5.5 );
+                spotLight.angle = Math.PI / 6;
+                spotLight.penumbra = 1;
+                spotLight.decay = 2;
+                spotLight.distance = 0;
+                //scene.add( spotLight );*/
+
+                renderer.physicallyCorrectLights = true;
+                renderer.outputEncoding = THREE.sRGBEncoding;
+
+                
+
 
 //-----------------------------------------
 let model_loaded_count = 0;
@@ -1882,9 +1927,9 @@ function init_1(){
 
     goalkeeper.traverse((obj) => {
 
-         //Object.entries(obj.children).forEach(([key, value]) => {
-            //console.log(`Key: ${key}, Value:`, value);
-        //});
+        /*Object.entries(obj.children).forEach(([key, value]) => {
+            console.log(`Key: ${key}, Value:`, value);
+        });*/
 
 
 
@@ -1892,26 +1937,41 @@ function init_1(){
         //console.log("-------- >"+obj[0]);
 
 
+
+
         if (obj.isMesh && obj.material) {
             //console.log("aaa");
           const mats = Array.isArray(obj.material) ? obj.material : [obj.material];
           mats.forEach(mat => {
 
-            mat.castShadow = true;
-            mat.receiveShadow = true;
+            //mat.castShadow = true;
+            //mat.receiveShadow = true;
 
               //mat.color.set(0xf26921);
               mat.transparent = true;
+              //mat.roughness = 1;//0.2;
+              //mat.metalness = 0.5;
               //mat.depthWrite = false;
               //mat.depthTest = false;
               //mat.opacity = 0.5;
               goli_Materials.push(mat);
 
               //console.log("mat.name == "+ mat.name);
+              if(mat.map){
+              //console.log(mat.map.name);
+               //mat.map.colorSpace = THREE.SRGBColorSpace;
+               mat.map.anisotropy = 4;
+              }
+              
+                    
+                
+              //mat.colorSpace = THREE.SRGBColorSpace;
 
 
           });
         }
+
+
         if (obj.isBone) {
             //console.log('Bone found:', obj.name);
             //console.log(obj);
@@ -2150,9 +2210,12 @@ function init_1(){
     const loader_ground = new GLTFLoader();
     //loader_ground.load("./grass_lenevo_1.glb", gltf => {
     //loader_ground.load("./grass_no_branding.glb", gltf => {//thinner strips
-    loader_ground.load("./grass_stadium_3.glb", gltf => {//grass with stadium
+    //loader_ground.load("./grass_stadium_3.glb", gltf => {//grass with stadium
+    //loader_ground.load("./grass_stadium_5.glb", gltf => {//grass with stadium with thin strips
+    //loader_ground.load("./grass_stadium_6.glb", gltf => {//grass with stadium with thin strips
+        loader_ground.load("./grass_stadium_7.glb", gltf => {//grass with stadium with thin strips
     
-        model_loaded_count++;
+      model_loaded_count++;
       ground = gltf.scene;
       //ground.scale.set(0.6, 0.6, 0.6);
       //ground.scale.set(3, 1, 3.6);
@@ -2170,10 +2233,10 @@ function init_1(){
               const mats = Array.isArray(child.material) ? child.material : [child.material];
               mats.forEach(mat => {
                 
-                mat.castShadow = true;
-                mat.receiveShadow = true;
-                mat.transparent = true;
-                mat.toneMapped = false;
+                //mat.castShadow = true;
+                //mat.receiveShadow = true;
+                //mat.transparent = true;// goli black shadow is visible afer dive if uncommented
+                //mat.toneMapped = false;
                   //mat.opacity = 0.5;
                   //mat.depthTest = false;
                   //mat.depthWrite = false;
@@ -2181,18 +2244,19 @@ function init_1(){
 
                   //console.log("mat.name == "+ mat.name);
 
-      mat.map.anisotropy = renderer.capabilities.getMaxAnisotropy();
+      //mat.map.anisotropy = renderer.capabilities.getMaxAnisotropy();
       mat.map.needsUpdate = true;
+
 
 
               });
               //---------Texture
 
-            /*const texture = child.material.map;
+            const texture = child.material.map;
 
             if (texture) {
 
-              texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+              /*texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
 
               texture.minFilter = THREE.LinearMipmapLinearFilter;
               texture.magFilter = THREE.LinearFilter;
@@ -2200,9 +2264,12 @@ function init_1(){
               texture.wrapS = THREE.RepeatWrapping;
               texture.wrapT = THREE.RepeatWrapping;
 
+              texture.needsUpdate = true;*/
               texture.needsUpdate = true;
+              texture.colorSpace = THREE.SRGBColorSpace;
+              texture.anisotropy = 4;
 
-            }*/
+            }
 
 
           }
@@ -2614,6 +2681,7 @@ function resetBall() {
  camY = 3.7;
  camZ = 8;
  cam_sp = 15;
+
   //console.log("reset ball.position.z = "+ ball.position.z);
   ballInFlight = false;
   //ball.position.set(0, 0.2, 0);
@@ -2668,7 +2736,7 @@ function shootBall() {
 
   camY = 2.9;
   camZ = 4;
-  cam_sp = 85;
+  cam_sp = 35;//85;
 
   playKick_Sound();
   
@@ -4260,8 +4328,8 @@ function fade_goli_out() {
   //console.log("goli fade out is called =====");
 
   const startTime = performance.now();
-  //const duration = 1000; // 1.5 second
-  const duration = 500; // 1.5 second
+  const duration = 1650; // 1.5 second
+  //const duration = 500; // 1.5 second
  
   let fade_goli_out_Id = null;
 
@@ -4285,7 +4353,14 @@ function fade_goli_out() {
            
 
            playIdleLoop();
-           fade_goli_in();
+           //fade_goli_in();
+           //cam_sp = 15;//yo
+           //camY = 3.7;
+           //camZ = 8;
+           setTimeout(() => {
+
+                fade_goli_in();
+            }, 700);
           cancelAnimationFrame(fade_goli_out_Id);
           return;
         }
