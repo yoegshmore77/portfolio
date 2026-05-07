@@ -703,9 +703,9 @@ const ok =
         if (pick && aiPreds.length) {
             for (const p of aiPreds) {
               //if( p.class === "cell phone" || p.class === "laptop" || p.class === "keyboard" || p.class === "tv" ||  p.class === "book" || p.class === "remote" || p.class === "handbag" || p.class === "couch" || p.class === "microwave" || p.class === "oven" || p.class === "sink" || p.class === "car" || p.class === "bus" || p.class === "bench"){ 
-                //if( p.class === "cell phone" || p.class === "tv"){ 
-                if ( p.class === "tv" ){ 
-                if ( p.score < 0.08 ) continue;//-------------------------------------------------------
+                if( p.class === "cell phone" || p.class === "tv"){ 
+                //if ( p.class === "tv" ){ 
+                if ( p.score < 0.04 ) continue;//-------------------------------------------------------
                 //if (p.score < 0.08) continue;
                 //if (p.score < 0.02) continue;
                 //if (p.score < 0.4) continue;//original
@@ -5355,6 +5355,16 @@ scannerOvl.style.opacity = 0;
 video.style.display = 'none';
 const loading_txt = document.getElementById("loading-text");
 //boot();
+
+// disable the buttons help quit reset
+btn1.style.width = 0;
+btn1.style.height = 0;
+
+btn2.style.width = 0;
+btn2.style.height = 0;
+
+btn3.style.width = 0;
+btn3.style.height = 0;
 
 
 function Restart_The_Game(){
